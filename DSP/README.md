@@ -2,6 +2,12 @@
 
 ## Quick start
 
+Software dependencies:
+
+* Python 3
+* [Kaitai Struct Compiler][ksc]
+* [Kaitai Struct Python Runtime][kspr]
+
 To start looking at the DSP code, you'll need a DSP binary. You can find
 these on a MediaTek LTE baseband-based phone in `/system/etc/firmware`, and
 the file will be called something like `dsp_*.bin`. If you don't have access
@@ -13,3 +19,6 @@ Once you have the DSP binary, run `make` in this directory to generate the
 parser code used by `extract_fw.py`. Then, simply run
 `./extract_fw.py dsp_*.bin` to extract each section from the binary into
 separate files.
+
+[ksc]: https://github.com/kaitai-io/kaitai_struct_compiler
+[kspr]: https://github.com/kaitai-io/kaitai_struct_python_runtime
