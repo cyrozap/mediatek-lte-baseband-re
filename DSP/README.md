@@ -1,4 +1,4 @@
-# Coresonic (now MediaTek AB) DSP code
+# Coresonic (MediaTek) DSP code
 
 ## Quick start
 
