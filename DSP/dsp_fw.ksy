@@ -109,9 +109,9 @@ types:
                 type: u4
               - id: core_code_len
                 type: u4
-              - id: core_code_crc
+              - id: core_code_checksum
                 type: u4
               - id: core_data_len
                 type: u4
-              - id: core_data_crc
+              - id: core_data_checksum
                 type: u4
