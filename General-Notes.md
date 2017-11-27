@@ -20,7 +20,7 @@ doesn't exist yet.
 From what I've been able to glean from kernel sources and disassembled
 binaries, the AP and the BP share some memory for loading the BP fimware, DMA,
 and IPC (through virtual serial ports). They also appear to share access to
-certain peripherals, like the UARTS and UICC interfaces. The BP has either
+certain peripherals, like the UART and UICC interfaces. The BP has either
 some or all of the DSP's memory space mapped, and I think the AP may be able
 to access that directly (for, e.g., DSP memory dumps), but I'm not entirely
 sure.
