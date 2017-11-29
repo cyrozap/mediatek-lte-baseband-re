@@ -40,6 +40,9 @@
         address space compared to the other 6 cores.
       * It's possible that this is a [MediaDSP][MediaDSP] core used for audio
         coding.
+  * Each section is loaded sequentially based on its location in the binary.
+    * In other words, they're loaded in `file_idx` order, not `core_idx`
+      order.
 
 
 [Bloomberg]: https://www.bloomberg.com/research/stocks/private/snapshot.asp?privcapid=25110321
