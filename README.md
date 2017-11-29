@@ -51,3 +51,6 @@ found in the "Notes.md" files in their respective subdirectories.
 
 The DSP firmware can be decoded. See the "DSP" directory for some scripts
 to do this and to read the notes on my findings.
+
+The "Documents.md" file contains a list of research papers, presentations,
+and patents that are or might be relevant to this project.
