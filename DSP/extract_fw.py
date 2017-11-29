@@ -31,6 +31,7 @@ if __name__ == "__main__":
         filename = "{}.file_idx_{}.core_idx_{}.code.{}".format(basename, i, header.core_idx, ext)
         code_len = header.core_code_len
         code = fw.dsp_firmware.body[offset:offset+code_len]
+        print("{} checksum: {}".format(filename, "OK" if checksum_valid(code, header.core_code_checksum) else "FAIL"))
         code = fw._io.process_xor_many(code, key)
         open(filename, 'wb').write(code)
         offset += code_len
@@ -38,6 +39,7 @@ if __name__ == "__main__":
         filename = "{}.file_idx_{}.core_idx_{}.data.{}".format(basename, i, header.core_idx, ext)
         data_len = header.core_data_len
         data = fw.dsp_firmware.body[offset:offset+data_len]
+        print("{} checksum: {}".format(filename, "OK" if checksum_valid(data, header.core_data_checksum) else "FAIL"))
         data = fw._io.process_xor_many(data, key)
         open(filename, 'wb').write(data)
         offset += data_len
