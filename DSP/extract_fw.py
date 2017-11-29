@@ -1,10 +1,21 @@
 #!/usr/bin/env python3
 
+import struct
 import sys
 
 import mediatek_lte_dsp_firmware
 
 key = bytes([0x40, 0xeb, 0xf8, 0x56, 0x8b, 0x74, 0x24, 0x08, 0x66, 0x85, 0xf6, 0x74, 0x30, 0x66, 0x83, 0xfe])
+
+def checksum_valid(data, checksum):
+    if checksum == 0:
+        return True
+
+    temp = 0
+    for i in range(len(data)//4):
+        temp ^= struct.unpack_from('<I', data, i*4)[0]
+
+    return temp == checksum
 
 if __name__ == "__main__":
     orig = sys.argv[1]
