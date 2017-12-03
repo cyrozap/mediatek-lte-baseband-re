@@ -20,18 +20,18 @@
 
 ## Patents
 
- * EP2751670B1
- * EP2751671B1
- * US20060271764A1
- * US20060271765A1
- * US20070198815A1
- * US20140244970A1
- * US20140281373A1
- * US20140344549A1
- * US20140351555A1
- * US20140359252A1
- * US20140372728A1
- * US7299342
- * US7415595
- * US8874968
- * US9557996
+ * [EP2751670B1](https://patents.google.com/patent/EP2751670B1/en)
+ * [EP2751671B1](https://patents.google.com/patent/EP2751671B1/en)
+ * [US20060271764A1](https://patents.google.com/patent/US20060271764A1/en)
+ * [US20060271765A1](https://patents.google.com/patent/US20060271765A1/en)
+ * [US20070198815A1](https://patents.google.com/patent/US20070198815A1/en)
+ * [US20140244970A1](https://patents.google.com/patent/US20140244970A1/en)
+ * [US20140281373A1](https://patents.google.com/patent/US20140281373A1/en)
+ * [US20140344549A1](https://patents.google.com/patent/US20140344549A1/en)
+ * [US20140351555A1](https://patents.google.com/patent/US20140351555A1/en)
+ * [US20140359252A1](https://patents.google.com/patent/US20140359252A1/en)
+ * [US20140372728A1](https://patents.google.com/patent/US20140372728A1/en)
+ * [US7299342B2](https://patents.google.com/patent/US7299342B2/en)
+ * [US7415595B2](https://patents.google.com/patent/US7415595B2/en)
+ * [US8874968B1](https://patents.google.com/patent/US8874968B1/en)
+ * [US9557996B2](https://patents.google.com/patent/US9557996B2/en)
