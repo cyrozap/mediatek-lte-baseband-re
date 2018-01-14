@@ -45,12 +45,15 @@ do all of this.
 
 ## Current Progress
 
-See the "General-Notes.md" file in this directory for general information
-about MediaTek's LTE modems and SoCs. Information specific subsystems can be
-found in the "Notes.md" files in their respective subdirectories.
+The DSP firmware can be decoded. See the [DSP](DSP) directory for some
+scripts to do this and to read the notes on my findings.
 
-The DSP firmware can be decoded. See the "DSP" directory for some scripts
-to do this and to read the notes on my findings.
+## Additional Information
 
-The "Documents.md" file contains a list of research papers, presentations,
-and patents that are or might be relevant to this project.
+See the [General-Notes.md](General-Notes.md) file in this directory for
+general information about MediaTek's LTE modems and SoCs. Information on
+each subsystem can be found in the "Notes.md" file in the directory for
+that subsystem.
+
+The [Documents.md](Documents.md) file contains a list of research papers,
+presentations, and patents that are or might be relevant to this project.
