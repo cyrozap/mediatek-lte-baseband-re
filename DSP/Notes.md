@@ -40,6 +40,9 @@
         address space compared to the other 6 cores.
       * It's possible that this is a [MediaDSP][MediaDSP] core used for audio
         coding.
+        * The register tables for multiple SoCs heavily imply this.
+      * Also might be [this][devicetree-bindings].
+        * They might use it for different purposes in different SoCs.
   * Each section is loaded sequentially based on its location in the binary.
     * In other words, they're loaded in `file_idx` order, not `core_idx`
       order.
@@ -47,3 +50,4 @@
 
 [Bloomberg]: https://www.bloomberg.com/research/stocks/private/snapshot.asp?privcapid=25110321
 [MediaDSP]: https://pdfs.semanticscholar.org/bc0e/70ee308ae793bbd68592bb7346d30c591e1b.pdf
+[devicetree-bindings]: https://github.com/freedomtan/kernel-3.18-X20-96-board/blob/a0fd09200a4a4f7de5d366d20e43027f8dc6709a/Documentation/devicetree/bindings/misc/mediatek-md32.txt
