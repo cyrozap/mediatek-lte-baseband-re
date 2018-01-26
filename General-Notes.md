@@ -26,6 +26,27 @@ to access that directly (for, e.g., DSP memory dumps), but I'm not entirely
 sure.
 
 
+## Glossary
+
+MediaTek uses a lot of acronyms in their code and documentation but rarely
+expands them, so this glossary is my attempt at fixing that. Please note that
+some of these entries are complete guesses.
+
+* CCCI: Cross Core Communication Interface.
+* CONN: "Connectivity", usually refers to the connectivity subsystem. The
+  connectivity subsystem includes the WiFi CPU core and possibly the Bluetooth
+  CPU as well.
+* DBF: DSP Binary Filter. As the name implies, this is binary filter data that
+  is loaded into and parsed by the DSP.
+* DCM: Dynamic Clock Management.
+* M4U: Multimedia Memory Management Unit. This is what MediaTek calls their
+  IOMMU.
+* MSDC: Used to refer to their EMMC/SD card controller core. Possibly "MediaTek
+  SD Controller".
+* SWLA: Software LA (Logic Analyzer?). It seems to be some kind of debug
+  functionality in the BB firmware.
+
+
 ## History
 
 * 2012: [MediaTek acquires Coresonic][acquisition], a DSP IP core company.
