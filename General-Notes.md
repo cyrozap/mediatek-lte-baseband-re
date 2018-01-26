@@ -32,7 +32,8 @@ MediaTek uses a lot of acronyms in their code and documentation but rarely
 expands them, so this glossary is my attempt at fixing that. Please note that
 some of these entries are complete guesses.
 
-* CCCI: Cross Core Communication Interface.
+* CCCI: Cross Core Communication Interface. This is how the AP and the BB
+  communicate.
 * CONN: "Connectivity", usually refers to the connectivity subsystem. The
   connectivity subsystem includes the WiFi CPU core and possibly the Bluetooth
   CPU as well.
