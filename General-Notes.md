@@ -41,6 +41,9 @@ some of these entries are complete guesses.
 * DCM: Dynamic Clock Management.
 * M4U: Multimedia Memory Management Unit. This is what MediaTek calls their
   IOMMU.
+* MCU: Used to refer to different processor subsystems. e.g., "APMCU" refers to
+  the main AP core cluster, while "MDMCU" refers to the BB CPU. "MCUSYS" seems
+  to refer to the AP MCU system.
 * MSDC: Used to refer to their EMMC/SD card controller core. Possibly "MediaTek
   SD Controller".
 * SWLA: Software LA (Logic Analyzer?). It seems to be some kind of debug
