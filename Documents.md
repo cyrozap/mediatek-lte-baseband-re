@@ -20,18 +20,18 @@
 
 ## Patents
 
- * [EP2751670B1](https://patents.google.com/patent/EP2751670B1/en): Digital signal processor
- * [EP2751671B1](https://patents.google.com/patent/EP2751671B1/en): Digital signal processor and baseband communication device
- * [US20060271764A1](https://patents.google.com/patent/US20060271764A1/en): Programmable digital signal processor including a clustered SIMD microarchitecture configured to execute complex vector instructions
- * [US20060271765A1](https://patents.google.com/patent/US20060271765A1/en): Digital signal processor including a programmable network
- * [US20070198815A1](https://patents.google.com/patent/US20070198815A1/en): Programmable digital signal processor having a clustered SIMD microarchitecture including a complex short multiplier and an independent vector load unit
- * [US20140244970A1](https://patents.google.com/patent/US20140244970A1/en): Digital signal processor and baseband communication device
- * [US20140281373A1](https://patents.google.com/patent/US20140281373A1/en): Digital signal processor and baseband communication device
- * [US20140344549A1](https://patents.google.com/patent/US20140344549A1/en): Digital signal processor and baseband communication device
- * [US20140351555A1](https://patents.google.com/patent/US20140351555A1/en): Digital signal processor and method for addressing a memory in a digital signal processor
- * [US20140359252A1](https://patents.google.com/patent/US20140359252A1/en): Digital signal processor
- * [US20140372728A1](https://patents.google.com/patent/US20140372728A1/en): Vector execution unit for digital signal processor
- * [US7299342B2](https://patents.google.com/patent/US7299342B2/en): Complex vector executing clustered SIMD micro-architecture DSP with accelerator coupled complex ALU paths each further including short multiplier/accumulator using two's complement
- * [US7415595B2](https://patents.google.com/patent/US7415595B2/en): Data processing without processor core intervention by chain of accelerators selectively coupled by programmable interconnect network and to memory
- * [US8874968B1](https://patents.google.com/patent/US8874968B1/en): Method and system for testing a processor designed by a configurator
- * [US9557996B2](https://patents.google.com/patent/US9557996B2/en): Digital signal processor and method for addressing a memory in a digital signal processor
+ * [EP2751670B1: Digital signal processor](https://patents.google.com/patent/EP2751670B1/en)
+ * [EP2751671B1: Digital signal processor and baseband communication device](https://patents.google.com/patent/EP2751671B1/en)
+ * [US20060271764A1: Programmable digital signal processor including a clustered SIMD microarchitecture configured to execute complex vector instructions](https://patents.google.com/patent/US20060271764A1/en)
+ * [US20060271765A1: Digital signal processor including a programmable network](https://patents.google.com/patent/US20060271765A1/en)
+ * [US20070198815A1: Programmable digital signal processor having a clustered SIMD microarchitecture including a complex short multiplier and an independent vector load unit](https://patents.google.com/patent/US20070198815A1/en)
+ * [US20140244970A1: Digital signal processor and baseband communication device](https://patents.google.com/patent/US20140244970A1/en)
+ * [US20140281373A1: Digital signal processor and baseband communication device](https://patents.google.com/patent/US20140281373A1/en)
+ * [US20140344549A1: Digital signal processor and baseband communication device](https://patents.google.com/patent/US20140344549A1/en)
+ * [US20140351555A1: Digital signal processor and method for addressing a memory in a digital signal processor](https://patents.google.com/patent/US20140351555A1/en)
+ * [US20140359252A1: Digital signal processor](https://patents.google.com/patent/US20140359252A1/en)
+ * [US20140372728A1: Vector execution unit for digital signal processor](https://patents.google.com/patent/US20140372728A1/en)
+ * [US7299342B2: Complex vector executing clustered SIMD micro-architecture DSP with accelerator coupled complex ALU paths each further including short multiplier/accumulator using two's complement](https://patents.google.com/patent/US7299342B2/en)
+ * [US7415595B2: Data processing without processor core intervention by chain of accelerators selectively coupled by programmable interconnect network and to memory](https://patents.google.com/patent/US7415595B2/en)
+ * [US8874968B1: Method and system for testing a processor designed by a configurator](https://patents.google.com/patent/US8874968B1/en)
+ * [US9557996B2: Digital signal processor and method for addressing a memory in a digital signal processor](https://patents.google.com/patent/US9557996B2/en)
