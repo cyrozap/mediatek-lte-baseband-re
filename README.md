@@ -56,4 +56,5 @@ each subsystem can be found in the "Notes.md" file in the directory for
 that subsystem.
 
 The [Documents.md](Documents.md) file contains a list of research papers,
-presentations, and patents that are or might be relevant to this project.
+presentations, patents, and other documents that are or might be relevant
+to this project.

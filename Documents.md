@@ -35,3 +35,16 @@
  * [US7415595B2: Data processing without processor core intervention by chain of accelerators selectively coupled by programmable interconnect network and to memory](https://patents.google.com/patent/US7415595B2/en)
  * [US8874968B1: Method and system for testing a processor designed by a configurator](https://patents.google.com/patent/US8874968B1/en)
  * [US9557996B2: Digital signal processor and method for addressing a memory in a digital signal processor](https://patents.google.com/patent/US9557996B2/en)
+
+
+## ARM Documents
+
+### Cortex-R4
+
+ * [ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition](https://developer.arm.com/products/architecture/r-profile/docs/ddi0406/latest/arm-architecture-reference-manual-armv7-a-and-armv7-r-edition)
+ * [Cortex-R4 and Cortex-R4F Technical Reference Manual](https://developer.arm.com/docs/ddi0363/latest/preface)
+
+### Debug
+
+ * [ARM® CoreSight™ Architecture Specification v3.0](https://static.docs.arm.com/ihi0029/e/coresight_v3_0_architecture_specification_IHI0029E.pdf)
+ * [ARM® Debug Interface Architecture Specification ADIv5.0 to ADIv5.2](https://static.docs.arm.com/ihi0031/d/debug_interface_v5_2_architecture_specification_IHI0031D.pdf)
