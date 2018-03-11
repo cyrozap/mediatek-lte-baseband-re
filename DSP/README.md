@@ -1,5 +1,6 @@
 # Coresonic (MediaTek) DSP code
 
+
 ## Quick start
 
 Software dependencies:
@@ -20,6 +21,12 @@ Once you have the DSP binary, run `make` in this directory to generate the
 parser code used by `extract_fw.py`. Then, simply run
 `./extract_fw.py dsp_*.bin` to extract each section from the binary into
 separate files.
+
+
+## Notes
+
+See [Notes.md](Notes.md).
+
 
 [ksc]: https://github.com/kaitai-io/kaitai_struct_compiler
 [kspr]: https://github.com/kaitai-io/kaitai_struct_python_runtime
