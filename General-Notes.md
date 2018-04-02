@@ -47,6 +47,8 @@ some of these entries are complete guesses.
   to refer to the AP MCU system.
 * MSDC: Used to refer to their EMMC/SD card controller core. Possibly "MediaTek
   SD Controller".
+* SST: System Stability Tracker. This is the name of the system trace
+  functionality included in the BB firmware.
 * SWLA: Software LA (Logic Analyzer?). It seems to be some kind of debug
   functionality in the BB firmware.
 
