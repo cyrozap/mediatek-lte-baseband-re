@@ -15,7 +15,8 @@ the file will be called something like `dsp_*.bin`. If you don't have access
 to a phone with a MediaTek LTE modem, you can also find these firmware files
 on the Internet, typically in the "vendor.zip" files posted by Android ROM
 developers. You can also find them, for example, using
-[this GitHub search query][firmware query].
+[this GitHub search query][firmware query]. Note: You must be logged in to
+GitHub in order to get any results from that query.
 
 Once you have the DSP binary, run `make` in this directory to generate the
 parser code used by `extract_fw.py`. Then, simply run
