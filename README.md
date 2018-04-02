@@ -48,6 +48,8 @@ do all of this.
 The DSP firmware can be decoded. See the [DSP](DSP) directory for some
 scripts to do this and to read the notes on my findings.
 
+My current task list is in [Tasks.md](Tasks.md).
+
 ## Additional Information
 
 See the [General-Notes.md](General-Notes.md) file in this directory for
