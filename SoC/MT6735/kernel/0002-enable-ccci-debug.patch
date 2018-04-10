@@ -1,0 +1,61 @@
+diff --git a/drivers/misc/mediatek/ccci_util/ccci_util_lib_load_img.c b/drivers/misc/mediatek/ccci_util/ccci_util_lib_load_img.c
+index 9e006fd9..743ebe62 100755
+--- a/drivers/misc/mediatek/ccci_util/ccci_util_lib_load_img.c
++++ b/drivers/misc/mediatek/ccci_util/ccci_util_lib_load_img.c
+@@ -1,3 +1,5 @@
++#define DEBUG
++
+ #include <linux/module.h>
+ #include <linux/device.h>
+ #include <linux/fs.h>
+diff --git a/drivers/misc/mediatek/ccci_util/ccci_util_log.h b/drivers/misc/mediatek/ccci_util/ccci_util_log.h
+index 7e0b8281..ff434d45 100644
+--- a/drivers/misc/mediatek/ccci_util/ccci_util_log.h
++++ b/drivers/misc/mediatek/ccci_util/ccci_util_log.h
+@@ -3,20 +3,20 @@
+ 
+ /* No MD id message part */
+ #define CCCI_UTIL_DBG_MSG(fmt, args...)\
+-do {} while (0)/*	pr_debug("[ccci0/util]" fmt, ##args) */
++	pr_debug("[ccci0/util]" fmt, ##args)
+ 
+ #define CCCI_UTIL_INF_MSG(fmt, args...)\
+-do {} while (0)/*	pr_debug("[ccci0/util]" fmt, ##args) */
++	pr_debug("[ccci0/util]" fmt, ##args)
+ 
+ #define CCCI_UTIL_ERR_MSG(fmt, args...)\
+ 	pr_err("[ccci0/util]" fmt, ##args)
+ 
+ /* With MD id message part */
+ #define CCCI_UTIL_DBG_MSG_WITH_ID(id, fmt, args...)\
+-do {} while (0)/*	pr_debug("[ccci%d/util]" fmt, (id+1), ##args) */
++	pr_debug("[ccci%d/util]" fmt, (id+1), ##args)
+ 
+ #define CCCI_UTIL_INF_MSG_WITH_ID(id, fmt, args...)\
+-do {} while (0)/*	pr_debug("[ccci%d/util]" fmt, (id+1), ##args) */
++	pr_debug("[ccci%d/util]" fmt, (id+1), ##args)
+ 
+ #define CCCI_UTIL_NOTICE_MSG_WITH_ID(id, fmt, args...) \
+ 	pr_notice("[ccci%d/util]" fmt, (id+1), ##args)
+diff --git a/drivers/misc/mediatek/eccci/mt6735/ccci_platform.c b/drivers/misc/mediatek/eccci/mt6735/ccci_platform.c
+index f7d28150..3c113bce 100644
+--- a/drivers/misc/mediatek/eccci/mt6735/ccci_platform.c
++++ b/drivers/misc/mediatek/eccci/mt6735/ccci_platform.c
+@@ -1,3 +1,5 @@
++#define DEBUG
++
+ #include <linux/platform_device.h>
+ #include <linux/device.h>
+ #include <linux/module.h>
+@@ -253,9 +255,9 @@ void ccci_set_dsp_region_protection(struct ccci_modem *md, int loaded)
+ 	dsp_mem_phy_start = (unsigned int)md->mem_layout.dsp_region_phy;
+ 	dsp_mem_phy_end = ((dsp_mem_phy_start + md->mem_layout.dsp_region_size + 0xFFFF) & (~0xFFFF)) - 0x1;
+ 
+-	CCCI_INF_MSG(md->index, TAG, "MPU Start protect DSP region<%d:%08x:%08x> %x\n",
++	CCCI_INF_MSG(md->index, TAG, "MPU Start protect DSP region<%d:%08x:%08x> %x (jk lol)\n",
+ 		     dsp_mem_mpu_id, dsp_mem_phy_start, dsp_mem_phy_end, dsp_mem_mpu_attr);
+-	emi_mpu_set_region_protection(dsp_mem_phy_start, dsp_mem_phy_end, dsp_mem_mpu_id, dsp_mem_mpu_attr);
++	//emi_mpu_set_region_protection(dsp_mem_phy_start, dsp_mem_phy_end, dsp_mem_mpu_id, dsp_mem_mpu_attr);
+ #else
+ 	if (!loaded) {
+ 		dsp_mem_phy_start = (unsigned int)md->mem_layout.dsp_region_phy;

@@ -1,0 +1,550 @@
+diff --git a/Makefile b/Makefile
+index 1ad63f5b..a1631aae 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1496,11 +1496,11 @@ image_name:
+ # Clear a bunch of variables before executing the submake
+ tools/: FORCE
+ 	$(Q)mkdir -p $(objtree)/tools
+-	$(Q)$(MAKE) LDFLAGS= MAKEFLAGS="$(filter --j% -j,$(MAKEFLAGS))" O=$(objtree) subdir=tools -C $(src)/tools/
++	$(Q)$(MAKE) LDFLAGS= MAKEFLAGS="$(filter --j% -j,$(MAKEFLAGS))" O=$(objtree) -C $(src)/tools/
+ 
+ tools/%: FORCE
+ 	$(Q)mkdir -p $(objtree)/tools
+-	$(Q)$(MAKE) LDFLAGS= MAKEFLAGS="$(filter --j% -j,$(MAKEFLAGS))" O=$(objtree) subdir=tools -C $(src)/tools/ $*
++	$(Q)$(MAKE) LDFLAGS= MAKEFLAGS="$(filter --j% -j,$(MAKEFLAGS))" O=$(objtree) -C $(src)/tools/ $*
+ 
+ # Single targets
+ # ---------------------------------------------------------------------------
+diff --git a/drivers/misc/mediatek/base/power/mt6735/mt_pbm.c b/drivers/misc/mediatek/base/power/mt6735/mt_pbm.c
+index 138bde95..e4cc770b 100644
+--- a/drivers/misc/mediatek/base/power/mt6735/mt_pbm.c
++++ b/drivers/misc/mediatek/base/power/mt6735/mt_pbm.c
+@@ -20,8 +20,8 @@
+ #include <mach/mt_pbm.h>
+ #include <mach/upmu_sw.h>
+ #include <mt-plat/upmu_common.h>
+-#include <mt_cpufreq.h>
+-#include <mt_gpufreq.h>
++#include "mt_cpufreq.h"
++#include "mt_gpufreq.h"
+ #include <mach/mt_thermal.h>
+ 
+ #ifndef DISABLE_PBM_FEATURE
+diff --git a/drivers/misc/mediatek/base/power/mt6735/mt_pm_init.c b/drivers/misc/mediatek/base/power/mt6735/mt_pm_init.c
+index b21d1b11..dd7b161f 100644
+--- a/drivers/misc/mediatek/base/power/mt6735/mt_pm_init.c
++++ b/drivers/misc/mediatek/base/power/mt6735/mt_pm_init.c
+@@ -30,7 +30,7 @@
+ /* #include "mach/mt_cpufreq.h" */
+ /* #include "mach/mt_gpufreq.h" */
+ #include "mt_cpuidle.h"
+-#include <mt_clkbuf_ctl.h>
++#include "mt_clkbuf_ctl.h"
+ /* #include "mach/mt_clkbuf_ctl.h" */
+ /* #include "mach/mt_chip.h" */
+ #include "mt-plat/mtk_rtc.h"
+diff --git a/drivers/misc/mediatek/base/power/mt6735/mt_ptp.c b/drivers/misc/mediatek/base/power/mt6735/mt_ptp.c
+index fadec129..778d9328 100644
+--- a/drivers/misc/mediatek/base/power/mt6735/mt_ptp.c
++++ b/drivers/misc/mediatek/base/power/mt6735/mt_ptp.c
+@@ -145,7 +145,7 @@ unsigned int reg_dump_addr_off[] = {
+ #include <linux/of_fdt.h>
+ #endif
+ /* local includes */
+-#include <mt_spm.h>
++#include "mt_spm.h"
+ #include "aee.h"
+ #include <linux/gpio.h>
+ 
+diff --git a/drivers/misc/mediatek/btcvsd/inc/mt6735/AudDrv_BTCVSD.h b/drivers/misc/mediatek/btcvsd/inc/mt6735/AudDrv_BTCVSD.h
+index 2dbc586c..41d0eb7c 100644
+--- a/drivers/misc/mediatek/btcvsd/inc/mt6735/AudDrv_BTCVSD.h
++++ b/drivers/misc/mediatek/btcvsd/inc/mt6735/AudDrv_BTCVSD.h
+@@ -2,7 +2,7 @@
+ #define AUDDRV_BTCVSD_H
+ 
+ #include <linux/types.h>
+-#include "AudioBTCVSDDef.h"
++#include "../../AudioBTCVSDDef.h"
+ 
+ #undef DEBUG_AUDDRV
+ #ifdef DEBUG_AUDDRV
+diff --git a/drivers/misc/mediatek/cmdq/v2/cmdq_def.h b/drivers/misc/mediatek/cmdq/v2/cmdq_def.h
+index 9c934827..b4a16437 100644
+--- a/drivers/misc/mediatek/cmdq/v2/cmdq_def.h
++++ b/drivers/misc/mediatek/cmdq/v2/cmdq_def.h
+@@ -9,7 +9,7 @@
+ #ifdef CMDQ_COMMON_ENG_SUPPORT
+ #include "cmdq_engine_common.h"
+ #else
+-#include "cmdq_engine.h"
++#include "mt6735/cmdq_engine.h"
+ #endif
+ 
+ #define CMDQ_SPECIAL_SUBSYS_ADDR (99)
+diff --git a/drivers/misc/mediatek/ext_disp/extd_factory.c b/drivers/misc/mediatek/ext_disp/extd_factory.c
+index a5ddf765..3e182033 100644
+--- a/drivers/misc/mediatek/ext_disp/extd_factory.c
++++ b/drivers/misc/mediatek/ext_disp/extd_factory.c
+@@ -4,7 +4,7 @@
+ #include "extd_log.h"
+ #include "extd_factory.h"
+ #include "extd_info.h"
+-#include "external_display.h"
++#include "mt6735/external_display.h"
+ 
+ #include "dpi_dvt_test.h"
+ 
+diff --git a/drivers/misc/mediatek/ext_disp/extd_multi_control.c b/drivers/misc/mediatek/ext_disp/extd_multi_control.c
+index 5e88d3f8..8c796b58 100755
+--- a/drivers/misc/mediatek/ext_disp/extd_multi_control.c
++++ b/drivers/misc/mediatek/ext_disp/extd_multi_control.c
+@@ -3,8 +3,8 @@
+ 
+ #include "extd_multi_control.h"
+ #include "disp_drv_platform.h"
+-#include "external_display.h"
+-#include "extd_platform.h"
++#include "mt6735/external_display.h"
++#include "mt6735/extd_platform.h"
+ #include "extd_log.h"
+ #include "mtk_ovl.h"
+ 
+diff --git a/drivers/misc/mediatek/gpio/mt6735/6735_gpio.h b/drivers/misc/mediatek/gpio/mt6735/6735_gpio.h
+index 4ed08308..5cb6be65 100644
+--- a/drivers/misc/mediatek/gpio/mt6735/6735_gpio.h
++++ b/drivers/misc/mediatek/gpio/mt6735/6735_gpio.h
+@@ -1,7 +1,7 @@
+ #ifndef _6735_GPIO_H
+ #define _6735_GPIO_H
+ 
+-#include <mt_gpio_base.h>
++#include "mt_gpio_base.h"
+ #include <linux/slab.h>
+ #include <linux/device.h>
+ 
+diff --git a/drivers/misc/mediatek/gpio/mt6735/mt_gpio_affix.c b/drivers/misc/mediatek/gpio/mt6735/mt_gpio_affix.c
+index ce2d6c88..70d098a9 100644
+--- a/drivers/misc/mediatek/gpio/mt6735/mt_gpio_affix.c
++++ b/drivers/misc/mediatek/gpio/mt6735/mt_gpio_affix.c
+@@ -5,7 +5,7 @@
+ #include <linux/device.h>
+ /* #include <mach/mt_gpio.h> */
+ #include <mt-plat/mt_gpio_core.h>
+-#include <6735_gpio.h>
++#include "6735_gpio.h"
+ 
+ 
+ void mt_gpio_pin_decrypt(unsigned long *cipher)
+diff --git a/drivers/misc/mediatek/gpio/mt6735/mt_gpio_base.c b/drivers/misc/mediatek/gpio/mt6735/mt_gpio_base.c
+index 1e35250f..e6e4b0e3 100644
+--- a/drivers/misc/mediatek/gpio/mt6735/mt_gpio_base.c
++++ b/drivers/misc/mediatek/gpio/mt6735/mt_gpio_base.c
+@@ -9,14 +9,14 @@
+  ******************************************************************************/
+ 
+ 
+-#include <6735_gpio.h>
++#include "6735_gpio.h"
+ #include <linux/types.h>
+ #include "mt-plat/sync_write.h"
+ #include <mt-plat/mt_gpio.h>
+ #include <mt-plat/mt_gpio_core.h>
+-#include <mt_gpio_base.h>
++#include "mt_gpio_base.h"
+ /* autogen */
+-#include <gpio_cfg.h>
++#include "gpio_cfg.h"
+ #ifdef CONFIG_OF
+ #include <linux/of_address.h>
+ #endif
+diff --git a/drivers/misc/mediatek/gpio/mt6735/mt_gpio_base_linux.c b/drivers/misc/mediatek/gpio/mt6735/mt_gpio_base_linux.c
+index 2cec43ad..8eb87094 100644
+--- a/drivers/misc/mediatek/gpio/mt6735/mt_gpio_base_linux.c
++++ b/drivers/misc/mediatek/gpio/mt6735/mt_gpio_base_linux.c
+@@ -6,7 +6,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/seq_file.h>
+ 
+-#include <mt_gpio_base.h>
++#include "mt_gpio_base.h"
+ #include <mt-plat/mt_gpio_core.h>
+ /*#include <mach/eint.h>*/
+ #include <linux/interrupt.h>
+diff --git a/drivers/misc/mediatek/gpio/mt6735/mt_gpio_debug.c b/drivers/misc/mediatek/gpio/mt6735/mt_gpio_debug.c
+index 6c080223..6c2a7d5f 100644
+--- a/drivers/misc/mediatek/gpio/mt6735/mt_gpio_debug.c
++++ b/drivers/misc/mediatek/gpio/mt6735/mt_gpio_debug.c
+@@ -9,7 +9,7 @@
+  ******************************************************************************/
+ 
+ #include <linux/slab.h>
+-#include <6735_gpio.h>
++#include "6735_gpio.h"
+ #include <mt-plat/mt_gpio.h>
+ #include <mt-plat/mt_gpio_core.h>
+ 
+diff --git a/drivers/misc/mediatek/gpio/mt6735/mt_gpio_ext.c b/drivers/misc/mediatek/gpio/mt6735/mt_gpio_ext.c
+index a35c91ab..99245e11 100644
+--- a/drivers/misc/mediatek/gpio/mt6735/mt_gpio_ext.c
++++ b/drivers/misc/mediatek/gpio/mt6735/mt_gpio_ext.c
+@@ -10,7 +10,7 @@
+ 
+ #include <mt-plat/mt_gpio.h>
+ #include <mt-plat/mt_gpio_core.h>
+-#include <mt_gpio_ext.h>
++#include "mt_gpio_ext.h"
+ 
+ /* #define MAX_GPIO_REG_BITS      16 */
+ /* #define MAX_GPIO_MODE_PER_REG  5 */
+diff --git a/drivers/misc/mediatek/i2c/mt6735/i2c.c b/drivers/misc/mediatek/i2c/mt6735/i2c.c
+index 6274df6d..2bc2d4a0 100644
+--- a/drivers/misc/mediatek/i2c/mt6735/i2c.c
++++ b/drivers/misc/mediatek/i2c/mt6735/i2c.c
+@@ -25,7 +25,7 @@
+ #include <asm/io.h>
+ /* #include <mach/dma.h> */
+ /* #include <mach/mt_reg_base.h> */
+-#include <mt_i2c.h>
++#include "mt_i2c.h"
+ #include <mt-plat/sync_write.h>
+ #include "../../base/power/mt6735/mt_pm_init.h"
+ /* #include "mach/memory.h" */
+diff --git a/drivers/misc/mediatek/i2c/mt6735/i2c_common.c b/drivers/misc/mediatek/i2c/mt6735/i2c_common.c
+index 7e004a7c..abca0d66 100644
+--- a/drivers/misc/mediatek/i2c/mt6735/i2c_common.c
++++ b/drivers/misc/mediatek/i2c/mt6735/i2c_common.c
+@@ -8,7 +8,7 @@
+ #include <linux/err.h>
+ /* #include <mach/mt_pm_ldo.h> */
+ #include <asm/memory.h>
+-#include <mt_i2c.h>
++#include "mt_i2c.h"
+ 
+ static char data_buffer[256 * 4];
+ 
+diff --git a/drivers/misc/mediatek/include/mt-plat/mt6735/include/mach/mt_thermal.h b/drivers/misc/mediatek/include/mt-plat/mt6735/include/mach/mt_thermal.h
+index 2fe522b6..f7b98a26 100644
+--- a/drivers/misc/mediatek/include/mt-plat/mt6735/include/mach/mt_thermal.h
++++ b/drivers/misc/mediatek/include/mt-plat/mt6735/include/mach/mt_thermal.h
+@@ -13,7 +13,7 @@
+ #include "mt-plat/sync_write.h"
+ #include "mtk_thermal_typedefs.h"
+ #include "mt-plat/mtk_mdm_monitor.h"
+-#include "mt_gpufreq.h"
++#include "../../../../../base/power/mt6735/mt_gpufreq.h"
+ /* #include "mach/mt6575_auxadc_hw.h" */
+ 
+ #if !defined(CONFIG_MTK_LEGACY)
+diff --git a/drivers/misc/mediatek/include/mt-plat/sd_misc.h b/drivers/misc/mediatek/include/mt-plat/sd_misc.h
+index 7e6768c9..cc5f27a6 100644
+--- a/drivers/misc/mediatek/include/mt-plat/sd_misc.h
++++ b/drivers/misc/mediatek/include/mt-plat/sd_misc.h
+@@ -10,7 +10,7 @@
+ #include <linux/mmc/sd.h>
+ #endif
+ 
+-#include <mt_sd.h>
++#include "../../../../mmc/host/mediatek/mt6735/mt_sd.h"
+ 
+ #ifndef FPGA_PLATFORM
+ extern void msdc_set_driving(struct msdc_host *host, struct msdc_hw *hw, bool sd_18);
+diff --git a/drivers/misc/mediatek/m4u/2.0/m4u_pgtable.h b/drivers/misc/mediatek/m4u/2.0/m4u_pgtable.h
+index fce98246..d3f5cad2 100644
+--- a/drivers/misc/mediatek/m4u/2.0/m4u_pgtable.h
++++ b/drivers/misc/mediatek/m4u/2.0/m4u_pgtable.h
+@@ -1,7 +1,7 @@
+ #ifndef __M4U_PGTABLE_H__
+ #define __M4U_PGTABLE_H__
+ 
+-#include "m4u_reg.h"
++#include "../mt6735/mt6735/m4u_reg.h"
+ 
+ /* ================================================================= */
+ /* 2 level pagetable: pgd -> pte */
+diff --git a/drivers/misc/mediatek/m4u/mt6735/m4u_priv.h b/drivers/misc/mediatek/m4u/mt6735/m4u_priv.h
+index 69dfa34b..7d4554d8 100644
+--- a/drivers/misc/mediatek/m4u/mt6735/m4u_priv.h
++++ b/drivers/misc/mediatek/m4u/mt6735/m4u_priv.h
+@@ -12,9 +12,9 @@
+ #endif
+ 
+ #include "m4u.h"
+-#include "m4u_reg.h"
++#include "mt6735/m4u_reg.h"
+ #include "../2.0/m4u_pgtable.h"
+-#include "m4u_platform.h"
++#include "mt6735/m4u_platform.h"
+ 
+ #define M4UMSG(string, args...)	pr_err("M4U"string, ##args)
+ #define M4UINFO(string, args...) pr_debug("M4U"string, ##args)
+diff --git a/drivers/misc/mediatek/power/mt6735/mt6311.c b/drivers/misc/mediatek/power/mt6735/mt6311.c
+index 018fc81f..9d71d731 100644
+--- a/drivers/misc/mediatek/power/mt6735/mt6311.c
++++ b/drivers/misc/mediatek/power/mt6735/mt6311.c
+@@ -27,7 +27,7 @@
+ /*#include <mach/eint.h> TBD*/
+ 
+ #include <mt-plat/upmu_common.h>
+-#include <mt6311.h>
++#include "mt6311.h"
+ 
+ #include <mach/mt_pmic.h>
+ 
+diff --git a/drivers/misc/mediatek/power/mt6735/pmic.c b/drivers/misc/mediatek/power/mt6735/pmic.c
+index 132569a5..b3b2f254 100644
+--- a/drivers/misc/mediatek/power/mt6735/pmic.c
++++ b/drivers/misc/mediatek/power/mt6735/pmic.c
+@@ -65,7 +65,7 @@
+ #include <linux/gpio/consumer.h>
+ #endif
+ #include <mt-plat/upmu_common.h>
+-#include <pmic.h>
++#include "pmic.h"
+ /*#include <mach/eint.h> TBD*/
+ #include <mach/mt_pmic_wrap.h>
+ #if defined CONFIG_MTK_LEGACY
+@@ -89,7 +89,7 @@
+ //#include <mach/mt_battery_meter.h>
+ #include "cust_battery_meter.h"
+ #endif
+-#include <mt6311.h>
++#include "mt6311.h"
+ #include <mach/mt_pmic.h>
+ 
+ #include <mt-plat/aee.h>
+diff --git a/drivers/misc/mediatek/uart/include/mtk_uart.h b/drivers/misc/mediatek/uart/include/mtk_uart.h
+index d971cb0a..e60b128e 100644
+--- a/drivers/misc/mediatek/uart/include/mtk_uart.h
++++ b/drivers/misc/mediatek/uart/include/mtk_uart.h
+@@ -5,7 +5,7 @@
+ #include <mach/mt_reg_base.h>
+ #endif
+ #include <mt-plat/sync_write.h>
+-#include "platform_uart.h"
++#include "../mt6735/platform_uart.h"
+ 
+ /*---------------------------------------------------------------------------*/
+ #if defined(ENABLE_VFIFO_DEBUG)
+diff --git a/drivers/misc/mediatek/uart/include/mtk_uart_intf.h b/drivers/misc/mediatek/uart/include/mtk_uart_intf.h
+index aff13c8a..60321384 100644
+--- a/drivers/misc/mediatek/uart/include/mtk_uart_intf.h
++++ b/drivers/misc/mediatek/uart/include/mtk_uart_intf.h
+@@ -1,7 +1,7 @@
+ #ifndef __MTK_UART_INTF_H__
+ #define __MTK_UART_INTF_H__
+ 
+-#include "platform_uart.h"
++#include "../mt6735/platform_uart.h"
+ #include <linux/platform_device.h>
+ /*---------------------------------------------------------------------------*/
+ /* fiq debugger */
+diff --git a/drivers/misc/mediatek/video/common/mtkfb_fence.h b/drivers/misc/mediatek/video/common/mtkfb_fence.h
+index d8bae158..9b607299 100644
+--- a/drivers/misc/mediatek/video/common/mtkfb_fence.h
++++ b/drivers/misc/mediatek/video/common/mtkfb_fence.h
+@@ -5,7 +5,7 @@
+ #include <linux/list.h>
+ #include "disp_session.h"
+ #include "disp_drv_platform.h"
+-#include "display_recorder.h"
++#include "../mt6735/dispsys/display_recorder.h"
+ 
+ #ifdef __cplusplus
+ extern "C" {
+diff --git a/drivers/misc/mediatek/video/common/rdma10/ddp_rdma.h b/drivers/misc/mediatek/video/common/rdma10/ddp_rdma.h
+index 4f4b3ac9..9ca124ec 100644
+--- a/drivers/misc/mediatek/video/common/rdma10/ddp_rdma.h
++++ b/drivers/misc/mediatek/video/common/rdma10/ddp_rdma.h
+@@ -4,8 +4,8 @@
+ #include <mt-plat/sync_write.h>
+ #include <linux/types.h>
+ /* #include <mach/mt_reg_base.h> */
+-#include "ddp_info.h"
+-#include "ddp_hal.h"
++#include "../mt6735/dispsys/ddp_info.h"
++#include "../mt6735/dispsys/ddp_hal.h"
+ 
+ extern unsigned long long rdma_start_time[];
+ extern unsigned long long rdma_end_time[];
+diff --git a/drivers/misc/mediatek/video/common/wdma10/ddp_wdma.h b/drivers/misc/mediatek/video/common/wdma10/ddp_wdma.h
+index 78e85172..3728d329 100644
+--- a/drivers/misc/mediatek/video/common/wdma10/ddp_wdma.h
++++ b/drivers/misc/mediatek/video/common/wdma10/ddp_wdma.h
+@@ -1,8 +1,8 @@
+ #ifndef _DDP_WDMA_H_
+ #define _DDP_WDMA_H_
+ 
+-#include "ddp_hal.h"
+-#include "ddp_info.h"
++#include "../../mt6735/dispsys/ddp_hal.h"
++#include "../../mt6735/dispsys/ddp_info.h"
+ 
+ /* start module */
+ int wdma_start(DISP_MODULE_ENUM module, void *handle);
+diff --git a/drivers/misc/mediatek/video/mt6735/dispsys/ddp_pwm_mux.c b/drivers/misc/mediatek/video/mt6735/dispsys/ddp_pwm_mux.c
+index f86dfb42..0735756c 100644
+--- a/drivers/misc/mediatek/video/mt6735/dispsys/ddp_pwm_mux.c
++++ b/drivers/misc/mediatek/video/mt6735/dispsys/ddp_pwm_mux.c
+@@ -1,10 +1,10 @@
+ #include <linux/kernel.h>
+ #include <linux/clk.h>
+-#include <ddp_drv.h>
+-#include <ddp_pwm_mux.h>
++#include "ddp_drv.h"
++#include "ddp_pwm_mux.h"
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+-#include <ddp_reg.h>
++#include "ddp_reg.h"
+ 
+ #define PWM_MSG(fmt, arg...) pr_debug("[PWM] " fmt "\n", ##arg)
+ #define PWM_ERR(fmt, arg...) pr_err("[PWM] " fmt "\n", ##arg)
+diff --git a/drivers/misc/mediatek/video/mt6735/dispsys/mt6735/ddp_ovl.h b/drivers/misc/mediatek/video/mt6735/dispsys/mt6735/ddp_ovl.h
+index 7a8c5dc8..8dad5b89 100644
+--- a/drivers/misc/mediatek/video/mt6735/dispsys/mt6735/ddp_ovl.h
++++ b/drivers/misc/mediatek/video/mt6735/dispsys/mt6735/ddp_ovl.h
+@@ -1,9 +1,9 @@
+ #ifndef _DDP_OVL_H_
+ #define _DDP_OVL_H_
+ 
+-#include "ddp_hal.h"
++#include "../ddp_hal.h"
+ #include "DpDataType.h"
+-#include "ddp_info.h"
++#include "../ddp_info.h"
+ 
+ 
+ #define OVL_MAX_WIDTH  (4095)
+diff --git a/drivers/misc/mediatek/video/mt6735/dispsys/mt6735/ddp_rdma_ex.h b/drivers/misc/mediatek/video/mt6735/dispsys/mt6735/ddp_rdma_ex.h
+index 80e16a42..f934000f 100644
+--- a/drivers/misc/mediatek/video/mt6735/dispsys/mt6735/ddp_rdma_ex.h
++++ b/drivers/misc/mediatek/video/mt6735/dispsys/mt6735/ddp_rdma_ex.h
+@@ -1,6 +1,6 @@
+ #ifndef _DDP_RDMA_EX_H_
+ #define _DDP_RDMA_EX_H_
+-#include "ddp_info.h"
++#include "../ddp_info.h"
+ 
+ #define RDMA_INSTANCES  2
+ #define RDMA_MAX_WIDTH  4095
+diff --git a/drivers/misc/mediatek/video/mt6735/dispsys/mt6735/ddp_reg.h b/drivers/misc/mediatek/video/mt6735/dispsys/mt6735/ddp_reg.h
+index c40eec43..5779a1d5 100644
+--- a/drivers/misc/mediatek/video/mt6735/dispsys/mt6735/ddp_reg.h
++++ b/drivers/misc/mediatek/video/mt6735/dispsys/mt6735/ddp_reg.h
+@@ -3,11 +3,11 @@
+ #include <mt-plat/sync_write.h>
+ /* #include <mach/mt_reg_base.h> */
+ #include <linux/types.h>
+-#include "display_recorder.h"
++#include "../display_recorder.h"
+ #include "cmdq_record.h"
+ #include "cmdq_core.h"
+-#include "ddp_hal.h"
+-#include "ddp_log.h"
++#include "../ddp_hal.h"
++#include "../ddp_log.h"
+ 
+ /* MIPITX and DSI */
+ #define ENABLE_CLK_MGR
+diff --git a/drivers/misc/mediatek/video/mt6735/videox/disp_drv_log.h b/drivers/misc/mediatek/video/mt6735/videox/disp_drv_log.h
+index 4262d8be..94491d69 100644
+--- a/drivers/misc/mediatek/video/mt6735/videox/disp_drv_log.h
++++ b/drivers/misc/mediatek/video/mt6735/videox/disp_drv_log.h
+@@ -1,7 +1,7 @@
+ #ifndef __DISP_DRV_LOG_H__
+ #define __DISP_DRV_LOG_H__
+-#include "display_recorder.h"
+-#include "ddp_debug.h"
++#include "../dispsys/display_recorder.h"
++#include "../dispsys/ddp_debug.h"
+ #include "disp_drv_platform.h"
+ 
+ extern unsigned int dprec_error_log_len;
+diff --git a/drivers/misc/mediatek/video/mt6735/videox/mt6735/disp_drv_platform.h b/drivers/misc/mediatek/video/mt6735/videox/mt6735/disp_drv_platform.h
+index a359f009..77d3819e 100644
+--- a/drivers/misc/mediatek/video/mt6735/videox/mt6735/disp_drv_platform.h
++++ b/drivers/misc/mediatek/video/mt6735/videox/mt6735/disp_drv_platform.h
+@@ -13,11 +13,11 @@
+ #endif
+ /* #include <mach/mt_irq.h> */
+ /*#include <board-custom.h>*/
+-#include "disp_assert_layer.h"
++#include "../disp_assert_layer.h"
+ #include <mt-plat/sync_write.h>
+-#include "ddp_hal.h"
++#include "../ddp_hal.h"
+ /* #include "ddp_drv.h" */
+-#include "ddp_path.h"
++#include "../ddp_path.h"
+ #include "ddp_ovl.h"
+ 
+ 
+diff --git a/drivers/misc/mediatek/video/mt6735/videox/primary_display.h b/drivers/misc/mediatek/video/mt6735/videox/primary_display.h
+index 673ff8df..35ea98aa 100644
+--- a/drivers/misc/mediatek/video/mt6735/videox/primary_display.h
++++ b/drivers/misc/mediatek/video/mt6735/videox/primary_display.h
+@@ -1,8 +1,8 @@
+ #ifndef _PRIMARY_DISPLAY_H_
+ #define _PRIMARY_DISPLAY_H_
+ 
+-#include "ddp_hal.h"
+-#include "ddp_manager.h"
++#include "../dispsys/ddp_hal.h"
++#include "../dispsys/ddp_manager.h"
+ #include <linux/types.h>
+ #include "disp_lcm.h"
+ #include "disp_session.h"
+diff --git a/drivers/pinctrl/mediatek/pinctrl-mtk-mt6735.h b/drivers/pinctrl/mediatek/pinctrl-mtk-mt6735.h
+index 4bc6b34d..280ecd16 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-mtk-mt6735.h
++++ b/drivers/pinctrl/mediatek/pinctrl-mtk-mt6735.h
+@@ -12,7 +12,7 @@
+ #define __PINCTRL_MTK_MT6735_H
+ 
+ #include <linux/pinctrl/pinctrl.h>
+-#include <pinctrl-mtk-common.h>
++#include "pinctrl-mtk-common.h"
+ 
+ static const struct mtk_desc_pin mtk_pins_mt6735[] = {
+ 	MTK_PIN(
+diff --git a/drivers/spi/mediatek/mt6735/spi-dev.c b/drivers/spi/mediatek/mt6735/spi-dev.c
+index 1408ae3b..3c1075cd 100644
+--- a/drivers/spi/mediatek/mt6735/spi-dev.c
++++ b/drivers/spi/mediatek/mt6735/spi-dev.c
+@@ -4,7 +4,7 @@
+ #include <linux/types.h>
+ #include <linux/device.h>
+ #include <linux/delay.h>
+-#include <mt_spi.h>
++#include "mt_spi.h"
+ 
+ #include <linux/dma-mapping.h>
+ #include <linux/sched.h>
+diff --git a/drivers/spi/mediatek/mt6735/spi.c b/drivers/spi/mediatek/mt6735/spi.c
+index c5cfe271..0b832910 100644
+--- a/drivers/spi/mediatek/mt6735/spi.c
++++ b/drivers/spi/mediatek/mt6735/spi.c
+@@ -27,7 +27,7 @@
+ #include <linux/of_address.h>
+ #endif
+ /*#include <mach/irqs.h>*/
+-#include <mt_spi.h>
++#include "mt_spi.h"
+ #include "mt_spi_hal.h"
+ /*#include <mach/mt_gpio.h>*/
+ 
+diff --git a/drivers/watchdog/mediatek/wdt/mt6735/mtk_wdt.c b/drivers/watchdog/mediatek/wdt/mt6735/mtk_wdt.c
+index 9d6869ba..93fb16a3 100644
+--- a/drivers/watchdog/mediatek/wdt/mt6735/mtk_wdt.c
++++ b/drivers/watchdog/mediatek/wdt/mt6735/mtk_wdt.c
+@@ -11,7 +11,7 @@
+ 
+ #include <asm/uaccess.h>
+ #include <linux/types.h>
+-#include <mt_wdt.h>
++#include "mt_wdt.h"
+ #include <linux/delay.h>
+ 
+ #include <linux/device.h>
