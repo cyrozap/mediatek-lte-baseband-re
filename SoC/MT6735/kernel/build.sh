@@ -3,15 +3,17 @@ set -e
 
 # https://stackoverflow.com/a/4774063
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+TOOLPATH=$SCRIPTPATH/arm-eabi-4.8
+KERNELPATH=$SCRIPTPATH/android_kernel_mediatek_mt6735
 
-[ -d arm-eabi-4.8 ] || git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8
-[ -d android_kernel_mediatek_mt6735 ] || git clone https://github.com/blumonks/android_kernel_mediatek_mt6735.git
+[ -d $TOOLPATH ] || git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8 $TOOLPATH
+[ -d $KERNELPATH ] || git clone https://github.com/blumonks/android_kernel_mediatek_mt6735.git $KERNELPATH
 
-export CROSS_COMPILE="$SCRIPTPATH/arm-eabi-4.8/bin/arm-eabi-"
+export CROSS_COMPILE="$TOOLPATH/bin/arm-eabi-"
 export ARCH=arm
 export ARCH_MTK_PLATFORM=mt6735
 
-cd android_kernel_mediatek_mt6735
+cd $KERNELPATH
 
 patch -p1 < ../0001-fix-build.patch
 patch -p1 < ../0002-enable-ccci-debug.patch
