@@ -13,6 +13,81 @@ seq:
   - id: dsp_firmware
     type: dsp_firmware
     size: gfh_file_info.file_len - gfh_file_info.content_offset
+enums:
+  gfh_file_type:
+    # recognized by bootrom
+    0x0000: gfh_file_none
+    0x0001: arm_bl
+    0x0002: arm_ext_bl
+    0x0003: dualmac_dsp_bl
+    0x0004: sctrl_cert
+    0x0005: tool_auth
+    0x0006: file_mtk_reserved1
+    0x0007: epp
+    0x0008: file_mtk_reserved2
+    0x0009: file_mtk_reserved3
+    0x000a: root_cert
+    0x000b: ap_bl
+
+    # maui binary group
+    0x0100: primary_maui
+    0x0101: secondary_maui
+    0x0102: on_demand_paging
+    0x0103: third_rom
+    0x0104: dsp_rom
+    0x0105: cached_dsp_rom
+    0x0106: primary_factory_bin
+    0x0107: secondary_factory_bin
+    0x0108: viva
+    0x0109: lte_dsp_rom
+    0x017f: v_maui_binary_end
+
+    # resource binary group
+    0x0180: custom_pack
+    0x0181: language_pack
+    0x0182: jump_table
+
+    # binary not belonging to maui
+    0x0200: fota_ue
+    0x0201: arm_ext_bl_backup
+
+    # secure structure group
+    0x0300: secure_ro_s
+    0x0301: secure_ro_me
+
+    # external_file
+    0x0400: card_download_package
+    0x0401: confidential_binary
+
+    # file system
+    0x0480: file_system
+
+    # secure structure group
+    0x500: boot_cert_ctrl
+
+    # customized_file
+    0x7000: customer_bin1
+    0x7001: customer_bin2
+    0x7002: customer_bin3
+
+    # slt_load_file
+    0x8000: gfh_file_type_for_mt6290
+  gfh_flash_dev:
+    0: flash_dev_none
+    1: f_nor
+    2: f_nand_sequential
+    3: f_nand_ttbl
+    4: f_nand_fdm50
+    5: f_emmc_boot_region
+    6: f_emmc_data_region
+    7: f_sf
+    8: f_xboot
+  gfh_sig_type:
+    0: sig_none
+    1: sig_phash
+    2: sig_single
+    3: sig_single_and_phash
+    4: sig_multi
 types:
   gfh_header:
     seq:
@@ -84,10 +159,13 @@ types:
         type: u4
       - id: file_type
         type: u2
+        enum: gfh_file_type
       - id: flash_dev
         type: u1
+        enum: gfh_flash_dev
       - id: sig_type
         type: u1
+        enum: gfh_sig_type
       - id: load_addr
         type: u4
       - id: file_len
