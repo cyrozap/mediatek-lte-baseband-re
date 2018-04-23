@@ -19,9 +19,7 @@ seq:
   - id: brom_sec_cfg
     type: gfh_brom_sec_cfg_v1
   - id: preloader
-    type: u1
-    repeat: expr
-    repeat-expr: file_info.file_len - file_info.content_offset
+    type: preloader
 enums:
   gfh_file_type:
     # recognized by bootrom
@@ -107,9 +105,9 @@ types:
   emmc_header:
     seq:
       - id: identifier
-        type: str
+        type: strz
         size: 12
-        encoding: UTF-8
+        encoding: ASCII
       - id: version
         type: u4
       - id: brlt_offset
@@ -119,9 +117,9 @@ types:
   boot_region_layout:
     seq:
       - id: identifier
-        type: str
+        type: strz
         size: 8
-        encoding: UTF-8
+        encoding: ASCII
       - id: version
         type: u4
       - id: boot_region_addr
@@ -217,9 +215,9 @@ types:
       - id: gfh_header
         type: gfh_header
       - id: identifier
-        type: str
+        type: strz
         size: 12
-        encoding: UTF-8
+        encoding: ASCII
       - id: file_ver
         type: u4
       - id: file_type
@@ -256,17 +254,13 @@ types:
       - id: gfh_header
         type: gfh_header
       - id: reserved
-        type: u1
-        repeat: expr
-        repeat-expr: 92
+        size: 92
   gfh_bl_sec_key_v1:
     seq:
       - id: gfh_header
         type: gfh_header
       - id: reserved
-        type: u1
-        repeat: expr
-        repeat-expr: 524
+        size: 524
   gfh_anti_clone_v1:
     seq:
       - id: gfh_header
@@ -284,6 +278,120 @@ types:
       - id: gfh_header
         type: gfh_header
       - id: reserved
-        type: u1
-        repeat: expr
-        repeat-expr: 40
+        size: 40
+  preloader:
+    seq:
+      - id: unk0
+        size: 0x1fc
+      - id: and_rominfo_v
+        type: and_rominfo_v
+    types:
+      and_rominfo_v:
+        seq:
+          - id: id
+            type: strz
+            size: 16
+            encoding: ASCII
+          - id: rom_info_ver
+            type: u4
+          - id: platform_id
+            type: strz
+            size: 16
+            encoding: UTF-8
+          - id: project_id
+            type: strz
+            size: 16
+            encoding: UTF-8
+          - id: sec_ro_exist
+            type: u4
+          - id: sec_ro_offset
+            type: u4
+          - id: sec_ro_length
+            type: u4
+          - id: ac_offset
+            type: u4
+          - id: ac_length
+            type: u4
+          - id: sec_cfg_offset
+            type: u4
+          - id: sec_cfg_length
+            type: u4
+          - id: reserve1
+            size: 128
+          - id: sec_ctrl
+            type: and_secctrl_v
+          - id: reserve2
+            size: 18
+          - id: sec_boot_check_part
+            type: and_secboot_check_part_v
+          - id: sec_key
+            type: and_seckey_v
+      and_secctrl_v:
+        seq:
+          - id: id
+            type: strz
+            size: 16
+            encoding: ASCII
+          - id: sec_cfg_ver
+            type: u4
+          - id: sec_usb_dl
+            type: u4
+            enum: status
+          - id: sec_boot
+            type: u4
+            enum: status
+          - id: sec_modem_auth
+            type: u4
+          - id: sec_sds_en
+            type: u4
+          - id: seccfg_ac_en
+            type: u1
+          - id: sec_aes_legacy
+            type: u1
+          - id: secro_ac_en
+            type: u1
+          - id: sml_aes_key_ac_en
+            type: u1
+          - id: reserve
+            type: u4
+            repeat: expr
+            repeat-expr: 3
+        enums:
+          status:
+            0x00: disable
+            0x11: enable
+            0x22: only_enable_on_schip
+      and_secboot_check_part_v:
+        seq:
+          - id: name
+            type: strz
+            size: 10
+            encoding: ASCII
+            repeat: expr
+            repeat-expr: 9
+      and_seckey_v:
+        seq:
+          - id: id
+            type: strz
+            size: 16
+            encoding: ASCII
+          - id: sec_key_ver
+            type: u4
+          - id: img_auth_rsa_n
+            size: 256
+          - id: img_auth_rsa_e
+            type: str
+            size: 5
+            encoding: ASCII
+          - id: sml_aes_key
+            size: 32
+          - id: crypto_seed
+            type: str
+            size: 16
+            encoding: ASCII
+          - id: sml_auth_rsa_n
+            size: 256
+          - id: sml_auth_rsa_e
+            type: str
+            size: 5
+            encoding: ASCII
