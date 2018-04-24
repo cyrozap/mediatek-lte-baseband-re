@@ -20,6 +20,9 @@ seq:
     type: gfh_brom_sec_cfg_v1
   - id: preloader
     type: preloader
+    size: file_info.file_len - file_info.content_offset - file_info.sig_len
+  - id: signature
+    size: file_info.sig_len
 enums:
   gfh_file_type:
     # recognized by bootrom
@@ -372,7 +375,7 @@ types:
       - id: and_rominfo_v
         type: and_rominfo_v
       - id: code1
-        size: _root.file_info.file_len - _root.file_info.content_offset - _root.bl_info.gfh_header.size - _root.brom_cfg_v3.gfh_header.size - _root.bl_sec_key.gfh_header.size - _root.anti_clone.gfh_header.size - _root.brom_sec_cfg.gfh_header.size - 0x1fc - 0x3c3
+        size-eos: true
     types:
       and_rominfo_v:
         seq:
