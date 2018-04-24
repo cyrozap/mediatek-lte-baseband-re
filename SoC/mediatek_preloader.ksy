@@ -254,13 +254,79 @@ types:
       - id: gfh_header
         type: gfh_header
       - id: reserved
-        size: 92
+        type: reserved
+        size: gfh_header.size-8
+    types:
+      reserved:
+        seq:
+          - id: flags
+            type: flags
+            size: 8
+          - id: usbdl_abnormal_timeout_string
+            type: strz
+            size: 0x40
+            encoding: ASCII
+          - id: reserved0
+            size: 1
+          - id: usbdl_bulk_com_support
+            type: u1
+          - id: reserved1
+            size: 1
+          - id: brom_cmd_via_uart1_disable_magic
+            type: u1
+          - id: m_brom_cmd_via_usb_disable_magic
+            type: u1
+          - id: reserved2
+            size: 1
+          - id: usbdl_hs_en
+            type: u1
+          - id: reserved3
+            size: 1
+          - id: usbdl_by_kcol0_timeout_ms
+            type: u4
+          - id: usbdl_by_flag_timeout_ms
+            type: u4
+          - id: usbdl_vid
+            type: u2
+          - id: usbdl_pid
+            type: u2
+        types:
+          flags:
+            seq:
+              - id: uart1_log_dis
+                type: b1
+              - id: usbdl_by_auto_detect_timeout_en
+                type: b1
+              - id: usbdl_abnormal_timeout_log_dis
+                type: b1
+              - id: usbdl_abnormal_timeout_log_cust
+                type: b1
+              - id: usbdl_auto_detect_dis
+                type: b1
+              - id: usbdl_bulk_com_support
+                type: b1
+              - id: usbdl_vidpid_cust_en
+                type: b1
+              - id: usbdl_by_kcol0_timeout_en
+                type: b1
+              - id: usbdl_by_flag_timeout_en
+                type: b1
+              - id: reserved0
+                type: b1
+              - id: usbdl_speed_config
+                type: b1
+              - id: reserved1
+                size: 2
+              - id: usbdl_by_auto_detect_timeout_ms
+                type: b1
+              - id: reserved2
+                size: 3
   gfh_bl_sec_key_v1:
     seq:
       - id: gfh_header
         type: gfh_header
       - id: reserved
-        size: 524
+        size: gfh_header.size-8
   gfh_anti_clone_v1:
     seq:
       - id: gfh_header
@@ -278,13 +344,35 @@ types:
       - id: gfh_header
         type: gfh_header
       - id: reserved
-        size: 40
+        type: reserved
+        size: gfh_header.size-8
+    types:
+      reserved:
+        seq:
+          - id: flags
+            type: flags
+            size: 4
+          - id: customer_name
+            type: strz
+            size: 0x20
+            encoding: ASCII
+          - id: brom_magic_cmd_mode_permanent_dis
+            type: u4
+            doc: Magic is 0xc975e033.
+      flags:
+        seq:
+          - id: jtag_en
+            type: b1
+          - id: debug_en
+            type: b1
   preloader:
     seq:
-      - id: unk0
+      - id: code0
         size: 0x1fc
       - id: and_rominfo_v
         type: and_rominfo_v
+      - id: code1
+        size: _root.file_info.file_len - _root.file_info.content_offset - _root.bl_info.gfh_header.size - _root.brom_cfg_v3.gfh_header.size - _root.bl_sec_key.gfh_header.size - _root.anti_clone.gfh_header.size - _root.brom_sec_cfg.gfh_header.size - 0x1fc - 0x3c3
     types:
       and_rominfo_v:
         seq:
@@ -326,6 +414,8 @@ types:
             type: and_secboot_check_part_v
           - id: sec_key
             type: and_seckey_v
+          - id: padding
+            size: 6
       and_secctrl_v:
         seq:
           - id: id
