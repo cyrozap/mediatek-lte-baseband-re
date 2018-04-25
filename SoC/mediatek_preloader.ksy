@@ -1,11 +1,12 @@
 meta:
   id: mediatek_preloader
   endian: le
-  title: MediaTek Preloader with BROM Header for EMMC
+  title: MediaTek Preloader with optional BROM Header for EMMC
   license: CC0-1.0
 seq:
   - id: bootrom_header
     type: bootrom_header
+    if: magic == "EMM"
   - id: file_info
     type: gfh_file_info
   - id: bl_info
@@ -23,6 +24,12 @@ seq:
     size: file_info.file_len - file_info.content_offset - file_info.sig_len
   - id: signature
     size: file_info.sig_len
+instances:
+  magic:
+    pos: 0
+    type: str
+    size: 3
+    encoding: ASCII
 enums:
   gfh_file_type:
     # recognized by bootrom
@@ -370,12 +377,12 @@ types:
             type: b1
   preloader:
     seq:
-      - id: code0
-        size: 0x1fc
-      - id: and_rominfo_v
-        type: and_rominfo_v
-      - id: code1
+      - id: code
         size-eos: true
+    instances:
+      and_rominfo_v:
+        pos: 0x1fc
+        type: and_rominfo_v
     types:
       and_rominfo_v:
         seq:
