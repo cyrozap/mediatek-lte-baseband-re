@@ -23,6 +23,13 @@ parser code used by `extract_fw.py`. Then, simply run
 `./extract_fw.py dsp_*.bin` to extract each section from the binary into
 separate files.
 
+To verify that the DSP binary has been parsed correctly, run
+`strings -e l *.data.bin` and make sure that some human-readable text
+strings are output. You should see some file paths, build IDs, and build
+timestamps at the very least. For additional confirmation, all the code
+binaries (`*.code.bin`) except for `*.core_idx_7.code.bin` should have every
+fourth byte set to zero, which will be very noticeable in a hex dump.
+
 
 ## Notes
 
