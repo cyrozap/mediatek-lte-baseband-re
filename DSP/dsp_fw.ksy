@@ -152,9 +152,9 @@ types:
       - id: gfh_header
         type: gfh_header
       - id: identifier
-        type: str
+        type: strz
         size: 12
-        encoding: UTF-8
+        encoding: ASCII
       - id: file_ver
         type: u4
       - id: file_type
@@ -189,15 +189,15 @@ types:
       - id: image_type
         type: u4
       - id: platform_id
-        type: str
+        type: strz
         size: 16
         encoding: UTF-8
       - id: project_id
-        type: str
+        type: strz
         size: 64
         encoding: UTF-8
       - id: build_time
-        type: str
+        type: strz
         size: 64
         encoding: UTF-8
       - id: reserved
