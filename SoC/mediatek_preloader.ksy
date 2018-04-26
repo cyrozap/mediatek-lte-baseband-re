@@ -123,7 +123,7 @@ types:
       - id: brlt_offset
         type: u4
       - id: padding
-        size: brlt_offset - 20
+        size: brlt_offset - (12+4+4)
   boot_region_layout:
     seq:
       - id: identifier
@@ -138,12 +138,17 @@ types:
         type: u4
       - id: bootloader_descriptors
         type: bootloader_descriptor
+        size: 20
         repeat: expr
-        repeat-expr: 1
+        repeat-expr: 8
+      - id: padding
+        size: boot_region_addr - (8+4+4+4+20*8) - _parent.emmc_header.brlt_offset
   bootloader_descriptor:
     seq:
-      - id: magic
-        contents: 'BBBB'
+      - id: bl_exist_magic
+        type: str
+        size: 4
+        encoding: ASCII
       - id: bl_dev
         type: u2
         enum: gfh_flash_dev
@@ -156,12 +161,6 @@ types:
         type: u4
       - id: bl_attribute
         type: u4
-      - id: padding0
-        size: 140
-      - id: padding1
-        size: 512-140-10*4
-      - id: padding2
-        size: 1024
   gfh_header:
     seq:
       - id: magic_ver
@@ -252,13 +251,39 @@ types:
       - id: jump_offset
         type: u4
       - id: attr
-        type: u4
+        type: attr
+        size: 4
+    types:
+      attr:
+        doc: "Flag bits in the following order: [7:0], [15:8], [23:16], [31:24]"
+        seq:
+          - id: reserved0
+            type: b5
+          - id: file_info_attr_slt
+            type: b1
+          - id: file_info_attr_xip
+            type: b1
+          - id: file_info_attr_post_build_done
+            type: b1
+          - id: reserved1
+            type: b23
+          - id: file_info_attr_dual_image
+            type: b1
   gfh_bl_info:
     seq:
       - id: gfh_header
         type: gfh_header
       - id: bl_attr
-        type: u4
+        type: bl_attr
+        size: gfh_header.size-8
+    types:
+      bl_attr:
+        doc: "Flag bits in the following order: [7:0]"
+        seq:
+          - id: reserved
+            type: b7
+          - id: bl_attr_load_by_bootrom
+            type: b1
   gfh_brom_cfg_v3:
     seq:
       - id: gfh_header
@@ -302,35 +327,36 @@ types:
             type: u2
         types:
           flags:
+            doc: "Flag bits in the following order: [7:0], [15:8], [23:16], [31:24], [39:32]"
             seq:
-              - id: uart1_log_dis
-                type: b1
-              - id: usbdl_by_auto_detect_timeout_en
-                type: b1
-              - id: usbdl_abnormal_timeout_log_dis
-                type: b1
-              - id: usbdl_abnormal_timeout_log_cust
-                type: b1
-              - id: usbdl_auto_detect_dis
-                type: b1
-              - id: usbdl_bulk_com_support
+              - id: usbdl_by_kcol0_timeout_en
                 type: b1
               - id: usbdl_vidpid_cust_en
                 type: b1
-              - id: usbdl_by_kcol0_timeout_en
+              - id: usbdl_bulk_com_support
                 type: b1
-              - id: usbdl_by_flag_timeout_en
+              - id: usbdl_auto_detect_dis
+                type: b1
+              - id: usbdl_abnormal_timeout_log_cust
+                type: b1
+              - id: usbdl_abnormal_timeout_log_dis
+                type: b1
+              - id: usbdl_by_auto_detect_timeout_en
+                type: b1
+              - id: uart1_log_dis
                 type: b1
               - id: reserved0
-                type: b1
+                type: b5
               - id: usbdl_speed_config
                 type: b1
               - id: reserved1
-                size: 2
-              - id: usbdl_by_auto_detect_timeout_ms
+                type: b1
+              - id: usbdl_by_flag_timeout_en
                 type: b1
               - id: reserved2
-                size: 3
+                type: b23
+              - id: usbdl_by_auto_detect_timeout_ms
+                type: b1
   gfh_bl_sec_key_v1:
     seq:
       - id: gfh_header
@@ -370,10 +396,13 @@ types:
             type: u4
             doc: Magic is 0xc975e033.
       flags:
+        doc: "Flag bits in the following order: [7:0]"
         seq:
-          - id: jtag_en
-            type: b1
+          - id: reserved
+            type: b6
           - id: debug_en
+            type: b1
+          - id: jtag_en
             type: b1
   preloader:
     seq:
