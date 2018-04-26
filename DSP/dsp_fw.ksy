@@ -179,7 +179,24 @@ types:
       - id: jump_offset
         type: u4
       - id: attr
-        type: u4
+        type: attr
+        size: 4
+    types:
+      attr:
+        doc: "Flag bits in the following order: [7:0], [15:8], [23:16], [31:24]"
+        seq:
+          - id: reserved0
+            type: b5
+          - id: file_info_attr_slt
+            type: b1
+          - id: file_info_attr_xip
+            type: b1
+          - id: file_info_attr_post_build_done
+            type: b1
+          - id: reserved1
+            type: b23
+          - id: file_info_attr_dual_image
+            type: b1
   gfh_dsp_info:
     seq:
       - id: gfh_header
