@@ -23,6 +23,7 @@ seq:
     type: preloader
     size: file_info.file_len - file_info.content_offset - file_info.sig_len
   - id: signature
+    type: signature
     size: file_info.sig_len
 instances:
   magic:
@@ -296,7 +297,9 @@ types:
         seq:
           - id: flags
             type: flags
-            size: 8
+            size: 4
+          - id: usbdl_by_auto_detect_timeout_ms
+            type: u4
           - id: usbdl_abnormal_timeout_string
             type: strz
             size: 0x40
@@ -327,7 +330,7 @@ types:
             type: u2
         types:
           flags:
-            doc: "Flag bits in the following order: [7:0], [15:8], [23:16], [31:24], [39:32]"
+            doc: "Flag bits in the following order: [7:0], [15:8], [23:16], [31:24]"
             seq:
               - id: usbdl_by_kcol0_timeout_en
                 type: b1
@@ -352,10 +355,6 @@ types:
               - id: reserved1
                 type: b1
               - id: usbdl_by_flag_timeout_en
-                type: b1
-              - id: reserved2
-                type: b23
-              - id: usbdl_by_auto_detect_timeout_ms
                 type: b1
   gfh_bl_sec_key_v1:
     seq:
@@ -453,8 +452,6 @@ types:
             type: and_secboot_check_part_v
           - id: sec_key
             type: and_seckey_v
-          - id: padding
-            size: 6
       and_secctrl_v:
         seq:
           - id: id
@@ -524,3 +521,9 @@ types:
             type: str
             size: 5
             encoding: ASCII
+  signature:
+    seq:
+      - id: version
+        type: u4
+      - id: data
+        size-eos: true
