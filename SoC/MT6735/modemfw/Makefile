@@ -44,6 +44,6 @@ disasm-elf: test.elf
 	arm-none-eabi-objdump -d $<
 
 clean:
-	rm -f test.img test.bin *.o *.elf
+	rm -f test.img test.bin *.o *.elf *.map
 
 .PHONY: all clean install load dmesg disasm-bin disasm-elf
