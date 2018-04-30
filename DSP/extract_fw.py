@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 
+import argparse
 import struct
 import sys
 
-import mediatek_lte_dsp_firmware
+try:
+    import mediatek_lte_dsp_firmware
+except ModuleNotFoundError:
+    sys.stderr.write("Error: Failed to import \"mediatek_lte_dsp_firmware.py\". Please run \"make\" in this directory to generate that file, then try running this script again.\n")
+    sys.exit(1)
 
 key = bytes([0x40, 0xeb, 0xf8, 0x56, 0x8b, 0x74, 0x24, 0x08, 0x66, 0x85, 0xf6, 0x74, 0x30, 0x66, 0x83, 0xfe])
 
@@ -18,12 +23,15 @@ def checksum_valid(data, checksum):
     return temp == checksum
 
 if __name__ == "__main__":
-    orig = sys.argv[1]
-    split = orig.split('.')
+    parser = argparse.ArgumentParser()
+    parser.add_argument("dsp_binary", type=str, help="The DSP binary you want to extract from.")
+    args = parser.parse_args()
+
+    split = args.dsp_binary.split('.')
     ext = split[-1]
     basename = '.'.join(split[:-1])
 
-    fw = mediatek_lte_dsp_firmware.MediatekLteDspFirmware.from_file(orig)
+    fw = mediatek_lte_dsp_firmware.MediatekLteDspFirmware.from_file(args.dsp_binary)
     offset = 0
     for i in range(fw.dsp_firmware.header.core_count):
         header = fw.dsp_firmware.header.core_headers[i]
