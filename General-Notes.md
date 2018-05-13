@@ -32,6 +32,8 @@ MediaTek uses a lot of acronyms in their code and documentation but rarely
 expands them, so this glossary is my attempt at fixing that. Please note that
 some of these entries are complete guesses.
 
+* AICE: Andes ICE. This is a JTAG adapter/"In-Circuit Emulator" made by Andes
+  Technology.
 * CCCI: Cross Core Communication Interface. This is how the AP and the BB
   communicate.
 * CONN: "Connectivity", usually refers to the connectivity subsystem. The
@@ -40,6 +42,7 @@ some of these entries are complete guesses.
 * DBF: DSP Binary Filter. As the name implies, this is binary filter data that
   is loaded into and parsed by the DSP.
 * DCM: Dynamic Clock Management.
+* GCU: GPRS Cipher Unit.
 * M4U: Multimedia Memory Management Unit. This is what MediaTek calls their
   IOMMU.
 * MCU: Used to refer to different processor subsystems. e.g., "APMCU" refers to
