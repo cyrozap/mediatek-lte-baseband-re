@@ -14,8 +14,8 @@ DSP to handle 2G/3G signal processing (a [Faraday Technology FD216][FD216]),
 but I'm not interested in that. Also, it seems the BP won't be a Cortex-R4
 in future devices, as [MediaTek has signed an agreement with Imagination Technologies][imgtech]
 to license some MIPS CPU core for the LTE BP in the upcoming Helio X30
-(MT6799) and later SoCs, but that doesn't matter now because that hardware
-doesn't exist yet.
+(MT6799) and later SoCs, but that doesn't matter now because the cheaper SoCs
+aren't using them yet.
 
 From what I've been able to glean from kernel sources and disassembled
 binaries, the AP and the BP share some memory for loading the BP fimware, DMA,
