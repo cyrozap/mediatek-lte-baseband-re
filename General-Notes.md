@@ -63,6 +63,6 @@ some of these entries are complete guesses.
 
 
 [FD216]: http://www.faraday-tech.com/download/techDocument/FD216_PB_v1.5.pdf
-[imgtech]: https://www.imgtec.com/news/press-release/mediatek-selects-mips-for-lte-modems/
+[imgtech]: https://www.mips.com/press/mediatek-selects-mips-for-lte-modems/
 [acquisition]: https://www.eetimes.com/document.asp?doc_id=1261529
 [mt6290]: https://www.mediatek.com/press-room/press-releases/mediatek-announces-the-availability-of-multimode-lte-modem-chipset
