@@ -34,15 +34,16 @@ some of these entries are complete guesses.
 
 * AICE: Andes ICE. This is a JTAG adapter/"In-Circuit Emulator" made by Andes
   Technology.
-* CCCI: Cross Core Communication Interface. This is how the AP and the BB
-  communicate.
+* CCCI: Cross Core Communication Interface. This is the memory/DMA interface
+  through which the AP and the BB communicate.
 * CONN: "Connectivity", usually refers to the connectivity subsystem. The
   connectivity subsystem includes the WiFi CPU core and possibly the Bluetooth
   CPU as well.
 * DBF: DSP Binary Filter. As the name implies, this is binary filter data that
-  is loaded into and parsed by the DSP.
+  is loaded into and parsed by the firmware running on the Coresonic DSP.
 * DCM: Dynamic Clock Management.
-* GCU: GPRS Cipher Unit.
+* GCU: GPRS Cipher Unit. An accelerator for cryptographic ciphers used in some
+  GSM protocols.
 * INFRACFG: "Infrastructure system configuration". Refers to the block of
   registers that control reset, clocking, and some miscellaneous control
   signals.
