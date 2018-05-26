@@ -58,11 +58,13 @@ some of these entries are complete guesses.
 
 ## History
 
+* 2007: [MediaTek acquires Analog Devices' cellular chip operations][adi-acquisition].
 * 2012: [MediaTek acquires Coresonic][acquisition], a DSP IP core company.
 * 2014: [MediaTek releases their first LTE modem][mt6290], the MT6290.
 
 
 [FD216]: http://www.faraday-tech.com/download/techDocument/FD216_PB_v1.5.pdf
 [imgtech]: https://www.mips.com/press/mediatek-selects-mips-for-lte-modems/
+[adi-acquisition]: https://www.mediatek.com/news-events/press-releases/mediatek-inc-to-purchase-analog-devices-cellular-radio-and-baseband-chipset-operations
 [acquisition]: https://www.eetimes.com/document.asp?doc_id=1261529
 [mt6290]: https://www.mediatek.com/press-room/press-releases/mediatek-announces-the-availability-of-multimode-lte-modem-chipset
