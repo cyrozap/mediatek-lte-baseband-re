@@ -43,6 +43,9 @@ some of these entries are complete guesses.
   is loaded into and parsed by the DSP.
 * DCM: Dynamic Clock Management.
 * GCU: GPRS Cipher Unit.
+* INFRACFG: "Infrastructure system configuration". Refers to the block of
+  registers that control reset, clocking, and some miscellaneous control
+  signals.
 * M4U: Multimedia Memory Management Unit. This is what MediaTek calls their
   IOMMU.
 * MCU: Used to refer to different processor subsystems. e.g., "APMCU" refers to
