@@ -1,0 +1,35 @@
+diff -ur a/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/platform/mt6735/src/security/trustzone/tz_sec_cfg.c b/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/platform/mt6735/src/security/trustzone/tz_sec_cfg.c
+--- a/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/platform/mt6735/src/security/trustzone/tz_sec_cfg.c	2016-07-10 23:49:16.000000000 -0500
++++ b/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/platform/mt6735/src/security/trustzone/tz_sec_cfg.c	2018-05-08 13:34:18.011486239 -0500
+@@ -30,25 +30,31 @@
+ void tz_sram_sec_init(u32 start)
+ {
+     /* Set Region Address Info */
++#if 0
+     WRITE_REGISTER_UINT32(SRAMROM_SEC_ADDR, (start & SRAMROM_SEC_ADDR_MASK));
++#endif
+ 
+     DBG_MSG("%s SRAMROM Secure Addr 0x%x\n", MOD, READ_REGISTER_UINT32(SRAMROM_SEC_ADDR));
+     DBG_MSG("%s SRAMROM Secure Control 0x%x\n", MOD, READ_REGISTER_UINT32(BOOTROM_PWR_CTRL));
+ 
+     /* Set permission for Region 0 */
++#if 0
+     TZ_SET_FIELD(BOOTROM_PWR_CTRL, SRAMROM_SEC_SEC0_DOM0_MASK, PERMIT_S_RW_NS_BLOCK << SRAMROM_SEC_SEC0_DOM0_SHIFT);
+     TZ_SET_FIELD(BOOTROM_PWR_CTRL, SRAMROM_SEC_SEC0_DOM1_MASK, PERMIT_S_BLOCK_NS_BLOCK << SRAMROM_SEC_SEC0_DOM1_SHIFT);
+     TZ_SET_FIELD(BOOTROM_PWR_CTRL, SRAMROM_SEC_SEC0_DOM2_MASK, PERMIT_S_BLOCK_NS_BLOCK << SRAMROM_SEC_SEC0_DOM2_SHIFT);
+     TZ_SET_FIELD(BOOTROM_PWR_CTRL, SRAMROM_SEC_SEC0_DOM3_MASK, PERMIT_S_BLOCK_NS_BLOCK << SRAMROM_SEC_SEC0_DOM3_SHIFT);
++#endif
+     
+     DBG_MSG("%s SRAMROM Secure Control 0x%x\n", MOD, READ_REGISTER_UINT32(BOOTROM_PWR_CTRL));
+     
++#if 0
+     /* Set permission for Region 1 */
+     TZ_SET_FIELD(BOOTROM_PWR_CTRL, SRAMROM_SEC_SEC1_DOM0_MASK, PERMIT_S_RW_NS_RW << SRAMROM_SEC_SEC1_DOM0_SHIFT);
+     TZ_SET_FIELD(BOOTROM_PWR_CTRL, SRAMROM_SEC_SEC1_DOM1_MASK, PERMIT_S_BLOCK_NS_BLOCK << SRAMROM_SEC_SEC1_DOM1_SHIFT);
+     TZ_SET_FIELD(BOOTROM_PWR_CTRL, SRAMROM_SEC_SEC1_DOM2_MASK, PERMIT_S_BLOCK_NS_BLOCK << SRAMROM_SEC_SEC1_DOM2_SHIFT);
+     TZ_SET_FIELD(BOOTROM_PWR_CTRL, SRAMROM_SEC_SEC1_DOM3_MASK, PERMIT_S_BLOCK_NS_BLOCK << SRAMROM_SEC_SEC1_DOM3_SHIFT);
+     TZ_SET_FIELD(BOOTROM_PWR_CTRL, SRAMROM_SEC_SEC1_EN_MASK, ENABLE_SEC_SEC1_PROTECTION << SRAMROM_SEC_SEC1_EN_SHIFT);
++#endif
+     
+     DBG_MSG("%s SRAMROM Secure Control 0x%x\n", MOD, READ_REGISTER_UINT32(BOOTROM_PWR_CTRL));
+ }

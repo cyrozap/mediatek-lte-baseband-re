@@ -1,0 +1,12 @@
+diff -ur a/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/build.sh b/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/build.sh
+--- a/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/build.sh	2016-07-10 23:49:16.000000000 -0500
++++ b/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/build.sh	2018-05-02 03:11:16.647051077 -0500
+@@ -20,7 +20,7 @@
+ fi
+ if [ -z ${PRELOADER_ROOT_DIR} ]; then
+   if [ -z ${ANDROID_BUILD_TOP} ]; then
+-    PRELOADER_ROOT_DIR=`pwd`/../../..
++    PRELOADER_ROOT_DIR=`pwd`/../../../../../../
+   else
+     PRELOADER_ROOT_DIR=${ANDROID_BUILD_TOP}
+   fi

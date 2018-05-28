@@ -1,0 +1,32 @@
+diff -ur a/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/platform/mt6735/src/drivers/msdc.c b/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/platform/mt6735/src/drivers/msdc.c
+--- a/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/platform/mt6735/src/drivers/msdc.c	2016-07-10 23:49:16.000000000 -0500
++++ b/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/platform/mt6735/src/drivers/msdc.c	2018-05-02 04:21:32.729848036 -0500
+@@ -533,9 +533,12 @@
+ 						  MSDC0_MODE_RSTB_MASK, 0x249);
+ 			break;
+ 		case 1:
++// disable for JTAG-over-SD
++#if 0
+ 			MSDC_SET_FIELD(MSDC1_GPIO_MODE17_ADDR,MSDC1_MODE_CMD_MASK | MSDC1_MODE_CLK_MASK | MSDC1_MODE_DAT0_MASK | \
+ 						  MSDC1_MODE_DAT1_MASK, 0x249);
+ 			MSDC_SET_FIELD(MSDC1_GPIO_MODE18_ADDR,MSDC1_MODE_DAT2_MASK | MSDC1_MODE_DAT2_MASK, 0x9);
++#endif
+ 			break;
+ #ifdef CFG_DEV_MSDC2 // Need sdio owner confirm
+ 
+diff -ur a/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/platform/mt6735/src/init/init.s b/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/platform/mt6735/src/init/init.s
+--- a/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/platform/mt6735/src/init/init.s	2016-07-10 23:49:16.000000000 -0500
++++ b/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/platform/mt6735/src/init/init.s	2018-05-02 03:05:36.639874795 -0500
+@@ -130,6 +130,12 @@
+     MOV sp, r1
+ 
+ entry :
++    /* Enable JTAG-over-SD */
++    LDR r2, =0x10211410  /* MSDC1_GPIO_MODE18_ADDR */
++    LDR r0, =0x6db11249
++    STR r0, [r2]
++    LDR r2, =0xDEADBEFF  /* restore r2 */
++
+     LDR r0, =bldr_args_addr
+     B   main
+ 
