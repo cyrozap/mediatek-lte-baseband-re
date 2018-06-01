@@ -1,0 +1,16 @@
+diff --git a/drivers/misc/mediatek/eccci/mt6735/ccci_platform.c b/drivers/misc/mediatek/eccci/mt6735/ccci_platform.c
+index f7d28150..3c113bce 100644
+--- a/drivers/misc/mediatek/eccci/mt6735/ccci_platform.c
++++ b/drivers/misc/mediatek/eccci/mt6735/ccci_platform.c
+@@ -255,9 +255,9 @@ void ccci_set_dsp_region_protection(struct ccci_modem *md, int loaded)
+ 	dsp_mem_phy_start = (unsigned int)md->mem_layout.dsp_region_phy;
+ 	dsp_mem_phy_end = ((dsp_mem_phy_start + md->mem_layout.dsp_region_size + 0xFFFF) & (~0xFFFF)) - 0x1;
+ 
+-	CCCI_INF_MSG(md->index, TAG, "MPU Start protect DSP region<%d:%08x:%08x> %x\n",
++	CCCI_INF_MSG(md->index, TAG, "MPU Start protect DSP region<%d:%08x:%08x> %x (jk lol)\n",
+ 		     dsp_mem_mpu_id, dsp_mem_phy_start, dsp_mem_phy_end, dsp_mem_mpu_attr);
+-	emi_mpu_set_region_protection(dsp_mem_phy_start, dsp_mem_phy_end, dsp_mem_mpu_id, dsp_mem_mpu_attr);
++	//emi_mpu_set_region_protection(dsp_mem_phy_start, dsp_mem_phy_end, dsp_mem_mpu_id, dsp_mem_mpu_attr);
+ #else
+ 	if (!loaded) {
+ 		dsp_mem_phy_start = (unsigned int)md->mem_layout.dsp_region_phy;

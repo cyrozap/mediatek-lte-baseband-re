@@ -15,11 +15,12 @@ export ARCH_MTK_PLATFORM=mt6735
 
 cd $KERNELPATH
 
-patch -p1 < ../0001-fix-build.patch
-patch -p1 < ../0002-enable-ccci-debug.patch
+for i in {0001..0003}; do
+	patch -p1 < ../$i*.patch
+done
 
 make p6601_defconfig
 
-patch .config ../0003-config.patch
+patch .config ../0004-config.patch
 
 make -j4
