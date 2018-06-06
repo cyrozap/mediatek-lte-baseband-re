@@ -1,0 +1,20 @@
+diff -ur ./ramdisk/init.modem.rc ./ramdisk/init.modem.rc
+--- ./ramdisk/init.modem.rc	2018-06-05 19:55:56.539577904 -0500
++++ ./ramdisk/init.modem.rc	2018-06-05 20:08:17.514378702 -0500
+@@ -112,11 +112,11 @@
+     class core
+     oneshot
+ 
+-service ccci_mdinit /system/bin/ccci_mdinit 0
+-    user system
+-    group radio system
+-    class core
+-    oneshot
++#service ccci_mdinit /system/bin/ccci_mdinit 0
++#    user system
++#    group radio system
++#    class core
++#    oneshot
+ 
+ service ccci_rpcd /system/bin/ccci_rpcd 0
+     user radio
