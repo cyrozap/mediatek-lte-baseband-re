@@ -11,6 +11,8 @@ on that device going forward. Check out the
 [MT6737M directory](../MT6737M) for more information and scripts for
 that device.
 
+Notes on this SoC can be found in [Notes.md](Notes.md).
+
 
 [r1hd]: http://bluproducts.com/r1-hd/
 [orangepi]: http://www.orangepi.org/Orange%20Pi%204G-IOT/
