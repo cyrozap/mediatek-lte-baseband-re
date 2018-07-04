@@ -67,6 +67,24 @@ some of these entries are complete guesses.
 * 2014: [MediaTek releases their first LTE modem][mt6290], the MT6290.
 
 
+## Prior Work
+
+ * [Path of Least Resistance: Cellular Baseband to Application Processor Escalation on Mediatek Devices](https://comsecuris.com/blog/posts/path_of_least_resistance/)
+   * More of an analysis of the kernel and userspace side of things and not so
+     much about the modem firmware, but still very good and helpful.
+   * [MTK Baseband Code Elevation Research Repo](https://github.com/Comsecuris/mtk-baseband-sanctuary)
+     * [BB image decryptor](https://github.com/Comsecuris/mtk-baseband-sanctuary/blob/master/ccci_md_dump/decrypt/decrypt.c)
+     * [Debug symbol loader](https://github.com/Comsecuris/mtk-baseband-sanctuary/blob/master/ida_load_syms/loadsyms.py)
+ * [Black box reverse engineering for unknown/custom instruction sets](https://recon.cx/2016/recordings/recon2016-02-david-carne-Black-box-reverse-engineering-for-unknown-custom-instruction-sets.mp4)
+   * "Reversing the ADF7242"
+   * Good talk on how to reverse engineer ISAs in general.
+ * [How to not break LTE crypto](https://www.sstic.org/media/SSTIC2016/SSTIC-actes/how_to_not_break_lte_crypto/SSTIC2016-Article-how_to_not_break_lte_crypto-michau_devine.pdf)
+   * MediaTek-specific modem information is in section 3.3.
+ * [Fun with the MTK 6573 Baseband (Patching / Replacing)](http://baseband-devel.722152.n3.nabble.com/Fun-with-the-MTK-6573-Baseband-Patching-Replacing-td4026683.html)
+   * [Fun with the MTK 6573 Baseband (Patching / Replacing), continued](https://lists.osmocom.org/pipermail/baseband-devel/2017-April/005188.html)
+   * Not much new information here, but still somewhat interesting.
+
+
 [FD216]: http://www.faraday-tech.com/download/techDocument/FD216_PB_v1.5.pdf
 [imgtech]: https://www.mips.com/press/mediatek-selects-mips-for-lte-modems/
 [adi-acquisition]: https://www.eetimes.com/document.asp?doc_id=1248601
