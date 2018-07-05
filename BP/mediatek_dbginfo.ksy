@@ -29,13 +29,13 @@ types:
       - id: version
         type: strz
         encoding: ASCII
-      - id: sub
+      - id: platform
         type: strz
         encoding: ASCII
-      - id: build
+      - id: build_name
         type: strz
         encoding: ASCII
-      - id: time
+      - id: build_time
         type: strz
         encoding: ASCII
       - id: symbols_start
