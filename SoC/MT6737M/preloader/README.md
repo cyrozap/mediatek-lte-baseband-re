@@ -13,11 +13,12 @@ directory and run the following command:
 TARGET_PRODUCT=bd6737m_35g_b_m0 ./build.sh
 ```
 
-The finished preloader should be available at
+The finished preloader should then be available at
 `code/out/target/product/bd6737m_35g_b_m0/obj/PRELOADER_OBJ/bin/preloader_bd6737m_35g_b_m0.bin`
 and can be flashed by either dd-ing it to the preloader partition using
 a shell on the device (adb or otherwise) or by using SPFT to flash the
-partition while the device is in download mode.
+partition while the device is in download mode. See
+[Flashing the preloader](#flashing-the-preloader) for more information.
 
 ## Flashing the preloader
 
@@ -25,14 +26,20 @@ partition while the device is in download mode.
 
 ### Flashing via dd (untested)
 
-On the host PC, run the following command:
+On the host PC, run the following command to push the new preloader
+binary to a temporary location on the target device:
 
 ```bash
 adb push code/out/target/product/bd6737m_35g_b_m0/obj/PRELOADER_OBJ/bin/preloader_bd6737m_35g_b_m0.bin /data/local/tmp/
 ```
 
-Then, still on the host PC, run the following command:
+Then, still on the host PC, run the following command to flash the
+preloader binary to the EMMC:
 
 ```bash
 adb shell dd if=/data/local/tmp/preloader_bd6737m_35g_b_m0.bin of=/dev/block/mmcblk0boot0 bs=2048 seek=1
 ```
+
+Note the `bs=2048 seek=1` in that command--these parameters are
+necessary in order to avoid overwriting the boot ROM configuration data
+in the first 2048 bytes of the EMMC BOOT0 partition.
