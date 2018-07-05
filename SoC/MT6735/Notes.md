@@ -11,7 +11,7 @@ Just some random notes for the MT6735 SoC.
   - Boot ROM and SRAM access from Linux are disabled during Preloader
     execution.
 
-- AP<-\>BB memory mappings:
-  - 0x10000000 (AP) <-> 0xA0000000 (BB): `infracfg_ao_reg` base address
-    - This enables the BB core to access clock controls, GPIOs and other
+- AP<-\>BP memory mappings:
+  - 0x10000000 (AP) <-> 0xA0000000 (BP): `infracfg_ao_reg` base address
+    - This enables the BP core to access clock controls, GPIOs and other
       peripherals directly.

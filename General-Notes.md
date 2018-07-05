@@ -6,7 +6,7 @@
 The SoC/LTE Modem system consists of three main parts:
 
 1. The Application Processor (AP), which is some ARM Cortex-A variant.
-2. The Baseband Processor (BB/BP), which is a Cortex-R4.
+2. The Baseband Processor (BP/BB), which is a Cortex-R4.
 3. The Baseband DSP (DSP), which is some Coresonic DSP.
 
 This is actually a simplification, because there's a second, non-Coresonic
@@ -35,7 +35,7 @@ some of these entries are complete guesses.
 * AICE: Andes ICE. This is a JTAG adapter/"In-Circuit Emulator" made by Andes
   Technology.
 * CCCI: Cross Core Communication Interface. This is the memory/DMA interface
-  through which the AP and the BB communicate.
+  through which the AP and the BP communicate.
 * CONN: "Connectivity", usually refers to the connectivity subsystem. The
   connectivity subsystem includes the WiFi CPU core and possibly the Bluetooth
   CPU as well.
@@ -50,14 +50,14 @@ some of these entries are complete guesses.
 * M4U: Multimedia Memory Management Unit. This is what MediaTek calls their
   IOMMU.
 * MCU: Used to refer to different processor subsystems. e.g., "APMCU" refers to
-  the main AP core cluster, while "MDMCU" refers to the BB CPU. "MCUSYS" seems
+  the main AP core cluster, while "MDMCU" refers to the BP CPU. "MCUSYS" seems
   to refer to the AP MCU system.
 * MSDC: Used to refer to their EMMC/SD card controller core. Possibly "MediaTek
   SD Controller".
 * SST: System Stability Tracker. This is the name of the system trace
-  functionality included in the BB firmware.
+  functionality included in the BP firmware.
 * SWLA: Software LA (Logic Analyzer?). It seems to be some kind of debug
-  functionality in the BB firmware.
+  functionality in the BP firmware.
 
 
 ## History
@@ -73,7 +73,7 @@ some of these entries are complete guesses.
    * More of an analysis of the kernel and userspace side of things and not so
      much about the modem firmware, but still very good and helpful.
    * [MTK Baseband Code Elevation Research Repo](https://github.com/Comsecuris/mtk-baseband-sanctuary)
-     * [BB image decryptor](https://github.com/Comsecuris/mtk-baseband-sanctuary/blob/master/ccci_md_dump/decrypt/decrypt.c)
+     * [BP image decryptor](https://github.com/Comsecuris/mtk-baseband-sanctuary/blob/master/ccci_md_dump/decrypt/decrypt.c)
      * [Debug symbol loader](https://github.com/Comsecuris/mtk-baseband-sanctuary/blob/master/ida_load_syms/loadsyms.py)
  * [Black box reverse engineering for unknown/custom instruction sets](https://recon.cx/2016/recordings/recon2016-02-david-carne-Black-box-reverse-engineering-for-unknown-custom-instruction-sets.mp4)
    * "Reversing the ADF7242"
