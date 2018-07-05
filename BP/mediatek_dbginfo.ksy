@@ -6,13 +6,14 @@ meta:
 seq:
   - id: header
     type: header
-  - id: symbols
+instances:
+  symbols:
     type: symbols
-    size: header.file_associations_start - header.header_len - 1
-  - id: junk
-    size: 1
-  - id: file_associations
+    pos: header.symbols_start
+    size: header.file_associations_start - header.symbols_start - 1
+  file_associations:
     type: file_associations
+    pos: header.file_associations_start
     size: _io.size - header.file_associations_start - 1
 types:
   header:
@@ -37,7 +38,7 @@ types:
       - id: time
         type: strz
         encoding: ASCII
-      - id: header_len
+      - id: symbols_start
         type: u4
       - id: file_associations_start
         type: u4
