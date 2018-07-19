@@ -60,3 +60,10 @@ that subsystem.
 The [Documents.md](Documents.md) file contains a list of research papers,
 presentations, patents, and other documents that are or might be relevant
 to this project.
+
+## Chat
+
+Join us in the `#postmarketos-lowlevel` channel on
+[Matrix](https://matrix.to/#/#postmarketos-lowlevel:disroot.org) or
+[Freenode IRC](https://kiwiirc.com/nextclient/#ircs://chat.freenode.net:6697/#postmarketos-lowlevel)
+to discuss this and other low-level smartphone firmware projects.
