@@ -324,8 +324,10 @@ types:
             size: 1
           - id: usbdl_by_kcol0_timeout_ms
             type: u4
+            doc: Values below 3000 ms will be rounded up to 3000 ms.
           - id: usbdl_by_flag_timeout_ms
             type: u4
+            doc: Values below 3000 ms will be rounded up to 3000 ms.
           - id: usbdl_vid
             type: u2
           - id: usbdl_pid
