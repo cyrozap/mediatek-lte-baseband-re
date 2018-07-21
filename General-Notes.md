@@ -58,6 +58,7 @@ some of these entries are complete guesses.
   functionality included in the BP firmware.
 * SWLA: Software LA (Logic Analyzer?). It seems to be some kind of debug
   functionality in the BP firmware.
+* TRNG: Truly Random Number Generator.
 
 
 ## History
