@@ -312,8 +312,10 @@ types:
             size: 1
           - id: brom_cmd_via_uart1_disable_magic
             type: u1
+            doc: Magic is "R" (0x52)
           - id: m_brom_cmd_via_usb_disable_magic
             type: u1
+            doc: Magic is "U" (0x55)
           - id: reserved2
             size: 1
           - id: usbdl_hs_en
