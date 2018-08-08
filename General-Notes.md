@@ -34,6 +34,8 @@ some of these entries are complete guesses.
 
 * AICE: Andes ICE. This is a JTAG adapter/"In-Circuit Emulator" made by Andes
   Technology.
+* C2CRF: "Coresonic to Cortex-R(4)F"? "Core to Core RF"? Related to access
+  between the CR4 and the Coresonic core, meant for debugging.
 * CCCI: Cross Core Communication Interface. This is the memory/DMA interface
   through which the AP and the BP communicate.
 * CONN: "Connectivity", usually refers to the connectivity subsystem. The
@@ -42,6 +44,10 @@ some of these entries are complete guesses.
 * DBF: DSP Binary Filter. As the name implies, this is binary filter data that
   is loaded into and parsed by the firmware running on the Coresonic DSP.
 * DCM: Dynamic Clock Management.
+* DEM: Debug Exchange Module/Data Exchange Module. This is a hardware block
+  with registers that control reset, clocking, and I/O selection for the debug
+  subsystem. For example, the JTAG enable/disable registers are part of this
+  module.
 * GCU: GPRS Cipher Unit. An accelerator for cryptographic ciphers used in some
   GSM protocols.
 * INFRACFG: "Infrastructure system configuration". Refers to the block of
@@ -54,6 +60,7 @@ some of these entries are complete guesses.
   to refer to the AP MCU system.
 * MSDC: Used to refer to their EMMC/SD card controller core. Possibly "MediaTek
   SD Controller".
+* RXDFE: "RX Digital Front End"?
 * SST: System Stability Tracker. This is the name of the system trace
   functionality included in the BP firmware.
 * SWLA: Software LA (Logic Analyzer?). It seems to be some kind of debug
