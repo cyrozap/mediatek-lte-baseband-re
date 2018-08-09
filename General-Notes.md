@@ -84,8 +84,9 @@ some of these entries are complete guesses.
      * [BP image decryptor](https://github.com/Comsecuris/mtk-baseband-sanctuary/blob/master/ccci_md_dump/decrypt/decrypt.c)
      * [Debug symbol loader](https://github.com/Comsecuris/mtk-baseband-sanctuary/blob/master/ida_load_syms/loadsyms.py)
  * "Reverse engineering MT8173 PCM firmwares and ISA for a fully free bootchain"
-   * [Video](https://www.youtube.com/watch?v=9rKxfo7Gkqo)
-   * [Slides](https://ecc2017.coreboot.org/uploads/talk/presentation/30/reverse-engineering-mt8173-pcm-firmwares-isa-fully-free-boot-chain.pdf)
+   * [Video](https://www.youtube.com/watch?v=9rKxfo7Gkqo),
+     [Slides](https://ecc2017.coreboot.org/uploads/talk/presentation/30/reverse-engineering-mt8173-pcm-firmwares-isa-fully-free-boot-chain.pdf)
+   * Good talk on reverse engineering the ISA of a custom MediaTek microcontroller core.
  * [Black box reverse engineering for unknown/custom instruction sets](https://recon.cx/2016/recordings/recon2016-02-david-carne-Black-box-reverse-engineering-for-unknown-custom-instruction-sets.mp4)
    * "Reversing the ADF7242"
    * Good talk on how to reverse engineer ISAs in general.
