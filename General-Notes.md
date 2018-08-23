@@ -90,6 +90,13 @@ some of these entries are complete guesses.
  * [Black box reverse engineering for unknown/custom instruction sets](https://recon.cx/2016/recordings/recon2016-02-david-carne-Black-box-reverse-engineering-for-unknown-custom-instruction-sets.mp4)
    * "Reversing the ADF7242"
    * Good talk on how to reverse engineer ISAs in general.
+ * [Reversing a Japanese Wireless SD Card - From Zero to Code Execution](https://docs.google.com/presentation/d/13OJNOb2IMwp79SDrbxSLF3i7StTgWLdD7QlYpic39r8/edit)
+   * This talk includes some ISA identification techniques.
+   * Has links to some interesting tools:
+     * [rbasefind](https://github.com/sgayou/rbasefind): A firmware base address search tool.
+     * [Miasm](https://github.com/cea-sec/miasm): Reverse engineering framework in Python.
+     * [Sibyl](https://github.com/cea-sec/Sibyl): A Miasm2 based function divination.
+     * [r2m2](https://github.com/guedou/r2m2): Use miasm2 as a radare2 plugin.
  * [How to not break LTE crypto](https://www.sstic.org/media/SSTIC2016/SSTIC-actes/how_to_not_break_lte_crypto/SSTIC2016-Article-how_to_not_break_lte_crypto-michau_devine.pdf)
    * MediaTek-specific modem information is in section 3.3.
  * [Fun with the MTK 6573 Baseband (Patching / Replacing)](http://baseband-devel.722152.n3.nabble.com/Fun-with-the-MTK-6573-Baseband-Patching-Replacing-td4026683.html)
