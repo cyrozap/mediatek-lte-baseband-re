@@ -24,6 +24,8 @@ partition while the device is in download mode. See
 
 ### Flashing via SP Flash Tool (SPFT)
 
+TODO
+
 ### Flashing via dd (untested)
 
 On the host PC, run the following command to push the new preloader
