@@ -121,10 +121,11 @@ types:
         encoding: ASCII
       - id: version
         type: u4
-      - id: brlt_offset
+      - id: dev_rw_unit
         type: u4
+        doc: Device block size in bytes.
       - id: padding
-        size: brlt_offset - (12+4+4)
+        size: dev_rw_unit - (12+4+4)
   boot_region_layout:
     seq:
       - id: identifier
@@ -143,7 +144,7 @@ types:
         repeat: expr
         repeat-expr: 8
       - id: padding
-        size: boot_region_addr - (8+4+4+4+20*8) - _parent.emmc_header.brlt_offset
+        size: boot_region_addr - (8+4+4+4+20*8) - _parent.emmc_header.dev_rw_unit
   bootloader_descriptor:
     seq:
       - id: bl_exist_magic
