@@ -119,6 +119,7 @@ types:
         type: strz
         size: 12
         encoding: ASCII
+        doc: Should be "EMMC_BOOT".
       - id: version
         type: u4
       - id: dev_rw_unit
@@ -132,6 +133,7 @@ types:
         type: strz
         size: 8
         encoding: ASCII
+        doc: Should be "BRLYT".
       - id: version
         type: u4
       - id: boot_region_addr
@@ -151,6 +153,7 @@ types:
         type: str
         size: 4
         encoding: ASCII
+        doc: If the entry exists, this field should be "BBBB".
       - id: bl_dev
         type: u2
         enum: gfh_flash_dev
