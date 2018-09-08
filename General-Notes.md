@@ -44,7 +44,7 @@ sure.
 The cellular RF frontends have two main functions:
 
 * Convert between the [low-IF][low-IF]/[zero-IF][direct-conversion] signals
-  the SoC transmits/receives and the much higher
+  the SoC transmits/receives and the much higher-frequency
   [cellular RF signals][cellular-frequencies].
 * Filter and amplify the transmitted and received cellular signals.
 
