@@ -26,6 +26,59 @@ to access that directly (for, e.g., DSP memory dumps), but I'm not entirely
 sure.
 
 
+## IC names and functions
+
+* Cellular RF Frontends (RFICs)
+  * MT6169
+* Connectivity RF Frontends (RFICs)
+  * MT6625
+  * MT6631
+* Antenna Switches
+  * Any Skyworks SKY77xxx-xx IC
+* Power Management ICs (PMICs)
+  * MT6328
+  * MT6351
+
+### Details
+
+The cellular RF frontends have two main functions:
+
+* Convert between the [low-IF][low-IF]/[zero-IF][direct-conversion] signals
+  the SoC transmits/receives and the much higher
+  [cellular RF signals][cellular-frequencies].
+* Filter and amplify the transmitted and received cellular signals.
+
+It's important to know that the cellular RF frontends only perform these
+tuning, filtering, and amplification functions, plus a few smaller
+functions--they don't do any ADC/DAC, so the signals shared between the SoC
+and them are entirely analog.
+
+The connectivity RF frontends are similar to the cellular RF frontends, but
+handle WiFi, Bluetooth, and GNSS instead. Like with the cellular RFICs, the
+amplified, filtered, and shifted RF signals for these functions are sent into
+the SoC for further processing. In addition to that, the connectivity RFICs
+also include a full FM radio receiver which contains a demodulator DSP.
+
+The antenna switches take the large number of TX/RX signals from the cellular
+RF frontend and multiplex them over a smaller number of antennas. This way a
+phone only needs 1-3 cellular antennas instead of 10+ antennas.
+
+The power management ICs are sort of "kitchen sink" ICs--in addition to
+performing typical power management functions like DC-DC conversion, battery
+charging, and battery monitoring and management ("fuel gauge"), they perform a
+number of additional funcions:
+
+* Vibration motor driver.
+* LED drivers.
+* Audio CODEC (ADC/DAC).
+* AUXADC for accessory detection/temperature sensing.
+* Real-time clock.
+* Extra GPIO.
+
+To summarize, the PMIC handles most of the higher-power analog functionality
+that isn't already handled by the RFICs or the SoC itself.
+
+
 ## Glossary
 
 MediaTek uses a lot of acronyms in their code and documentation but rarely
@@ -109,3 +162,6 @@ some of these entries are complete guesses.
 [adi-acquisition]: https://www.eetimes.com/document.asp?doc_id=1248601
 [acquisition]: https://www.eetimes.com/document.asp?doc_id=1261529
 [mt6290]: https://www.mediatek.com/press-room/press-releases/mediatek-announces-the-availability-of-multimode-lte-modem-chipset
+[low-IF]: https://en.wikipedia.org/wiki/Low_IF_receiver
+[direct-conversion]: https://en.wikipedia.org/wiki/Direct-conversion_receiver
+[cellular-frequencies]: https://en.wikipedia.org/wiki/Cellular_frequencies
