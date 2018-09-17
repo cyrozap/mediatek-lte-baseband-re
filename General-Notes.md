@@ -94,6 +94,7 @@ some of these entries are complete guesses.
 * CONN: "Connectivity", usually refers to the connectivity subsystem. The
   connectivity subsystem includes the WiFi CPU core and possibly the Bluetooth
   CPU as well.
+* CQDMA: Command-Queue DMA. This is what MediaTek calls their DMA controller.
 * DBF: DSP Binary Filter. As the name implies, this is binary filter data that
   is loaded into and parsed by the firmware running on the Coresonic DSP.
 * DCM: Dynamic Clock Management.
