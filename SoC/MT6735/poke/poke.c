@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	long page_size = sysconf(_SC_PAGESIZE);
+	size_t page_size = sysconf(_SC_PAGESIZE);
 	reg_offset = address % page_size;
 	reg_base = address - reg_offset;
 
