@@ -221,7 +221,7 @@ types:
           - id: magic
             contents: 'MMM'
           - id: ver
-            size: 1
+            type: u1
   gfh_file_info:
     seq:
       - id: gfh_header
