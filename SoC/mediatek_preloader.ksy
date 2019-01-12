@@ -111,8 +111,10 @@ types:
     seq:
       - id: emmc_header
         type: emmc_header
+        size: 512
       - id: boot_region_layout
         type: boot_region_layout
+        size: 512*3
   emmc_header:
     seq:
       - id: identifier
@@ -125,8 +127,6 @@ types:
       - id: dev_rw_unit
         type: u4
         doc: Device block size in bytes.
-      - id: padding
-        size: dev_rw_unit - (12+4+4)
   boot_region_layout:
     seq:
       - id: identifier
@@ -145,8 +145,6 @@ types:
         size: 20
         repeat: expr
         repeat-expr: 8
-      - id: padding
-        size: boot_region_addr - (8+4+4+4+20*8) - _parent.emmc_header.dev_rw_unit
   bootloader_descriptor:
     seq:
       - id: bl_exist_magic
