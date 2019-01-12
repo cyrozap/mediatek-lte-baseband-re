@@ -112,8 +112,8 @@ types:
       - id: emmc_header
         type: emmc_header
         size: 512
-      - id: boot_region_layout
-        type: boot_region_layout
+      - id: bootrom_layout
+        type: bootrom_layout
         size: 512*3
   emmc_header:
     seq:
@@ -127,7 +127,7 @@ types:
       - id: dev_rw_unit
         type: u4
         doc: Device block size in bytes.
-  boot_region_layout:
+  bootrom_layout:
     seq:
       - id: identifier
         type: strz
