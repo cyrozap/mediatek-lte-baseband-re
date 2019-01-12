@@ -6,6 +6,7 @@ meta:
 seq:
   - id: bootrom_header
     type: bootrom_header
+    size: 512 * 4
     if: magic == "EMM"
   - id: file_info
     type: gfh_file_info
@@ -114,7 +115,7 @@ types:
         size: 512
       - id: bootrom_layout
         type: bootrom_layout
-        size: 512*3
+        size: 512
   emmc_header:
     seq:
       - id: identifier
