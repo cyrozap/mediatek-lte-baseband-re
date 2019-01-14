@@ -35,6 +35,7 @@ modems using inexpensive, off-the-shelf Android smartphones. Some examples
 of what would be possible:
 
 - Over-engineered walkie-talkie.
+- Smartphone DECT handset.
 - Cognitive radio in TV whitespace.
 - Dongle-free smartphone digital TV receiver.
 - Dongle-free smartphone SDR/spectrum analyzer.
