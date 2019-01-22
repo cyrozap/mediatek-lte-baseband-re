@@ -222,6 +222,28 @@ class UsbDl:
 
         return data[:count]
 
+    def memory_write(self, addr, data, cqdma=False):
+        '''Write a byte array to a range of memory.
+
+        addr: A 32-bit address as an int.
+        data: The data to write.
+        '''
+        data = bytes(data)
+
+        # Pad the byte array.
+        remaining_bytes = (len(data) % 4)
+        if remaining_bytes > 0:
+            data += b'\0' * (4 - remaining_bytes)
+
+        words = []
+        for i in range(0, len(data), 4):
+            words.append(struct.unpack_from('<I', data, i)[0])
+
+        if cqdma:
+            self.cqdma_write32(addr, words)
+        else:
+            self.cmd_write32(addr, words)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('port', type=str, help="The serial port you want to connect to.")
