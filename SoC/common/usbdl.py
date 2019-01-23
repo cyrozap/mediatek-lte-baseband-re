@@ -129,6 +129,29 @@ class UsbDl:
             print(status)
             raise Exception
 
+    def cmd_jump_da(self, addr):
+        self._send_bytes([self.commands['CMD_JUMP_DA']])
+        self._send_bytes(struct.pack('>I', addr))
+
+        status = struct.unpack('>H', self._recv_bytes(2))[0]
+        if status > 0xff:
+            print(status)
+            raise Exception
+
+    def cmd_get_target_config(self):
+        self._send_bytes([self.commands['CMD_GET_TARGET_CONFIG']])
+
+        target_config = struct.unpack('>I', self._recv_bytes(4))[0]
+        print("Target config: 0x{:08X}".format(target_config))
+        print("\tSBC enabled: {}".format(True if (target_config & 0x1) else False))
+        print("\tSLA enabled: {}".format(True if (target_config & 0x2) else False))
+        print("\tDAA enabled: {}".format(True if (target_config & 0x4) else False))
+
+        status = struct.unpack('>H', self._recv_bytes(2))[0]
+        if status > 0xff:
+            print(status)
+            raise Exception
+
     def cmd_get_hw_sw_ver(self):
         self._send_bytes([self.commands['CMD_GET_HW_SW_VER']])
         hw_subcode = struct.unpack('>H', self._recv_bytes(2))[0]
