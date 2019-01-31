@@ -78,6 +78,22 @@ class UsbDl:
             raise Exception
         return bytes(data)
 
+    def get_word(self):
+        '''Read a big-endian 16-bit integer from the serial port.'''
+        return struct.unpack('>H', self._recv_bytes(2))[0]
+
+    def put_word(self, word):
+        '''Write a big-endian 16-bit integer to the serial port.'''
+        self._send_bytes(struct.pack('>H', word))
+
+    def get_dword(self):
+        '''Read a big-endian 32-bit integer from the serial port.'''
+        return struct.unpack('>I', self._recv_bytes(4))[0]
+
+    def put_dword(self, dword):
+        '''Write a big-endian 32-bit integer to the serial port.'''
+        self._send_bytes(struct.pack('>I', dword))
+
     def cmd_read32(self, addr, word_count):
         '''Read 32-bit words starting at an address.
 
@@ -87,19 +103,18 @@ class UsbDl:
         words = []
 
         self._send_bytes([self.commands['CMD_READ32']])
-        self._send_bytes(struct.pack('>I', addr))
-        self._send_bytes(struct.pack('>I', word_count))
+        self.put_dword(addr)
+        self.put_dword(word_count)
 
-        status = struct.unpack('>H', self._recv_bytes(2))[0]
+        status = self.get_word()
         if status != 0:
             print(status)
             raise Exception
 
         for i in range(word_count):
-            word = self._recv_bytes(4)
-            words.append(struct.unpack('>I', word)[0])
+            words.append(self.get_dword())
 
-        status = struct.unpack('>H', self._recv_bytes(2))[0]
+        status = self.get_word()
         if status != 0:
             print(status)
             raise Exception
@@ -113,27 +128,27 @@ class UsbDl:
         words: A list of 32-bit ints to write starting at address addr.
         '''
         self._send_bytes([self.commands['CMD_WRITE32']])
-        self._send_bytes(struct.pack('>I', addr))
-        self._send_bytes(struct.pack('>I', len(words)))
+        self.put_dword(addr)
+        self.put_dword(len(words))
 
-        status = struct.unpack('>H', self._recv_bytes(2))[0]
+        status = self.get_word()
         if status > 0xff:
             print(status)
             raise Exception
 
         for word in words:
-            self._send_bytes(struct.pack('>I', word))
+            self.put_dword(word)
 
-        status = struct.unpack('>H', self._recv_bytes(2))[0]
+        status = self.get_word()
         if status > 0xff:
             print(status)
             raise Exception
 
     def cmd_jump_da(self, addr):
         self._send_bytes([self.commands['CMD_JUMP_DA']])
-        self._send_bytes(struct.pack('>I', addr))
+        self.put_dword(addr)
 
-        status = struct.unpack('>H', self._recv_bytes(2))[0]
+        status = self.get_word()
         if status > 0xff:
             print(status)
             raise Exception
@@ -141,24 +156,24 @@ class UsbDl:
     def cmd_get_target_config(self):
         self._send_bytes([self.commands['CMD_GET_TARGET_CONFIG']])
 
-        target_config = struct.unpack('>I', self._recv_bytes(4))[0]
+        target_config = self.get_dword()
         print("Target config: 0x{:08X}".format(target_config))
         print("\tSBC enabled: {}".format(True if (target_config & 0x1) else False))
         print("\tSLA enabled: {}".format(True if (target_config & 0x2) else False))
         print("\tDAA enabled: {}".format(True if (target_config & 0x4) else False))
 
-        status = struct.unpack('>H', self._recv_bytes(2))[0]
+        status = self.get_word()
         if status > 0xff:
             print(status)
             raise Exception
 
     def cmd_get_hw_sw_ver(self):
         self._send_bytes([self.commands['CMD_GET_HW_SW_VER']])
-        hw_subcode = struct.unpack('>H', self._recv_bytes(2))[0]
-        hw_ver = struct.unpack('>H', self._recv_bytes(2))[0]
-        sw_ver = struct.unpack('>H', self._recv_bytes(2))[0]
+        hw_subcode = self.get_word()
+        hw_ver = self.get_word()
+        sw_ver = self.get_word()
 
-        status = struct.unpack('>H', self._recv_bytes(2))[0]
+        status = self.get_word()
         if status != 0:
             print(status)
             raise Exception
@@ -167,9 +182,9 @@ class UsbDl:
 
     def cmd_get_hw_code(self):
         self._send_bytes([self.commands['CMD_GET_HW_CODE']])
-        hw_code = struct.unpack('>H', self._recv_bytes(2))[0]
+        hw_code = self.get_word()
 
-        status = struct.unpack('>H', self._recv_bytes(2))[0]
+        status = self.get_word()
         if status != 0:
             print(status)
             raise Exception
