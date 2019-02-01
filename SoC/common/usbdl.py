@@ -24,27 +24,24 @@ class UsbDl:
         'CMD_GET_HW_CODE': 0xFD,
     }
 
-    hw_code_map = {
-        0x0279: "MT6797",
-        0x0321: "MT6735",
-        0x0335: "MT6737M",
-        0x8163: "MT8163",
-    }
-
-    cqdma_addrs = {
-        "MT6797": {
+    socs = {
+        0x0279: {
+            'name': "MT6797",
             'cqdma_base': 0x10212C00,
             'tmp_addr': 0x110001A0,
         },
-        "MT6735": {
+        0x0321: {
+            'name': "MT6735",
             'cqdma_base': 0x10217C00,
             'tmp_addr': 0x110001A0,
         },
-        "MT6737M": {
+        0x0335: {
+            'name': "MT6737M",
             'cqdma_base': 0x10217C00,
             'tmp_addr': 0x110001A0,
         },
-        "MT8163": {
+        0x8163: {
+            'name': "MT8163",
             'cqdma_base': 0x10212C00,
             'tmp_addr': 0x110001A0,
         },
@@ -54,10 +51,8 @@ class UsbDl:
         self.debug = debug
         self.ser = serial.Serial(port, timeout=timeout, write_timeout=write_timeout)
         hw_code = self.cmd_get_hw_code()
-        self.soc = self.hw_code_map[hw_code]
-        print("{} detected!".format(self.soc))
-        self.cqdma_base = self.cqdma_addrs[self.soc]['cqdma_base']
-        self.tmp_addr = self.cqdma_addrs[self.soc]['tmp_addr']
+        self.soc = self.socs[hw_code]
+        print("{} detected!".format(self.soc['name']))
 
     def _send_bytes(self, data):
         data = bytes(data)
@@ -198,20 +193,23 @@ class UsbDl:
         word_count: The number of words to read as an int.
         '''
 
+        tmp_addr = self.soc['tmp_addr']
+        cqdma_base = self.soc['cqdma_base']
+
         words = []
         for i in range(word_count):
             # Set DMA source address.
-            self.cmd_write32(self.cqdma_base+0x1C, [addr+i*4])
+            self.cmd_write32(cqdma_base+0x1C, [addr+i*4])
             # Set DMA destination address.
-            self.cmd_write32(self.cqdma_base+0x20, [self.tmp_addr])
+            self.cmd_write32(cqdma_base+0x20, [tmp_addr])
             # Set DMA transfer length in bytes.
-            self.cmd_write32(self.cqdma_base+0x24, [4])
+            self.cmd_write32(cqdma_base+0x24, [4])
             # Start DMA transfer.
-            self.cmd_write32(self.cqdma_base+0x08, [0x00000001])
+            self.cmd_write32(cqdma_base+0x08, [0x00000001])
             # Stop and reset DMA transfer.
-            self.cmd_write32(self.cqdma_base+0x0C, [0x00000001])
+            self.cmd_write32(cqdma_base+0x0C, [0x00000001])
             # Read word from tmp_addr.
-            words.extend(self.cmd_read32(self.tmp_addr, 1))
+            words.extend(self.cmd_read32(tmp_addr, 1))
 
         return words
 
@@ -222,21 +220,24 @@ class UsbDl:
         words: A list of 32-bit ints to write starting at address addr.
         '''
 
+        tmp_addr = self.soc['tmp_addr']
+        cqdma_base = self.soc['cqdma_base']
+
         for i in range(len(words)):
             # Write word to tmp_addr.
-            self.cmd_write32(self.tmp_addr, [words[i]])
+            self.cmd_write32(tmp_addr, [words[i]])
             # Set DMA source address.
-            self.cmd_write32(self.cqdma_base+0x1C, [self.tmp_addr])
+            self.cmd_write32(cqdma_base+0x1C, [tmp_addr])
             # Set DMA destination address.
-            self.cmd_write32(self.cqdma_base+0x20, [addr+i*4])
+            self.cmd_write32(cqdma_base+0x20, [addr+i*4])
             # Set DMA transfer length in bytes.
-            self.cmd_write32(self.cqdma_base+0x24, [4])
+            self.cmd_write32(cqdma_base+0x24, [4])
             # Start DMA transfer.
-            self.cmd_write32(self.cqdma_base+0x08, [0x00000001])
+            self.cmd_write32(cqdma_base+0x08, [0x00000001])
             # Stop and reset DMA transfer.
-            self.cmd_write32(self.cqdma_base+0x0C, [0x00000001])
+            self.cmd_write32(cqdma_base+0x0C, [0x00000001])
             # Write dummy word to tmp_addr for error detection.
-            self.cmd_write32(self.tmp_addr, [0xc0ffeeee])
+            self.cmd_write32(tmp_addr, [0xc0ffeeee])
 
     def memory_read(self, addr, count, cqdma=False):
         '''Read a range of memory to a byte array.
@@ -296,7 +297,7 @@ if __name__ == "__main__":
     # Dump efuses to file.
     print("Dumping efuses...")
     foo = usbdl.memory_read(0x10206000, 0x1000, cqdma=False)
-    e = open("{}-efuses.bin".format(usbdl.soc.lower()), 'wb')
+    e = open("{}-efuses.bin".format(usbdl.soc['name'].lower()), 'wb')
     e.write(foo)
     e.close()
 
