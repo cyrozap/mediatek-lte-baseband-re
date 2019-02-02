@@ -29,13 +29,10 @@ class UsbDl:
     socs = {
         0x0279: {
             'name': "MT6797",
-            'brom': 0x00000000,
-            'brom_size': 0x14000,
-            'sram': 0x00100000,
-            'sram_size': 0x30000,
-            'l2_sram': 0x00200000, # Functional spec says this is 0x00400000, but that's incorrect.
-            'l2_sram_size': 0x100000,
-            'efusec': 0x10206000,
+            'brom': (0x00000000, 0x14000),
+            'sram': (0x00100000, 0x30000),
+            'l2_sram': (0x00200000, 0x100000), # Functional spec says address is 0x00400000, but that's incorrect.
+            'efusec': (0x10206000, 0x1000),
             'cqdma_base': 0x10212C00,
             'tmp_addr': 0x110001A0,
             'brom_g_bounds_check': (
@@ -45,13 +42,10 @@ class UsbDl:
         },
         0x0321: {
             'name': "MT6735",
-            'brom': 0x00000000,
-            'brom_size': 0x10000,
-            'sram': 0x00100000,
-            'sram_size': 0x10000,
-            'l2_sram': 0x00200000,
-            'l2_sram_size': 0x40000,
-            'efusec': 0x10206000,
+            'brom': (0x00000000, 0x10000),
+            'sram': (0x00100000, 0x10000),
+            'l2_sram': (0x00200000, 0x40000),
+            'efusec': (0x10206000, 0x1000),
             'cqdma_base': 0x10217C00,
             'tmp_addr': 0x110001A0,
             'brom_g_bounds_check': (
@@ -61,13 +55,10 @@ class UsbDl:
         },
         0x0335: {
             'name': "MT6737M",
-            'brom': 0x00000000,
-            'brom_size': 0x10000,
-            'sram': 0x00100000,
-            'sram_size': 0x10000,
-            'l2_sram': 0x00200000,
-            'l2_sram_size': 0x40000,
-            'efusec': 0x10206000,
+            'brom': (0x00000000, 0x10000),
+            'sram': (0x00100000, 0x10000),
+            'l2_sram': (0x00200000, 0x40000),
+            'efusec': (0x10206000, 0x1000),
             'cqdma_base': 0x10217C00,
             'tmp_addr': 0x110001A0,
             'brom_g_bounds_check': (
@@ -77,13 +68,10 @@ class UsbDl:
         },
         0x8163: {
             'name': "MT8163",
-            'brom': 0x00000000,
-            'brom_size': 0x14000,
-            'sram': 0x00100000,
-            'sram_size': 0x10000,
-            'l2_sram': 0x00200000,
-            'l2_sram_size': 0x40000,
-            'efusec': 0x10206000,
+            'brom': (0x00000000, 0x14000),
+            'sram': (0x00100000, 0x10000),
+            'l2_sram': (0x00200000, 0x40000),
+            'efusec': (0x10206000, 0x1000),
             'cqdma_base': 0x10212C00,
             'tmp_addr': 0x110001A0,
             'brom_g_bounds_check': (
@@ -383,7 +371,7 @@ if __name__ == "__main__":
 
     # Dump efuses to file.
     print("Dumping efuses...")
-    efuses = usbdl.memory_read(usbdl.soc['efusec'], 0x1000)
+    efuses = usbdl.memory_read(usbdl.soc['efusec'][0], usbdl.soc['efusec'][1])
     efuse_file = open("{}-efuses.bin".format(usbdl.soc['name'].lower()), 'wb')
     efuse_file.write(efuses)
     efuse_file.close()
@@ -417,10 +405,10 @@ if __name__ == "__main__":
     # Dump BROM.
     print("Dumping BROM...")
     start_time = time.time()
-    brom = usbdl.memory_read(usbdl.soc['brom'], usbdl.soc['brom_size'], cqdma=use_cqdma)
+    brom = usbdl.memory_read(usbdl.soc['brom'][0], usbdl.soc['brom'][1], cqdma=use_cqdma)
     end_time = time.time()
     elapsed = end_time - start_time
-    if len(brom) != usbdl.soc['brom_size']:
+    if len(brom) != usbdl.soc['brom'][1]:
         print("Error: Failed to dump entire BROM.")
         sys.exit(1)
 
