@@ -15,6 +15,7 @@ def hex_int(i):
 
 class UsbDl:
     commands = {
+        'CMD_C8': 0xC8, # Don't know the meaning of this yet.
         'CMD_READ32': 0xD1,
         'CMD_WRITE32': 0xD4,
         'CMD_JUMP_DA': 0xD5,
@@ -92,6 +93,44 @@ class UsbDl:
     def put_dword(self, dword):
         '''Write a big-endian 32-bit integer to the serial port.'''
         self._send_bytes(struct.pack('>I', dword))
+
+    def cmd_C8(self, subcommand):
+        subcommands = {
+            'B0': 0xB0,
+            'B1': 0xB1,
+            'B2': 0xB2,
+            'B3': 0xB3,
+            'B4': 0xB4,
+            'B5': 0xB5,
+            'B6': 0xB6,
+            'B7': 0xB7,
+            'B8': 0xB8,
+            'B9': 0xB9,
+            'BA': 0xBA,
+            'C0': 0xC0,
+            'C1': 0xC1,
+            'C2': 0xC2,
+            'C3': 0xC3,
+            'C4': 0xC4,
+            'C5': 0xC5,
+            'C6': 0xC6,
+            'C7': 0xC7,
+            'C8': 0xC8,
+            'C9': 0xC9,
+            'CA': 0xCA,
+            'CB': 0xCB,
+            'CC': 0xCC,
+        }
+        self._send_bytes([self.commands['CMD_C8']])
+        self._send_bytes([subcommands[subcommand]])
+        sub_data = struct.unpack('B', self._recv_bytes(1))[0]
+
+        status = self.get_word()
+        if status != 0:
+            print(status)
+            raise Exception
+
+        return sub_data
 
     def cmd_read32(self, addr, word_count):
         '''Read 32-bit words starting at an address.
@@ -311,3 +350,6 @@ if __name__ == "__main__":
     # Print a string to UART0.
     for byte in "Hello, there!\r\n".encode('utf-8'):
         usbdl.cmd_write32(0x11002000, [byte])
+
+    # The C8 B1 command disables caches.
+    usbdl.cmd_C8('B1')
