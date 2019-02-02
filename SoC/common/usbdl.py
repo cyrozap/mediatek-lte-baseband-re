@@ -27,21 +27,25 @@ class UsbDl:
     socs = {
         0x0279: {
             'name': "MT6797",
+            'efusec': 0x10206000,
             'cqdma_base': 0x10212C00,
             'tmp_addr': 0x110001A0,
         },
         0x0321: {
             'name': "MT6735",
+            'efusec': 0x10206000,
             'cqdma_base': 0x10217C00,
             'tmp_addr': 0x110001A0,
         },
         0x0335: {
             'name': "MT6737M",
+            'efusec': 0x10206000,
             'cqdma_base': 0x10217C00,
             'tmp_addr': 0x110001A0,
         },
         0x8163: {
             'name': "MT8163",
+            'efusec': 0x10206000,
             'cqdma_base': 0x10212C00,
             'tmp_addr': 0x110001A0,
         },
@@ -296,10 +300,10 @@ if __name__ == "__main__":
 
     # Dump efuses to file.
     print("Dumping efuses...")
-    foo = usbdl.memory_read(0x10206000, 0x1000, cqdma=False)
-    e = open("{}-efuses.bin".format(usbdl.soc['name'].lower()), 'wb')
-    e.write(foo)
-    e.close()
+    efuses = usbdl.memory_read(usbdl.soc['efusec'], 0x1000)
+    efuse_file = open("{}-efuses.bin".format(usbdl.soc['name'].lower()), 'wb')
+    efuse_file.write(efuses)
+    efuse_file.close()
 
     # Print a string to UART0.
     for byte in "Hello, there!\r\n".encode('utf-8'):
