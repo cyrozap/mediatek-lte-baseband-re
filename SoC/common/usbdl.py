@@ -88,6 +88,7 @@ class UsbDl:
             'tmp_addr': 0x110001A0,
             'brom_g_bounds_check': (
                 (0x00102868, 0x00000000),
+                (0x001072DC, 0x00000000),
             ),
         },
     }
