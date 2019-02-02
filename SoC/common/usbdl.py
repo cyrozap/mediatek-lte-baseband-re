@@ -298,6 +298,9 @@ if __name__ == "__main__":
     print("Disabling WDT...")
     usbdl.cmd_write32(0x10007000, [0x22000000])
 
+    # Get the security configuration of the target.
+    usbdl.cmd_get_target_config()
+
     # Dump efuses to file.
     print("Dumping efuses...")
     efuses = usbdl.memory_read(usbdl.soc['efusec'], 0x1000)
