@@ -311,7 +311,7 @@ class UsbDl:
             # Write dummy word to tmp_addr for error detection.
             self.cmd_write32(tmp_addr, [0xc0ffeeee])
 
-    def memory_read(self, addr, count, cqdma=False):
+    def memory_read(self, addr, count, cqdma=False, print_speed=False):
         '''Read a range of memory to a byte array.
 
         addr: A 32-bit address as an int.
@@ -322,18 +322,25 @@ class UsbDl:
             word_count += 1
 
         words = []
+        start_time = time.time()
         if cqdma:
             words = self.cqdma_read32(addr, word_count)
         else:
             words = self.cmd_read32(addr, word_count)
+        end_time = time.time()
 
         data = b''
         for word in words:
             data += struct.pack('<I', word)
+        data = data[:count]
 
-        return data[:count]
+        if print_speed:
+            elapsed = end_time - start_time
+            print("Read {} bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed, int(len(data)/elapsed)))
 
-    def memory_write(self, addr, data, cqdma=False):
+        return data
+
+    def memory_write(self, addr, data, cqdma=False, print_speed=False):
         '''Write a byte array to a range of memory.
 
         addr: A 32-bit address as an int.
@@ -342,18 +349,25 @@ class UsbDl:
         data = bytes(data)
 
         # Pad the byte array.
-        remaining_bytes = (len(data) % 4)
+        padded_data = data
+        remaining_bytes = (len(padded_data) % 4)
         if remaining_bytes > 0:
-            data += b'\0' * (4 - remaining_bytes)
+            padded_data += b'\0' * (4 - remaining_bytes)
 
         words = []
-        for i in range(0, len(data), 4):
-            words.append(struct.unpack_from('<I', data, i)[0])
+        for i in range(0, len(padded_data), 4):
+            words.append(struct.unpack_from('<I', padded_data, i)[0])
 
+        start_time = time.time()
         if cqdma:
             self.cqdma_write32(addr, words)
         else:
             self.cmd_write32(addr, words)
+        end_time = time.time()
+
+        if print_speed:
+            elapsed = end_time - start_time
+            print("Wrote {} bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed, int(len(data)/elapsed)))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -404,15 +418,11 @@ if __name__ == "__main__":
 
     # Dump BROM.
     print("Dumping BROM...")
-    start_time = time.time()
-    brom = usbdl.memory_read(usbdl.soc['brom'][0], usbdl.soc['brom'][1], cqdma=use_cqdma)
-    end_time = time.time()
-    elapsed = end_time - start_time
+    brom = usbdl.memory_read(usbdl.soc['brom'][0], usbdl.soc['brom'][1], cqdma=use_cqdma, print_speed=True)
     if len(brom) != usbdl.soc['brom'][1]:
         print("Error: Failed to dump entire BROM.")
         sys.exit(1)
 
-    print("Dumped the {}-byte BROM in {} seconds ({} bytes per second).".format(len(brom), elapsed, int(len(brom)/elapsed)))
     brom_file = open("{}-brom.bin".format(usbdl.soc['name'].lower()), 'wb')
     brom_file.write(brom)
     brom_file.close()
