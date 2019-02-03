@@ -426,3 +426,17 @@ if __name__ == "__main__":
     brom_file = open("{}-brom.bin".format(usbdl.soc['name'].lower()), 'wb')
     brom_file.write(brom)
     brom_file.close()
+
+    # Dump SRAM.
+    print("Dumping SRAM...")
+    sram = usbdl.memory_read(usbdl.soc['sram'][0], usbdl.soc['sram'][1], cqdma=use_cqdma, print_speed=True)
+    sram_file = open("{}-sram.bin".format(usbdl.soc['name'].lower()), 'wb')
+    sram_file.write(sram)
+    sram_file.close()
+
+    # Dump L2 SRAM.
+    print("Dumping L2 SRAM...")
+    l2_sram = usbdl.memory_read(usbdl.soc['l2_sram'][0], usbdl.soc['l2_sram'][1], cqdma=use_cqdma, print_speed=True)
+    l2_sram_file = open("{}-l2-sram.bin".format(usbdl.soc['name'].lower()), 'wb')
+    l2_sram_file.write(l2_sram)
+    l2_sram_file.close()
