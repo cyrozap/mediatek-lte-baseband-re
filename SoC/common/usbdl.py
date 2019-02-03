@@ -278,8 +278,10 @@ class UsbDl:
             self.cmd_write32(cqdma_base+0x24, [4])
             # Start DMA transfer.
             self.cmd_write32(cqdma_base+0x08, [0x00000001])
-            # Stop and reset DMA transfer.
-            self.cmd_write32(cqdma_base+0x0C, [0x00000001])
+            # Wait for transaction to finish.
+            while True:
+                if (self.cmd_read32(cqdma_base+0x08, 1)[0] & 1) == 0:
+                    break
             # Read word from tmp_addr.
             words.extend(self.cmd_read32(tmp_addr, 1))
 
@@ -306,8 +308,10 @@ class UsbDl:
             self.cmd_write32(cqdma_base+0x24, [4])
             # Start DMA transfer.
             self.cmd_write32(cqdma_base+0x08, [0x00000001])
-            # Stop and reset DMA transfer.
-            self.cmd_write32(cqdma_base+0x0C, [0x00000001])
+            # Wait for transaction to finish.
+            while True:
+                if (self.cmd_read32(cqdma_base+0x08, 1)[0] & 1) == 0:
+                    break
             # Write dummy word to tmp_addr for error detection.
             self.cmd_write32(tmp_addr, [0xc0ffeeee])
 
