@@ -40,6 +40,7 @@ class UsbDl:
                 (0x0010276C, 0x00000000),
                 (0x00105704, 0x00000000),
             ),
+            'brom_g_da_verified': 0x001030BC,
         },
         0x0321: {
             'name': "MT6735",
@@ -53,6 +54,7 @@ class UsbDl:
                 (0x00102760, 0x00000000),
                 (0x00105704, 0x00000000),
             ),
+            'brom_g_da_verified': 0x001030C0,
         },
         0x0335: {
             'name': "MT6737M",
@@ -66,6 +68,7 @@ class UsbDl:
                 (0x00102760, 0x00000000),
                 (0x00105704, 0x00000000),
             ),
+            'brom_g_da_verified': 0x001030C0,
         },
         0x8163: {
             'name': "MT8163",
@@ -79,6 +82,7 @@ class UsbDl:
                 (0x00102868, 0x00000000),
                 (0x001072DC, 0x00000000),
             ),
+            'brom_g_da_verified': 0x001031D0,
         },
     }
 
@@ -445,3 +449,28 @@ if __name__ == "__main__":
     l2_sram_file = open("{}-l2-sram.bin".format(usbdl.soc['name'].lower()), 'wb')
     l2_sram_file.write(l2_sram)
     l2_sram_file.close()
+
+    # Code parameters.
+    binary = open("test.bin", 'rb').read()
+    load_addr = 0x00201000
+    thumb_mode = True
+
+    # Load executable.
+    print("Loading executable...")
+    usbdl.memory_write(load_addr, binary, cqdma=use_cqdma, print_speed=True)
+
+    # Mark DA as verified.
+    if usbdl.soc.get('brom_g_da_verified', False):
+        if use_cqdma:
+            usbdl.cqdma_write32(usbdl.soc['brom_g_da_verified'], [1])
+        else:
+            usbdl.cmd_write32(usbdl.soc['brom_g_da_verified'], [1])
+    else:
+        print("Error: No DA verification address specified, exiting...")
+        sys.exit(1)
+
+    # Jump to executable.
+    print("Jumping to executable...")
+    if thumb_mode:
+        load_addr |= 1
+    usbdl.cmd_jump_da(load_addr)
