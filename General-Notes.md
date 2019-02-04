@@ -102,6 +102,11 @@ some of these entries are complete guesses.
   with registers that control reset, clocking, and I/O selection for the debug
   subsystem. For example, the JTAG enable/disable registers are part of this
   module.
+* GCE: Global Command Engine. A SoC peripheral that can be used to program
+  registers with strict timing requirements.
+* GCPU: General Copy Protection Unit. A SoC peripheral used for decrypting
+  encrypted media. It's a microcontroller core (MD32?) with some ROM, SRAM,
+  and hardware accelerators for AES, SHA, MD5, RC4, DES, CRC32, DMA, etc.
 * GCU: GPRS Cipher Unit. An accelerator for cryptographic ciphers used in some
   GSM protocols.
 * INFRACFG: "Infrastructure system configuration". Refers to the block of
