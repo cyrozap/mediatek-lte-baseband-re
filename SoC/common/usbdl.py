@@ -4,6 +4,7 @@ import argparse
 import binascii
 import serial
 import struct
+import sys
 import time
 
 
