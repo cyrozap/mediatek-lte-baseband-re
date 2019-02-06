@@ -33,6 +33,7 @@ class UsbDl:
             'brom': (0x00000000, 0x14000),
             'sram': (0x00100000, 0x30000),
             'l2_sram': (0x00200000, 0x100000), # Functional spec says address is 0x00400000, but that's incorrect.
+            'toprgu': (0x10007000, 0x1000),
             'efusec': (0x10206000, 0x1000),
             'cqdma_base': 0x10212C00,
             'tmp_addr': 0x110001A0,
@@ -47,6 +48,7 @@ class UsbDl:
             'brom': (0x00000000, 0x10000),
             'sram': (0x00100000, 0x10000),
             'l2_sram': (0x00200000, 0x40000),
+            'toprgu': (0x10212000, 0x1000),
             'efusec': (0x10206000, 0x1000),
             'cqdma_base': 0x10217C00,
             'tmp_addr': 0x110001A0,
@@ -61,6 +63,7 @@ class UsbDl:
             'brom': (0x00000000, 0x10000),
             'sram': (0x00100000, 0x10000),
             'l2_sram': (0x00200000, 0x40000),
+            'toprgu': (0x10212000, 0x1000),
             'efusec': (0x10206000, 0x1000),
             'cqdma_base': 0x10217C00,
             'tmp_addr': 0x110001A0,
@@ -75,6 +78,7 @@ class UsbDl:
             'brom': (0x00000000, 0x14000),
             'sram': (0x00100000, 0x10000),
             'l2_sram': (0x00200000, 0x40000),
+            'toprgu': (0x10007000, 0x1000),
             'efusec': (0x10206000, 0x1000),
             'cqdma_base': 0x10212C00,
             'tmp_addr': 0x110001A0,
@@ -387,7 +391,7 @@ if __name__ == "__main__":
 
     # Disable WDT.
     print("Disabling WDT...")
-    usbdl.cmd_write32(0x10007000, [0x22000000])
+    usbdl.cmd_write32(usbdl.soc['toprgu'][0], [0x22000000])
 
     # Get the security configuration of the target.
     usbdl.cmd_get_target_config()
