@@ -3,7 +3,6 @@ ASFLAGS := -mcpu=cortex-r4
 CC := arm-none-eabi-gcc
 CFLAGS := -mcpu=cortex-r4 -mthumb -mfloat-abi=soft -fpie -nostdlib -nostartfiles -nodefaultlibs -fno-builtin -Os
 LD := arm-none-eabi-ld
-#LDFLAGS := -e 0x00000000 -Ttext 0x00000000 -Tdata 0x00020000 -Tbss 0x00030000 -Map test.map
 LDFLAGS := -T modem.ld -Map test.map
 
 all: test.img test.bin test.elf
