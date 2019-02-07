@@ -22,6 +22,7 @@ SECTIONS
 {
 	.text : {
 		*(.vectors)	/* Vector table */
+		*(.init)	/* Init code */
 		*(.text*)	/* Program code */
 		. = ALIGN(4);
 		*(.rodata*)	/* Read-only data */

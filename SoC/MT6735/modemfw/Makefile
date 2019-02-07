@@ -14,7 +14,7 @@ all: test.img test.bin test.elf
 %.o: %.S
 	$(AS) $(ASFLAGS) -o $@ $<
 
-test.elf: vectors.o test.o
+test.elf: vectors.o init.o test.o
 	$(LD) $(LDFLAGS) -o $@ $^
 
 %.bin: %.elf

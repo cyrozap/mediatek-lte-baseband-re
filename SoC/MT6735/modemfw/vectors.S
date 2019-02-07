@@ -53,6 +53,8 @@
 	.globl		_vector_start
 	.globl		_vector_end
 
+	.extern		_start
+
 /****************************************************************************
  * Assembly Macros
  ****************************************************************************/
@@ -80,10 +82,14 @@ _vector_start:
 	ldr		pc, other_handler	/* 0x18: IRQ */
 	ldr		pc, other_handler	/* 0x1c: FIQ */
 
+wfi_loop:
+	wfi
+	b other_handler
+
 reset_handler:
-	.long	main
+	.long	_start
 other_handler:
-	.long	_vector_start
+	.long   wfi_loop
 
 	.globl	_vector_end
 _vector_end:
