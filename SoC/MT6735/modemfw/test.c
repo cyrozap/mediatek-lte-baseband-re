@@ -29,18 +29,43 @@ static void putchar(char c) {
 	ap_base[MD2AP_REG/4] |= 0x100;
 }
 
+static void handle_read() {
+	// Get the address.
+	uint32_t addr = 0;
+	for (uint8_t i = 0; i < 4; i++) {
+		uint8_t c = getchar();
+		addr |= c << (8 * i);
+	}
+	// Save the data at that address.
+	uint32_t dword = data[addr/4];
+	// Send the data.
+	for (uint8_t i = 0; i < 4; i++) {
+		uint8_t c = (dword >> (8 * i)) & 0xff;
+		putchar(c);
+	}
+}
+
+static void handle_write() {
+	// Get the address.
+	uint32_t addr = 0;
+	for (uint8_t i = 0; i < 4; i++) {
+		uint8_t c = getchar();
+		addr |= c << (8 * i);
+	}
+	// Get the data.
+	uint32_t dword = 0;
+	for (uint8_t i = 0; i < 4; i++) {
+		uint8_t c = getchar();
+		dword |= c << (8 * i);
+	}
+	// Write the data to the address.
+	data[addr/4] = dword;
+}
+
 typedef enum {
 	CMD_READ = 0x40,
 	CMD_WRITE = 0x80,
 } cmd_t;
-
-typedef enum {
-	STATE_IDLE,
-	STATE_RECV_READ_ADDR,
-	STATE_SEND_READ_DATA,
-	STATE_RECV_WRITE_ADDR,
-	STATE_RECV_WRITE_DATA,
-} state_t;
 
 void main(void) {
 	// Enable JTAG on SD card port.
@@ -50,84 +75,17 @@ void main(void) {
 	ap_base[AP2MD_REG/4] &= 0xfffffe00;
 	ap_base[MD2AP_REG/4] &= 0xfffffe00;
 
-	char c;
-	state_t state = STATE_IDLE;
-	uint32_t ra = 0;
-	uint32_t rd = 0;
-	uint32_t wa = 0;
-	uint32_t wd = 0;
-	uint8_t rab_idx = 0;
-	uint8_t rdb_idx = 0;
-	uint8_t wab_idx = 0;
-	uint8_t wdb_idx = 0;
-
 	while (1) {
-		switch (state) {
-		case STATE_IDLE:
-			state = STATE_IDLE;
-			ra = 0;
-			rd = 0;
-			wa = 0;
-			wd = 0;
-			rab_idx = 0;
-			rdb_idx = 0;
-			wab_idx = 0;
-			wdb_idx = 0;
-			c = getchar();
-			if (c == CMD_READ) {
-				state = STATE_RECV_READ_ADDR;
-			} else if (c == CMD_WRITE) {
-				state = STATE_RECV_WRITE_ADDR;
-			}
+		char cmd = getchar();
+
+		switch (cmd) {
+		case CMD_READ:
+			handle_read();
 			break;
-		case STATE_RECV_READ_ADDR:
-			c = getchar();
-			ra |= c << (8 * rab_idx);
-			if (rab_idx < 3) {
-				rab_idx++;
-				state = STATE_RECV_READ_ADDR;
-			} else {
-				rd = data[ra/4];
-				rab_idx = 0;
-				state = STATE_SEND_READ_DATA;
-			}
-			break;
-		case STATE_SEND_READ_DATA:
-			c = (rd >> (8 * rdb_idx)) & 0xff;
-			putchar(c);
-			if (rdb_idx < 3) {
-				rdb_idx++;
-				state = STATE_SEND_READ_DATA;
-			} else {
-				rdb_idx = 0;
-				state = STATE_IDLE;
-			}
-			break;
-		case STATE_RECV_WRITE_ADDR:
-			c = getchar();
-			wa |= c << (8 * wab_idx);
-			if (wab_idx < 3) {
-				wab_idx++;
-				state = STATE_RECV_WRITE_ADDR;
-			} else {
-				wab_idx = 0;
-				state = STATE_RECV_WRITE_DATA;
-			}
-			break;
-		case STATE_RECV_WRITE_DATA:
-			c = getchar();
-			wd |= c << (8 * wdb_idx);
-			if (wdb_idx < 3) {
-				wdb_idx++;
-				state = STATE_RECV_WRITE_DATA;
-			} else {
-				data[wa/4] = wd;
-				wdb_idx = 0;
-				state = STATE_IDLE;
-			}
+		case CMD_WRITE:
+			handle_write();
 			break;
 		default:
-			state = STATE_IDLE;
 			break;
 		}
 	}
