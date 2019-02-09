@@ -1,2 +1,3 @@
 *.o
+md_dump
 md_poke
