@@ -26,12 +26,12 @@
   * Each section contains the code and data for a single DSP core.
     * There are 7 DSP cores.
     * The cores are named as follows:
-      * 1: FMC
-      * 2: MC
-      * 3: BC
-      * 4: FNC
-      * 5: MMC
-      * 6: MSC
+      * 1: FMC/FC1
+      * 2: BC/BC1
+      * 3: MC/MC1
+      * 4: FNC/FC2
+      * 5: MMC/MC2
+      * 6: MSC/MC3
       * 7: MD32
     * MD32, the 7th core (`core_idx` 7) seems to be different from the other
       cores.
