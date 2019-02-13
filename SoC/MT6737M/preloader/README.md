@@ -42,7 +42,39 @@ the original preloader for the device, which you'll need in case the
 preloader gets erased from the device or your custom preloader fails to
 boot.
 
-TODO
+If you haven't already, extract the SPFT and
+"IoT\_op\_smt\_hd720\_pcb\_v2\_v00\_eng\_20181030221529.tar.gz" archives
+and start SPFT. If you're using Linux, to start SPFT you'll need to run
+`chmod +x flash_tool.sh` to mark that script as executable and then you
+need to run `sudo ./flash_tool.sh`. If you don't want to run SPFT as
+root, you need to add udev rules to give your user permission to access
+serial ports.
+
+After starting SPFT, you should already be on the "Download" tab. Click
+the "choose" button next to the "Scatter-loading File" box to select the
+scatter file from the archive you downloaded earlier,
+`IoT_op_smt_hd720_pcb_v2/images/MT6737M_Android_scatter.txt`. After
+clicking "Open", the list of partitions should populate with all the
+checkboxes pre-selected. Deselect all the checkboxes except for the one
+for the "preloader" partition, then click the file path in the
+"Location" column for that partition to open up a file selection dialog.
+From there, select your custom preloader.
+
+Once you're ready to flash the preloader, first make sure that jumper J5
+has been removed from your device and that your device is unpowered and
+disconnected from your computer. Once you've confirmed this, click the
+"Download" button in SPFT. After that, plug your device into your
+computer via USB. If your device's preloader is functional, it should
+automatically be detected by SPFT and the preloader will start to be
+flashed to your device. Once you've flashed the preloader, you're done!
+
+If your device's preloader is not functional, you'll need to enter BROM
+download mode and flash from there. To do this, use a bit of wire to
+short the "KCOL0" test pad (found on the underside of the board) to
+ground, and keep the pin shorted while plugging in the USB cable to your
+computer. If you pressed the "Download" button previously, SPFT should
+now find the BROM in download mode and use that to flash the preloader
+to your device.
 
 [spft]: https://mega.nz/#F!WGwUhAZJ!xcc_4wd_UG_0OLruixz3ww!mCJG3DgT
 [tool download page]: http://www.orangepi.org/downloadresources/orangepi4G-IOT/2018-03-27/466a6d3bca476eca4dbd964b163739e2.html
