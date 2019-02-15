@@ -389,12 +389,12 @@ if __name__ == "__main__":
 
     usbdl = UsbDl(args.port, debug=False)
 
+    # Get the security configuration of the target.
+    usbdl.cmd_get_target_config()
+
     # Disable WDT.
     print("Disabling WDT...")
     usbdl.cmd_write32(usbdl.soc['toprgu'][0], [0x22000000])
-
-    # Get the security configuration of the target.
-    usbdl.cmd_get_target_config()
 
     # Dump efuses to file.
     print("Dumping efuses...")
