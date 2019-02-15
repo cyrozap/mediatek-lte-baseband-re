@@ -407,8 +407,26 @@ if __name__ == "__main__":
     for byte in "Hello, there!\r\n".encode('utf-8'):
         usbdl.cmd_write32(0x11002000, [byte])
 
-    # The C8 B1 command disables caches.
-    usbdl.cmd_C8('B1')
+    try:
+        # The C8 B1 command disables caches.
+        usbdl.cmd_C8('B1')
+    except:
+        # The C8 command is not available in Preloader mode.
+        print("Error: Not in BROM DL mode. Attempting to reboot into BROM DL mode...")
+        timeout = 60 # 0x3fff is no timeout. Less than that is timeout in seconds.
+        usbdl_flag = (0x444C << 16) | (timeout << 2) | 0x00000001 # USBDL_BIT_EN
+        usbdl.cmd_write32(0x10000818, [usbdl_flag])
+
+        # Make sure USBDL_FLAG is not reset by the WDT.
+        usbdl.cmd_write32(0x10000838, [0xAD98])
+        usbdl.cmd_write32(0x10000840, [0x00000001])
+        usbdl.cmd_write32(0x10000838, [0])
+
+        # WDT reset.
+        usbdl.cmd_write32(usbdl.soc['toprgu'][0], [0x22000000 | 0x10 | 0x4])
+        time.sleep(0.001)
+        usbdl.cmd_write32(usbdl.soc['toprgu'][0] + 0x14, [0x1209])
+        sys.exit(0)
 
     # Assume we have to use the CQDMA to access restricted memory.
     use_cqdma = True
