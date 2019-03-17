@@ -1,0 +1,85 @@
+diff --git a/drivers/misc/mediatek/connectivity/common/conn_soc/linux/include/osal.h b/drivers/misc/mediatek/connectivity/common/conn_soc/linux/include/osal.h
+index 52b782c6..34838081 100644
+--- a/drivers/misc/mediatek/connectivity/common/conn_soc/linux/include/osal.h
++++ b/drivers/misc/mediatek/connectivity/common/conn_soc/linux/include/osal.h
+@@ -233,6 +233,7 @@ extern char *osal_strncat(char *dst, const char *src, UINT32 len);
+ extern char *osal_strchr(const char *str, UINT8 c);
+ extern char *osal_strsep(char **str, const char *c);
+ extern int osal_strtol(const char *str, UINT32 adecimal, long *res);
++extern int osal_strtoul(const char *str, UINT32 adecimal, unsigned long *res);
+ extern INT32 osal_snprintf(char *buf, UINT32 len, const char *fmt, ...);
+ extern char *osal_strstr(char *str1, const char *str2);
+ 
+diff --git a/drivers/misc/mediatek/connectivity/common/conn_soc/linux/pri/wmt_dev.c b/drivers/misc/mediatek/connectivity/common/conn_soc/linux/pri/wmt_dev.c
+index 5ea848f8..ab7eeb3e 100644
+--- a/drivers/misc/mediatek/connectivity/common/conn_soc/linux/pri/wmt_dev.c
++++ b/drivers/misc/mediatek/connectivity/common/conn_soc/linux/pri/wmt_dev.c
+@@ -1210,7 +1210,7 @@ static ssize_t wmt_dev_dbg_write(struct file *filp, const char __user *buffer, s
+ 	INT32 x = 0, y = 0, z = 0;
+ 	PINT8 pToken = NULL;
+ 	PINT8 pDelimiter = " \t";
+-	long res;
++	unsigned long res;
+ 	INT32 ret;
+ 
+ 	WMT_INFO_FUNC("write parameter len = %d\n\r", (INT32) len);
+@@ -1230,24 +1230,24 @@ static ssize_t wmt_dev_dbg_write(struct file *filp, const char __user *buffer, s
+ 	pToken = osal_strsep(&pBuf, pDelimiter);
+ 
+ 	if (pToken != NULL) {
+-		ret = osal_strtol(pToken, 16, &res);
++		ret = osal_strtoul(pToken, 16, &res);
+ 		if (ret) {
+ 			WMT_ERR_FUNC("get x fail(%d)\n", ret);
+ 			x = 0;
+ 		}
+-		x = res;
++		x = (INT32)res;
+ 	} else {
+ 		x = 0;
+ 	}
+ 
+ 	pToken = osal_strsep(&pBuf, "\t\n ");
+ 	if (pToken != NULL) {
+-		ret = osal_strtol(pToken, 16, &res);
++		ret = osal_strtoul(pToken, 16, &res);
+ 		if (ret) {
+ 			WMT_ERR_FUNC("get y fail(%d)\n", ret);
+ 			y = 0;
+ 		}
+-		y = res;
++		y = (INT32)res;
+ 		WMT_INFO_FUNC("y = 0x%08x\n\r", y);
+ 	} else {
+ 		y = 3000;
+@@ -1259,12 +1259,12 @@ static ssize_t wmt_dev_dbg_write(struct file *filp, const char __user *buffer, s
+ 
+ 	pToken = osal_strsep(&pBuf, "\t\n ");
+ 	if (pToken != NULL) {
+-		ret = osal_strtol(pToken, 16, &res);
++		ret = osal_strtoul(pToken, 16, &res);
+ 		if (ret) {
+ 			WMT_ERR_FUNC("get z fail(%d)\n", ret);
+ 			z = 0;
+ 		}
+-		z = res;
++		z = (INT32)res;
+ 	} else {
+ 		z = 10;
+ 		/*efuse, register read write default value */
+diff --git a/drivers/misc/mediatek/connectivity/common/conn_soc/linux/pub/osal.c b/drivers/misc/mediatek/connectivity/common/conn_soc/linux/pub/osal.c
+index 2f0adfbb..dec11b62 100644
+--- a/drivers/misc/mediatek/connectivity/common/conn_soc/linux/pub/osal.c
++++ b/drivers/misc/mediatek/connectivity/common/conn_soc/linux/pub/osal.c
+@@ -152,6 +152,11 @@ _osal_inline_ int osal_strtol(const char *str, UINT32 adecimal, long *res)
+ 	return kstrtol(str, adecimal, res);
+ }
+ 
++_osal_inline_ int osal_strtoul(const char *str, UINT32 adecimal, unsigned long *res)
++{
++	return kstrtoul(str, adecimal, res);
++}
++
+ _osal_inline_ char *osal_strstr(char *str1, const char *str2)
+ {
+ 	return strstr(str1, str2);

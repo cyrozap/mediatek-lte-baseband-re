@@ -15,12 +15,12 @@ export ARCH_MTK_PLATFORM=mt6735
 
 cd $KERNELPATH
 
-for i in {0001..0003}; do
+for i in {0001..0005}; do
 	patch -p1 < ../$i*.patch
 done
 
 make p6601_defconfig
 
-patch .config ../0004-config.patch
+patch .config ../0006-config.patch
 
 make -j4
