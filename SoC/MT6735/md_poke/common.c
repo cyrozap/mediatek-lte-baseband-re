@@ -86,6 +86,7 @@ int get_mem_info(mem_info_t * mem_info) {
 
 	if (mem_info == NULL) {
 		fprintf(stderr, "Error: \"mem_info\" wasn't set\n");
+		return -1;
 	}
 
 	long page_size = sysconf(_SC_PAGESIZE);
