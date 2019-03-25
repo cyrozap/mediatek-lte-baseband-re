@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
 	mem_info_t mem_info;
 
 	if (get_mem_info(&mem_info) != 0) {
+		fprintf(stderr, "Error: get_mem_info() failed\n");
 		return -1;
 	}
 
