@@ -23,8 +23,10 @@ types:
         encoding: ASCII
       - id: info_ver
         type: u4
+        doc: Should be 4
       - id: info_magic
         type: u4
+        doc: Should be 0x22668899
       - id: da_count
         type: u4
   da_list:
