@@ -72,7 +72,7 @@ types:
     instances:
       buf:
         io: _root._io
-        pos: buf
+        pos: buf_offset
         size: len
       sig:
         io: _root._io
