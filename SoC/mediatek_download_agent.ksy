@@ -7,8 +7,10 @@ seq:
   - id: header
     type: header
   - id: da_list
-    type: da_list
-    size: header.da_count * 220
+    type: da_entry
+    size: 220
+    repeat: expr
+    repeat-expr: header.da_count
 
 types:
   header:
@@ -29,12 +31,6 @@ types:
         doc: Should be 0x22668899
       - id: da_count
         type: u4
-  da_list:
-    seq:
-      - id: da_entries
-        type: da_entry
-        size: 220
-        repeat: eos
   da_entry:
     seq:
       - id: magic
