@@ -1,7 +1,7 @@
 meta:
   id: mediatek_download_agent
   endian: le
-  title: MediaTek Download Agent
+  title: MediaTek Download Agent Archive
   license: CC0-1.0
 seq:
   - id: header
@@ -9,68 +9,72 @@ seq:
   - id: da_list
     type: da_list
     size: header.da_count * 220
+
 types:
   header:
     seq:
-      - id: identifier
+      - id: da_description
         type: strz
         size: 32
         encoding: ASCII
-      - id: name
+      - id: da_identifier
         type: strz
         size: 64
         encoding: ASCII
-      - id: unk0
+      - id: info_ver
         type: u4
-      - id: unk1
+      - id: info_magic
         type: u4
       - id: da_count
         type: u4
   da_list:
     seq:
-      - id: da_headers
-        type: da_header
+      - id: da_entries
+        type: da_entry
         size: 220
         repeat: eos
-  da_header:
+  da_entry:
     seq:
       - id: magic
         contents: [0xDA, 0xDA]
-      - id: chip_id
+      - id: bbchip_hw_code
         type: u2
-      - id: unk0
-        type: u4
-      - id: unk1
+      - id: bbchip_hw_sub_code
+        type: u2
+      - id: bbchip_hw_version
+        type: u2
+      - id: bbchip_sw_version
         type: u4
       - id: unk2
         type: u4
       - id: unk3
+        type: u1
+      - id: unk4
+        type: u1
+      - id: load_region_count
+        type: u2
+      - id: regions
+        type: da_region
+        repeat: expr
+        repeat-expr: load_region_count
+  da_region:
+    seq:
+      - id: buf_offset
         type: u4
-      - id: file_offset
+      - id: len
         type: u4
-      - id: unk5
+      - id: start_addr
         type: u4
-      - id: unk6
+      - id: sig_offset
         type: u4
-      - id: unk7
+      - id: sig_len
         type: u4
-      - id: unk8
-        type: u4
-      - id: unk9
-        type: u4
-      - id: unk10
-        type: u4
-      - id: unk11
-        type: u4
-      - id: unk12
-        type: u4
-      - id: unk13
-        type: u4
-      - id: unk14
-        type: u4
-      - id: unk15
-        type: u4
-      - id: unk16
-        type: u4
-      - id: unk17
-        type: u4
+    instances:
+      buf:
+        io: _root._io
+        pos: buf
+        size: len
+      sig:
+        io: _root._io
+        pos: sig_offset
+        size: sig_len
