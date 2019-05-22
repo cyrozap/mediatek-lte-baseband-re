@@ -109,6 +109,9 @@ some of these entries are complete guesses.
   and hardware accelerators for AES, SHA, MD5, RC4, DES, CRC32, DMA, etc.
 * GCU: GPRS Cipher Unit. An accelerator for cryptographic ciphers used in some
   GSM protocols.
+* HIF: Host Interface. This is the interface between the SoC and the
+  Connectivity (WLAN/BT/GPS) core. The HIF is an abstraction layer over the
+  physical interface (AHB/eHPI/PCIe/SDIO/USB).
 * INFRACFG: "Infrastructure system configuration". Refers to the block of
   registers that control reset, clocking, and some miscellaneous control
   signals.
@@ -125,6 +128,7 @@ some of these entries are complete guesses.
 * SWLA: Software LA (Logic Analyzer?). It seems to be some kind of debug
   functionality in the BP firmware.
 * TRNG: Truly Random Number Generator.
+* WMT: Wireless Management Task. Refers to the WiFi/Bluetooth drivers/API.
 
 
 ## History
