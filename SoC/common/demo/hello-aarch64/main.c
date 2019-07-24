@@ -16,7 +16,7 @@ static uint32_t readw(uint32_t reg) {
 	return mem[reg/4];
 }
 
-static uint32_t writew(uint32_t reg, uint32_t word) {
+static void writew(uint32_t reg, uint32_t word) {
 	mem[reg/4] = word;
 }
 
