@@ -473,13 +473,14 @@ if __name__ == "__main__":
     l2_sram_file.close()
 
     # Code parameters.
-    binary = open("test.bin", 'rb').read()
-    load_addr = 0x00201000
-    thumb_mode = True
+    binary = open("demo/mode-switch/mode-switch.bin", 'rb').read()
+    load_addr = 0x00200000
+    thumb_mode = False
 
     # Load executable.
-    print("Loading executable...")
+    print("Loading executables...")
     usbdl.memory_write(load_addr, binary, cqdma=use_cqdma, print_speed=True)
+    usbdl.memory_write(0x00201000, open("demo/hello-aarch64/hello-aarch64.bin", 'rb').read(), cqdma=use_cqdma, print_speed=True)
 
     # Mark DA as verified.
     if usbdl.soc.get('brom_g_da_verified', False):
