@@ -35,6 +35,7 @@ class UsbDl:
             'l2_sram': (0x00200000, 0x100000), # Functional spec says address is 0x00400000, but that's incorrect.
             'toprgu': (0x10007000, 0x1000),
             'efusec': (0x10206000, 0x1000),
+            'usbdl': 0x10001680,
             'cqdma_base': 0x10212C00,
             'tmp_addr': 0x110001A0,
             'brom_g_bounds_check': (
@@ -50,6 +51,7 @@ class UsbDl:
             'l2_sram': (0x00200000, 0x40000),
             'toprgu': (0x10212000, 0x1000),
             'efusec': (0x10206000, 0x1000),
+            'usbdl': 0x10000818,
             'cqdma_base': 0x10217C00,
             'tmp_addr': 0x110001A0,
             'brom_g_bounds_check': (
@@ -65,6 +67,7 @@ class UsbDl:
             'l2_sram': (0x00200000, 0x40000),
             'toprgu': (0x10212000, 0x1000),
             'efusec': (0x10206000, 0x1000),
+            'usbdl': 0x10000818,
             'cqdma_base': 0x10217C00,
             'tmp_addr': 0x110001A0,
             'brom_g_bounds_check': (
@@ -415,12 +418,12 @@ if __name__ == "__main__":
         print("Error: Not in BROM DL mode. Attempting to reboot into BROM DL mode...")
         timeout = 60 # 0x3fff is no timeout. Less than that is timeout in seconds.
         usbdl_flag = (0x444C << 16) | (timeout << 2) | 0x00000001 # USBDL_BIT_EN
-        usbdl.cmd_write32(0x10000818, [usbdl_flag])
+        usbdl.cmd_write32(usbdl.soc['usbdl'] + 0x00, [usbdl_flag])  # USBDL_FLAG/BOOT_MISC0
 
         # Make sure USBDL_FLAG is not reset by the WDT.
-        usbdl.cmd_write32(0x10000838, [0xAD98])
-        usbdl.cmd_write32(0x10000840, [0x00000001])
-        usbdl.cmd_write32(0x10000838, [0])
+        usbdl.cmd_write32(usbdl.soc['usbdl'] + 0x20, [0xAD98])  # MISC_LOCK_KEY
+        usbdl.cmd_write32(usbdl.soc['usbdl'] + 0x28, [0x00000001])  # RST_CON
+        usbdl.cmd_write32(usbdl.soc['usbdl'] + 0x20, [0])  # MISC_LOCK_KEY
 
         # WDT reset.
         usbdl.cmd_write32(usbdl.soc['toprgu'][0], [0x22000000 | 0x10 | 0x4])
