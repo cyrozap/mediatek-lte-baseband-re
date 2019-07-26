@@ -83,6 +83,7 @@ class UsbDl:
             'l2_sram': (0x00200000, 0x40000),
             'toprgu': (0x10007000, 0x1000),
             'efusec': (0x10206000, 0x1000),
+            'usbdl': 0x10202050,
             'cqdma_base': 0x10212C00,
             'tmp_addr': 0x110001A0,
             'brom_g_bounds_check': (
