@@ -58,10 +58,30 @@ static void wfi() {
 	asm("wfi");
 }
 
+static const uint32_t get_rvbar(void) {
+	uint32_t soc_id = mem[0x08000000/4];
+	switch(soc_id) {
+	case 0x0279:
+		// MT6797
+		return 0x10220038;
+	case 0x0321:
+		// MT6735
+		return 0x10200038;
+	case 0x0335:
+		// MT6737M
+		return 0x10200038;
+	case 0x8163:
+		// MT8163
+		return 0x10200038;
+	default:
+		return 0x10200038;
+	}
+}
+
 static void jump_to_aarch64(uint32_t addr) {
+	uint32_t rvbar = get_rvbar();
 	asm(
-		"ldr r0, =0x10200038\n"
-		"str %0, [r0]\n"
+		"str %0, [%1]\n"
 		"dsb sy\n"
 		"isb sy\n"
 		"mrc 15, 0, r0, cr12, cr0, 2\n"
@@ -69,7 +89,7 @@ static void jump_to_aarch64(uint32_t addr) {
 		"mcr 15, 0, r0, cr12, cr0, 2\n"
 		"isb sy\n"
 		: /* No outputs. */
-		: "r" (addr)
+		: "r" (addr), "r" (rvbar)
 		: "r0"
 	);
 
