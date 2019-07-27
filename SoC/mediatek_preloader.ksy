@@ -319,8 +319,9 @@ types:
           - id: m_brom_cmd_via_usb_disable_magic
             type: u1
             doc: Magic is "U" (0x55)
-          - id: reserved2
-            size: 1
+          - id: boot_aarch64_magic
+            type: u1
+            doc: Magic is 0x64. Requires "flags.boot_aarch64" to be set.
           - id: usbdl_hs_en
             type: u1
           - id: reserved3
@@ -356,10 +357,14 @@ types:
               - id: uart1_log_dis
                 type: b1
               - id: reserved0
-                type: b5
-              - id: usbdl_speed_config
+                type: b3
+              - id: boot_aarch64
                 type: b1
               - id: reserved1
+                type: b1
+              - id: usbdl_speed_config
+                type: b1
+              - id: reserved2
                 type: b1
               - id: usbdl_by_flag_timeout_en
                 type: b1
