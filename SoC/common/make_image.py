@@ -48,6 +48,10 @@ import hashlib
 import struct
 
 
+class code_arch(enum.Enum):
+    aarch32 = enum.auto()
+    aarch64 = enum.auto()
+
 class flash_device(enum.Enum):
     EMMC = enum.auto()
     SD = enum.auto()
@@ -123,10 +127,23 @@ def gen_gfh_bl_info():
 
     return bl_info
 
-def gen_gfh_brom_cfg():
+def gen_gfh_brom_cfg(arch):
     brom_cfg = gen_gfh_header(gfh_type.BROM_CFG, 3)
     # TODO: Make this configurable.
     brom_cfg += bytes.fromhex("9001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000881300000000000000000000")
+
+    if arch == code_arch.aarch64:
+        brom_cfg = bytearray(brom_cfg)
+
+        # Set the flag.
+        flags = struct.unpack_from('<I', brom_cfg, 8)[0]
+        flags |= 1 << 12
+        struct.pack_into('<I', brom_cfg, 8, flags)
+
+        # Set the magic value.
+        brom_cfg[0x55] = 0x64
+
+        brom_cfg = bytes(brom_cfg)
 
     return brom_cfg
 
@@ -149,7 +166,7 @@ def gen_gfh_brom_sec_cfg():
 
     return brom_sec_cfg
 
-def gen_image(boot_device, payload):
+def gen_image(boot_device, payload, payload_arch):
     # Header
     identifier = {
         flash_device.EMMC: b'EMMC_BOOT',
@@ -220,7 +237,7 @@ def gen_image(boot_device, payload):
     start_addr = base_addr
     image = gen_gfh_file_info(bl_type, bl_dev, offset, base_addr, start_addr, max_preloader_size, len(payload))
     image += gen_gfh_bl_info()
-    image += gen_gfh_brom_cfg()
+    image += gen_gfh_brom_cfg(payload_arch)
     image += gen_gfh_bl_sec_key()
     image += gen_gfh_anti_clone()
     image += gen_gfh_brom_sec_cfg()
@@ -240,6 +257,7 @@ if __name__ == "__main__":
     parser.add_argument("input", type=str, help="Input binary.")
     parser.add_argument("-o", "--output", type=str, default="preloader.img", help="Output image.")
     parser.add_argument("-b", "--boot-device", type=str, choices=["eMMC", "SD"], default="eMMC", help="Boot device.")
+    parser.add_argument("-a", "--arch", type=str, choices=["aarch32", "aarch64"], default="aarch32", help="Code architecture. Choose \"aarch32\" if you're booting 32-bit ARM code, \"aarch64\" for 64-bit ARM code.")
     args = parser.parse_args()
 
     binary = open(args.input, 'rb').read()
@@ -252,7 +270,12 @@ if __name__ == "__main__":
         "SD": flash_device.SD,
     }.get(args.boot_device)
 
-    image = gen_image(boot_device, binary)
+    arch = {
+        "aarch32": code_arch.aarch32,
+        "aarch64": code_arch.aarch64,
+    }.get(args.arch)
+
+    image = gen_image(boot_device, binary, arch)
 
     output = open(args.output, 'wb')
     output.write(image)
