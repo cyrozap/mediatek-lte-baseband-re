@@ -24,8 +24,13 @@ seq:
     type: preloader
     size: file_info.file_len - file_info.content_offset - file_info.sig_len
   - id: signature
-    type: signature
     size: file_info.sig_len
+    type:
+      switch-on: file_info.sig_type
+      cases:
+        gfh_sig_type::sig_phash: signature_phash
+        gfh_sig_type::sig_single: signature_single
+        gfh_sig_type::sig_single_and_phash: signature_single_and_phash
 instances:
   magic:
     pos: 0
@@ -533,9 +538,20 @@ types:
             type: str
             size: 5
             encoding: ASCII
-  signature:
+  signature_phash:
+    seq:
+      - id: hash
+        size: 0x20
+  signature_single:
+    seq:
+      - id: signature
+        size: 0x100
+  signature_single_and_phash:
     seq:
       - id: version
         type: u4
-      - id: data
-        size-eos: true
+        doc: Must be 1.
+      - id: hash
+        size: 0x20
+      - id: signature
+        size: 0x100
