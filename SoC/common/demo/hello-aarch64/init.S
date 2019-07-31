@@ -66,4 +66,8 @@ _cleanup:
 	mov x3, xzr
 
 _jump_to_main:
-	b   main
+	bl  main
+
+_wfi_loop:
+	wfi
+	b   _wfi_loop
