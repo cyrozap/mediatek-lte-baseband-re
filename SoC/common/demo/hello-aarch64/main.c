@@ -12,6 +12,8 @@ static uint32_t UART_LSR;
 #define UART_LSR_DR   (1 << 0)
 #define UART_LSR_THRE (1 << 5)
 
+static uint32_t TOPRGU_BASE;
+
 #define MAX_CMD_LEN 100
 #define MAX_ARGS 3
 
@@ -102,10 +104,12 @@ static void init(void) {
 	case 0x0279:
 		// MT6797
 		UART_BASE = 0x11002000;
+		TOPRGU_BASE = 0x10007000;
 		break;
 	case 0x0321:
 		// MT6735
 		UART_BASE = 0x11002000;
+		TOPRGU_BASE = 0x10212000;
 		break;
 	case 0x0335:
 		// MT6737M
@@ -153,13 +157,17 @@ static void init(void) {
 
 		// Configure and initialize FIFO.
 		writew(UART_BASE + 0x8, 0x97);
+
+		TOPRGU_BASE = 0x10212000;
 		break;
 	case 0x8163:
 		// MT8163
 		UART_BASE = 0x11002000;
+		TOPRGU_BASE = 0x10007000;
 		break;
 	default:
 		UART_BASE = 0x11002000;
+		TOPRGU_BASE = 0x10007000;
 		break;
 	}
 	UART_RBR = UART_BASE + 0x00;
@@ -298,6 +306,15 @@ static int mww_handler(size_t argc, const char * argv[]) {
 	return ret;
 }
 
+static int reset_handler(size_t argc, const char * argv[]) {
+	println("Resetting SoC...");
+
+	writew(TOPRGU_BASE, 0x22000000 | 0x10 | 0x4);
+	writew(TOPRGU_BASE + 0x14, 0x1209);
+
+	return 0;
+}
+
 static int help_handler(size_t argc, const char * argv[]);
 
 typedef struct {
@@ -309,6 +326,7 @@ static const command cmd_table[] = {
 	{ "help", help_handler },
 	{ "mrw", mrw_handler },
 	{ "mww", mww_handler },
+	{ "reset", reset_handler },
 	{ 0, 0 },
 };
 
