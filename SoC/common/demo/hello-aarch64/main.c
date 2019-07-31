@@ -51,15 +51,16 @@ static size_t strnlen(const char * buf, size_t max_len) {
 	return len;
 }
 
-static void println(const char * buf) {
-	size_t len = 256;
-
-	for (size_t i = 0; i < len; i++) {
+static void print(const char * buf) {
+	for (size_t i = 0; ; i++) {
 		if (buf[i] == 0)
 			break;
 		putchar(buf[i]);
 	}
+}
 
+static void println(const char * buf) {
+	print(buf);
 	putchar('\n');
 }
 
