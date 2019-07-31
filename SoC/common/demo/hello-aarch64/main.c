@@ -109,7 +109,50 @@ static void init(void) {
 		break;
 	case 0x0335:
 		// MT6737M
-		UART_BASE = 0x11002000;
+		UART_BASE = 0x11002000 + 0x1000; // UART1 base address.
+
+		// Configure UART1 pins.
+		uint32_t gpio_dir = readw(0x10211020);
+		gpio_dir &= ~(1 << 12);
+		gpio_dir |= (1 << 13);
+		writew(0x10211020, gpio_dir);
+		uint32_t gpio_pull_sel = readw(0x10211A50);
+		gpio_pull_sel |= 1 << 15;
+		writew(0x10211A50, gpio_pull_sel);
+		uint32_t gpio_pull_en = readw(0x10211A30);
+		gpio_pull_en |= 1 << 15;
+		writew(0x10211A30, gpio_pull_sel);
+		uint32_t gpio_mode = readw(0x10211370);
+		gpio_mode &= ~((0x7 << 22) | (0x7 << 19));
+		gpio_mode |= (0x1 << 22) | (0x1 << 19);
+		writew(0x10211370, gpio_mode);
+
+		// Set high speed mode.
+		writew(UART_BASE + 0x24, 0x3);
+
+		// Calculate parameters.
+		uint32_t cpu_freq_hz = 26000000;
+		uint32_t baudrate = 115200;
+		uint32_t tmp = (cpu_freq_hz + (baudrate / 2)) / baudrate;
+		uint32_t divisor_latch = ((tmp + 255) >> 8);
+		uint32_t sample_count = tmp / divisor_latch;
+
+		// Write sample count.
+		writew(UART_BASE + 0x28, (sample_count - 1) & 0xff);
+
+		// Write sample point.
+		writew(UART_BASE + 0x2c, ((sample_count - 1) / 2) & 0xff);
+
+		// Write divisor latch.
+		writew(UART_BASE + 0xc, 0x80);
+		writew(UART_BASE + 0x0, divisor_latch & 0xff);
+		writew(UART_BASE + 0x4, (divisor_latch >> 8) & 0xff);
+
+		// Configure UART parameters: 8N1
+		writew(UART_BASE + 0xc, 0x3);
+
+		// Configure and initialize FIFO.
+		writew(UART_BASE + 0x8, 0x97);
 		break;
 	case 0x8163:
 		// MT8163
