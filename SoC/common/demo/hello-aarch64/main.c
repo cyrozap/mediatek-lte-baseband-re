@@ -173,6 +173,9 @@ static void init(void) {
 	UART_RBR = UART_BASE + 0x00;
 	UART_THR = UART_BASE + 0x00;
 	UART_LSR = UART_BASE + 0x14;
+
+	// Make sure WDT is disabled.
+	writew(TOPRGU_BASE, 0x22000000);
 }
 
 static int parse_hex(uint32_t * value, const uint8_t * str) {
