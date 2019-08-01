@@ -351,20 +351,74 @@ static int reset_handler(size_t argc, const char * argv[]) {
 }
 
 static int usbdl_handler(size_t argc, const char * argv[]) {
-	println("Configuring SoC to enter BROM DL mode on reset...");
+	if (argc < 2) {
+		println("Error: Too few arguments.");
+		println("Usage: usbdl {enable,disable,now} [timeout]");
+		println("Examples:");
+		println("    usbdl enable none");
+		println("    usbdl enable 60");
+		println("    usbdl enable");
+		println("    usbdl disable");
+		println("    usbdl now none");
+		println("    usbdl now 60");
+		println("    usbdl now");
+		return -1;
+	}
 
-	// Write USBDL flag.
-	uint16_t timeout = 60; // 0x3fff is no timeout. Less than that is timeout in seconds.
-	uint32_t usbdl_flag = (0x444C << 16) | (timeout << 2) | 0x00000001; // USBDL_BIT_EN
-	writew(USBDL + 0x00, usbdl_flag);  // USBDL_FLAG/BOOT_MISC0
+	if (!strcmp(argv[1], "enable")) {
+		uint32_t timeout = 60; // 0x3fff is no timeout. Less than that is timeout in seconds.
+		if (argc > 2) {
+			if (!strcmp(argv[2], "none")) {
+				timeout = 0x3fff;
+			} else {
+				int ret = parse_dec(&timeout, argv[2]);
+				if (ret != 0) {
+					println("Error: parse_dec(argv[2]) failed.");
+					return -1;
+				}
+				if (timeout >= 0x3fff) {
+					println("Error: timeout must be less than 16383 seconds.");
+					return -1;
+				}
+			}
+		}
 
-	// Make sure USBDL_FLAG is not reset by the WDT.
-	writew(USBDL + 0x20, 0xAD98);  // MISC_LOCK_KEY
-	writew(USBDL + 0x28, 0x00000001);  // RST_CON
-	writew(USBDL + 0x20, 0);  // MISC_LOCK_KEY
+		print("Configuring SoC to enter BROM DL mode on reset, with ");
+		if (timeout == 0x3fff) {
+			println("no timeout.");
+		} else {
+			print("a timeout of ");
+			print_value(timeout, 8);
+			println(" seconds.");
+		}
 
-	// Trigger reset.
-	return reset_handler(argc, argv);
+		// Write USBDL flag.
+		uint32_t usbdl_flag = (0x444C << 16) | (timeout << 2) | 0x00000001; // USBDL_BIT_EN
+		writew(USBDL + 0x00, usbdl_flag);  // USBDL_FLAG/BOOT_MISC0
+
+		// Make sure USBDL_FLAG is not reset by the WDT.
+		writew(USBDL + 0x20, 0xAD98);  // MISC_LOCK_KEY
+		writew(USBDL + 0x28, 0x00000001);  // RST_CON
+		writew(USBDL + 0x20, 0);  // MISC_LOCK_KEY
+	} else if (!strcmp(argv[1], "disable")) {
+		// Make sure USBDL_FLAG is reset by the WDT.
+		writew(USBDL + 0x20, 0xAD98);  // MISC_LOCK_KEY
+		writew(USBDL + 0x28, 0x00000000);  // RST_CON
+		writew(USBDL + 0x20, 0);  // MISC_LOCK_KEY
+	} else if (!strcmp(argv[1], "now")) {
+		const char * new_argv[] = { argv[0], "enable", argv[2] };
+		int ret = usbdl_handler(argc, new_argv);
+		if (ret != 0) {
+			return ret;
+		}
+		return reset_handler(NULL, NULL);
+	} else {
+		print("Error: Unknown subcommand: ");
+		println(argv[1]);
+		return -1;
+	}
+
+	return 0;
 }
 
 static int help_handler(size_t argc, const char * argv[]);
