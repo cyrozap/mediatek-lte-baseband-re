@@ -13,6 +13,7 @@ static uint32_t UART_LSR;
 #define UART_LSR_THRE (1 << 5)
 
 static uint32_t TOPRGU_BASE;
+static uint32_t USBDL;
 
 #define MAX_CMD_LEN 100
 #define MAX_ARGS 3
@@ -105,11 +106,13 @@ static void init(void) {
 		// MT6797
 		UART_BASE = 0x11002000;
 		TOPRGU_BASE = 0x10007000;
+		USBDL = 0x10001680;
 		break;
 	case 0x0321:
 		// MT6735
 		UART_BASE = 0x11002000;
 		TOPRGU_BASE = 0x10212000;
+		USBDL = 0x10000818;
 		break;
 	case 0x0335:
 		// MT6737M
@@ -159,15 +162,18 @@ static void init(void) {
 		writew(UART_BASE + 0x8, 0x97);
 
 		TOPRGU_BASE = 0x10212000;
+		USBDL = 0x10000818;
 		break;
 	case 0x8163:
 		// MT8163
 		UART_BASE = 0x11002000;
 		TOPRGU_BASE = 0x10007000;
+		USBDL = 0x10202050;
 		break;
 	default:
 		UART_BASE = 0x11002000;
 		TOPRGU_BASE = 0x10007000;
+		USBDL = 0x10202050;
 		break;
 	}
 	UART_RBR = UART_BASE + 0x00;
@@ -318,6 +324,23 @@ static int reset_handler(size_t argc, const char * argv[]) {
 	return 0;
 }
 
+static int usbdl_handler(size_t argc, const char * argv[]) {
+	println("Configuring SoC to enter BROM DL mode on reset...");
+
+	// Write USBDL flag.
+	uint16_t timeout = 60; // 0x3fff is no timeout. Less than that is timeout in seconds.
+	uint32_t usbdl_flag = (0x444C << 16) | (timeout << 2) | 0x00000001; // USBDL_BIT_EN
+	writew(USBDL + 0x00, usbdl_flag);  // USBDL_FLAG/BOOT_MISC0
+
+	// Make sure USBDL_FLAG is not reset by the WDT.
+	writew(USBDL + 0x20, 0xAD98);  // MISC_LOCK_KEY
+	writew(USBDL + 0x28, 0x00000001);  // RST_CON
+	writew(USBDL + 0x20, 0);  // MISC_LOCK_KEY
+
+	// Trigger reset.
+	return reset_handler(argc, argv);
+}
+
 static int help_handler(size_t argc, const char * argv[]);
 
 typedef struct {
@@ -330,6 +353,7 @@ static const command cmd_table[] = {
 	{ "mrw", mrw_handler },
 	{ "mww", mww_handler },
 	{ "reset", reset_handler },
+	{ "usbdl", usbdl_handler },
 	{ 0, 0 },
 };
 
