@@ -184,6 +184,32 @@ static void init(void) {
 	writew(TOPRGU_BASE, 0x22000000);
 }
 
+static int parse_dec(uint32_t * value, const uint8_t * str) {
+	size_t len = strnlen(str, 11);
+	if (len > 10) {
+		println("Error: Decimal string too long.");
+		return -1;
+	}
+
+	*value = 0;
+	uint32_t multiplier = 1;
+	for (size_t i = 0; i < len; i++) {
+		char c = str[len - i - 1];
+		if ('0' <= c && c <= '9') {
+			uint8_t digit = c - '0';
+			*value += digit * multiplier;
+			multiplier *= 10;
+		} else {
+			print("Error: Bad character in decimal string: ");
+			putchar(c);
+			putchar('\n');
+			return -1;
+		}
+	}
+
+	return 0;
+}
+
 static int parse_hex(uint32_t * value, const uint8_t * str) {
 	size_t start = 0;
 	if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
