@@ -74,5 +74,5 @@ types:
         size: len
       sig:
         io: _root._io
-        pos: sig_offset
+        pos: buf_offset + sig_offset
         size: sig_len
