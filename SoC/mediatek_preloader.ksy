@@ -377,8 +377,25 @@ types:
     seq:
       - id: gfh_header
         type: gfh_header
-      - id: reserved
-        size: gfh_header.size-8
+      - id: pubkey_type
+        type: u4
+      - id: rsa_n_words
+        type: u4
+        doc: Number of 16-bit words in the RSA modulus.
+      - id: unk2
+        type: u2
+      - id: rsa_n_words_minus_1
+        type: u2
+        doc: rsa_n_words - 1
+      - id: rsa_e
+        type: u4
+        doc: RSA exponent.
+      - id: rsa_n_padding
+        size: gfh_header.size - 8 - 16 - 2 * rsa_n_words
+        doc: Padding, derived from scrambling the RSA modulus.
+      - id: rsa_n
+        size: 2 * rsa_n_words
+        doc: RSA modulus, stored as little-endian 16-bit words, in big-endian word order.
   gfh_anti_clone_v1:
     seq:
       - id: gfh_header
