@@ -21,6 +21,7 @@ class UsbDl:
         'CMD_READ32': 0xD1,
         'CMD_WRITE32': 0xD4,
         'CMD_JUMP_DA': 0xD5,
+        'CMD_SEND_DA': 0xD7,
         'CMD_GET_TARGET_CONFIG': 0xD8,
         'CMD_UART1_LOG_EN': 0xDB,
         'CMD_GET_HW_SW_VER': 0xFC,
@@ -101,16 +102,17 @@ class UsbDl:
         self.soc = self.socs[hw_code]
         print("{} detected!".format(self.soc['name']))
 
-    def _send_bytes(self, data):
+    def _send_bytes(self, data, echo=True):
         data = bytes(data)
         if self.debug:
             print("-> {}".format(binascii.b2a_hex(data)))
         self.ser.write(data)
-        echo = self.ser.read(len(data))
-        if self.debug:
-            print("<- {}".format(binascii.b2a_hex(echo)))
-        if echo != data:
-            raise Exception
+        if echo:
+            echo_data = self.ser.read(len(data))
+            if self.debug:
+                print("<- {}".format(binascii.b2a_hex(echo_data)))
+            if echo_data != data:
+                raise Exception
 
     def _recv_bytes(self, count):
         data = self.ser.read(count)
@@ -232,6 +234,43 @@ class UsbDl:
         if status > 0xff:
             print(status)
             raise Exception
+
+    def cmd_send_da(self, load_addr, data, sig_length=0, print_speed=False):
+        self._send_bytes([self.commands['CMD_SEND_DA']])
+        self.put_dword(load_addr)
+        self.put_dword(len(data))
+        self.put_dword(sig_length)
+
+        status = self.get_word()
+        if status > 0xff:
+            print(status)
+            raise Exception
+
+        calc_checksum = 0
+        padded_data = data
+        if len(padded_data) % 2 != 0:
+            padded_data += b'\0'
+        for i in range(0, len(padded_data), 2):
+            calc_checksum ^= struct.unpack_from('<H', padded_data, i)[0]
+
+        start_time = time.time()
+        self._send_bytes(data, echo=False)
+        end_time = time.time()
+
+        remote_checksum = self.get_word()
+
+        if remote_checksum != calc_checksum:
+            print("Checksum mismatch: Expected 0x{:04x}, got 0x{:04x}.".format(calc_checksum, remote_checksum))
+            raise Exception
+
+        status = self.get_word()
+        if status > 0xff:
+            print(status)
+            raise Exception
+
+        if print_speed:
+            elapsed = end_time - start_time
+            print("Sent {} DA bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed, int(len(data)/elapsed)))
 
     def cmd_get_target_config(self):
         self._send_bytes([self.commands['CMD_GET_TARGET_CONFIG']])
