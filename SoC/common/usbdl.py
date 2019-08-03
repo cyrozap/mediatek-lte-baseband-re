@@ -25,6 +25,7 @@ class UsbDl:
         'CMD_SEND_DA': 0xD7,
         'CMD_GET_TARGET_CONFIG': 0xD8,
         'CMD_UART1_LOG_EN': 0xDB,
+        'SCMD_GET_ME_ID': 0xE1,
         'CMD_GET_HW_SW_VER': 0xFC,
         'CMD_GET_HW_CODE': 0xFD,
     }
@@ -294,6 +295,18 @@ class UsbDl:
         if status > 0xff:
             print(status)
             raise Exception
+
+    def scmd_get_me_id(self):
+        self._send_bytes([self.commands['SCMD_GET_ME_ID']])
+        length = self.get_dword()
+        me_id = self._recv_bytes(length)
+
+        status = self.get_word()
+        if status != 0:
+            print(status)
+            raise Exception
+
+        return me_id
 
     def cmd_get_hw_sw_ver(self):
         self._send_bytes([self.commands['CMD_GET_HW_SW_VER']])
