@@ -21,6 +21,7 @@ class UsbDl:
         'CMD_READ32': 0xD1,
         'CMD_WRITE32': 0xD4,
         'CMD_JUMP_DA': 0xD5,
+        'CMD_JUMP_BL': 0xD6,
         'CMD_SEND_DA': 0xD7,
         'CMD_GET_TARGET_CONFIG': 0xD8,
         'CMD_UART1_LOG_EN': 0xDB,
@@ -229,6 +230,14 @@ class UsbDl:
     def cmd_jump_da(self, addr):
         self._send_bytes([self.commands['CMD_JUMP_DA']])
         self.put_dword(addr)
+
+        status = self.get_word()
+        if status > 0xff:
+            print(status)
+            raise Exception
+
+    def cmd_jump_bl(self):
+        self._send_bytes([self.commands['CMD_JUMP_BL']])
 
         status = self.get_word()
         if status > 0xff:
