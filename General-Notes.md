@@ -165,6 +165,13 @@ some of these entries are complete guesses.
  * [Fun with the MTK 6573 Baseband (Patching / Replacing)](http://baseband-devel.722152.n3.nabble.com/Fun-with-the-MTK-6573-Baseband-Patching-Replacing-td4026683.html)
    * [Fun with the MTK 6573 Baseband (Patching / Replacing), continued](https://lists.osmocom.org/pipermail/baseband-devel/2017-April/005188.html)
    * Not much new information here, but still somewhat interesting.
+ * [reverse-engineering a custom, unknown CPU from a single program](https://www.robertxiao.ca/hacking/dsctf-2019-cpu-adventure-unknown-cpu-reversing/)
+   * Explains how, for a CTF competition, a custom ISA was reverse-engineered
+     with only access to the executed binary and a running, remote instance of
+     the code.
+   * By interacting with the code, they could observe how the code behaved and
+     map its functionality, which enabled them to search for those patterns of
+     functionality in the binary.
 
 
 [FD216]: http://www.faraday-tech.com/download/techDocument/FD216_PB_v1.5.pdf
