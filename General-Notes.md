@@ -97,6 +97,10 @@ some of these entries are complete guesses.
   connectivity subsystem includes the WiFi CPU core and possibly the Bluetooth
   CPU as well.
 * CQDMA: Command-Queue DMA. This is what MediaTek calls their DMA controller.
+* DA: Download Agent. In the official MediaTek USB-based eMMC flashing flow,
+  the DA is code loaded over USB by the preloader (which itself may be loaded
+  over USB in BROM USB Download Mode) that interacts with the host software to
+  read from/write to eMMC.
 * DAA: "Download Agent Authentication"?
 * DBF: DSP Binary Filter. As the name implies, this is binary filter data that
   is loaded into and parsed by the firmware running on the Coresonic DSP.
