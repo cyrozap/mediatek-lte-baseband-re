@@ -87,6 +87,8 @@ some of these entries are complete guesses.
 
 * AICE: Andes ICE. This is a JTAG adapter/"In-Circuit Emulator" made by Andes
   Technology.
+* BROM: Boot ROM. The mask ROM baked into the silicon of the SoC that holds the
+  first code executed by the CPU. As it is a ROM, it is completely immutable.
 * C2CRF: "Coresonic to Cortex-R(4)F"? "Core to Core RF"? Related to access
   between the CR4 and the Coresonic core, meant for debugging.
 * CCCI: Cross Core Communication Interface. This is the memory/DMA interface
@@ -95,6 +97,7 @@ some of these entries are complete guesses.
   connectivity subsystem includes the WiFi CPU core and possibly the Bluetooth
   CPU as well.
 * CQDMA: Command-Queue DMA. This is what MediaTek calls their DMA controller.
+* DAA: "Download Agent Authentication"?
 * DBF: DSP Binary Filter. As the name implies, this is binary filter data that
   is loaded into and parsed by the firmware running on the Coresonic DSP.
 * DCM: Dynamic Clock Management.
@@ -123,6 +126,10 @@ some of these entries are complete guesses.
 * MSDC: Used to refer to their EMMC/SD card controller core. Possibly "MediaTek
   SD Controller".
 * RXDFE: "RX Digital Front End"?
+* SLA: "Software Loader Authentication"? Some challenge-response auth to
+  authenticate the program loading the DA? Challenge-response auth to
+  authenticate the program communicating with the BROM? When this is enabled, it
+  disables Download Agent (DA) functionality in the BROM.
 * SST: System Stability Tracker. This is the name of the system trace
   functionality included in the BP firmware.
 * SWLA: Software LA (Logic Analyzer?). It seems to be some kind of debug
