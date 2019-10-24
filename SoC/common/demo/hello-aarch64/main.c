@@ -47,6 +47,13 @@ static void putchar(char c) {
 	writew(UART_THR, c);
 }
 
+static void putbyte(uint8_t b) {
+	// Wait for the UART to become ready.
+	while ((readw(UART_LSR) & UART_LSR_THRE) == 0);
+
+	writew(UART_THR, b);
+}
+
 static size_t strnlen(const char * buf, size_t max_len) {
 	size_t len = 0;
 	for (size_t i = 0; i < max_len; i++) {
@@ -421,6 +428,50 @@ static int usbdl_handler(size_t argc, const char * argv[]) {
 	return 0;
 }
 
+typedef enum bmo_commands {
+	EXIT = '\r',
+	READ = 'R',
+	WRITE = 'W',
+} bmo_command_t;
+
+static int bmo_handler(size_t argc, const char * argv[]) {
+	int ret = 0;
+	int done = 0;
+
+	println("OK");
+	while (!done) {
+		uint32_t addr = 0;
+		uint32_t val = 0;
+		bmo_command_t command = getchar();
+		switch (command) {
+		case EXIT:
+			done = 1;
+			break;
+		case READ:
+			for (int i = 0; i < 4; i++) {
+				addr |= getchar() << (i * 8);
+			}
+			val = readw(addr);
+			for (int i = 0; i < 4; i++) {
+				putbyte((val >> (i * 8)) & 0xff);
+			}
+			break;
+		case WRITE:
+			for (int i = 0; i < 4; i++) {
+				addr |= getchar() << (i * 8);
+			}
+			for (int i = 0; i < 4; i++) {
+				val |= getchar() << (i * 8);
+			}
+			writew(addr, val);
+			break;
+		default:
+			break;
+		}
+	}
+	return ret;
+}
+
 static int help_handler(size_t argc, const char * argv[]);
 
 typedef struct {
@@ -434,6 +485,7 @@ static const command cmd_table[] = {
 	{ "mww", mww_handler },
 	{ "reset", reset_handler },
 	{ "usbdl", usbdl_handler },
+	{ "bmo", bmo_handler },
 	{ 0, 0 },
 };
 
