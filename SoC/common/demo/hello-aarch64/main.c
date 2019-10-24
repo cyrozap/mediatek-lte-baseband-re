@@ -411,7 +411,7 @@ static int usbdl_handler(size_t argc, const char * argv[]) {
 		if (ret != 0) {
 			return ret;
 		}
-		return reset_handler(NULL, NULL);
+		return reset_handler(0, NULL);
 	} else {
 		print("Error: Unknown subcommand: ");
 		println(argv[1]);
