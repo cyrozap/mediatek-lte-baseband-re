@@ -549,6 +549,11 @@ static void cmdloop(void) {
 					cmd_buf[--cmd_len] = 0;
 				}
 				break;
+			case 0x03:
+				// Control-C
+				memset(cmd_buf, 0, MAX_CMD_LEN + 1);
+				cmd_entered = 1;
+				break;
 			default:
 				if (cmd_len < MAX_CMD_LEN) {
 					putchar(c);
