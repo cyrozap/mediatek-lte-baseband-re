@@ -633,5 +633,10 @@ static void cmdloop(void) {
 void main(void) {
 	init();
 	println("Hello from AArch64!");
+	print("hello-aarch64 version ");
+	print(build_version);
+	print(" (built on ");
+	print(build_time);
+	println(")");
 	cmdloop();
 }
