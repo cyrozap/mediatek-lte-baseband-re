@@ -18,6 +18,9 @@ static uint32_t USBDL;
 #define MAX_CMD_LEN 100
 #define MAX_ARGS 3
 
+extern char const * const build_version;
+extern char const * const build_time;
+
 static uint32_t readw(uint32_t reg) {
 	return mem[reg/4];
 }
@@ -472,6 +475,14 @@ static int bmo_handler(size_t argc, const char * argv[]) {
 	return ret;
 }
 
+static int version_handler(size_t argc, const char * argv[]) {
+	print("Build version: ");
+	println(build_version);
+	print("Build time: ");
+	println(build_time);
+	return 0;
+}
+
 static int help_handler(size_t argc, const char * argv[]);
 
 typedef struct {
@@ -481,6 +492,7 @@ typedef struct {
 
 static const command cmd_table[] = {
 	{ "help", help_handler },
+	{ "version", version_handler },
 	{ "mrw", mrw_handler },
 	{ "mww", mww_handler },
 	{ "reset", reset_handler },

@@ -2,3 +2,4 @@
 *.elf
 *.map
 *.o
+build_info.c
