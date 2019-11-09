@@ -65,6 +65,6 @@ to this project.
 ## Chat
 
 Join us in the `#postmarketos-lowlevel` channel on
-[Matrix](https://matrix.to/#/#postmarketos-lowlevel:disroot.org) or
+[Matrix](https://matrix.to/#/#lowlevel:postmarketos.org) or
 [Freenode IRC](https://kiwiirc.com/nextclient/#ircs://chat.freenode.net:6697/#postmarketos-lowlevel)
 to discuss this and other low-level smartphone firmware projects.
