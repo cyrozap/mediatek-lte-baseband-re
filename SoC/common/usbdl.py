@@ -25,6 +25,7 @@ class UsbDl:
         'CMD_SEND_DA': 0xD7,
         'CMD_GET_TARGET_CONFIG': 0xD8,
         'CMD_UART1_LOG_EN': 0xDB,
+        'CMD_UART1_SET_BAUD': 0xDC, # Not sure what the real name of this command is.
         'SCMD_GET_ME_ID': 0xE1,
         'CMD_GET_HW_SW_VER': 0xFC,
         'CMD_GET_HW_CODE': 0xFD,
@@ -298,6 +299,15 @@ class UsbDl:
 
     def cmd_uart1_log_enable(self):
         self._send_bytes([self.commands['CMD_UART1_LOG_EN']])
+
+        status = self.get_word()
+        if status != 0:
+            print(status)
+            raise Exception
+
+    def cmd_uart1_set_baud(self, baud):
+        self._send_bytes([self.commands['CMD_UART1_SET_BAUD']])
+        self.put_dword(baud)
 
         status = self.get_word()
         if status != 0:
