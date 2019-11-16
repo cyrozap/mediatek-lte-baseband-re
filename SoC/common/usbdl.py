@@ -296,6 +296,14 @@ class UsbDl:
             print(status)
             raise Exception
 
+    def cmd_uart1_log_enable(self):
+        self._send_bytes([self.commands['CMD_UART1_LOG_EN']])
+
+        status = self.get_word()
+        if status != 0:
+            print(status)
+            raise Exception
+
     def scmd_get_me_id(self):
         self._send_bytes([self.commands['SCMD_GET_ME_ID']])
         length = self.get_dword()
