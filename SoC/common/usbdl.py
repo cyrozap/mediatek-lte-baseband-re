@@ -26,6 +26,7 @@ class UsbDl:
         'CMD_GET_TARGET_CONFIG': 0xD8,
         'CMD_UART1_LOG_EN': 0xDB,
         'CMD_UART1_SET_BAUD': 0xDC, # Not sure what the real name of this command is.
+        'CMD_GET_BROM_LOG': 0xDD, # Not sure what the real name of this command is.
         'SCMD_GET_ME_ID': 0xE1,
         'CMD_GET_HW_SW_VER': 0xFC,
         'CMD_GET_HW_CODE': 0xFD,
@@ -313,6 +314,18 @@ class UsbDl:
         if status != 0:
             print(status)
             raise Exception
+
+    def cmd_get_brom_log(self):
+        self._send_bytes([self.commands['CMD_GET_BROM_LOG']])
+        length = self.get_dword()
+        log_bytes = self._recv_bytes(length)
+
+        status = self.get_word()
+        if status != 0:
+            print(status)
+            raise Exception
+
+        return log_bytes
 
     def scmd_get_me_id(self):
         self._send_bytes([self.commands['SCMD_GET_ME_ID']])
