@@ -320,11 +320,6 @@ class UsbDl:
         length = self.get_dword()
         log_bytes = self._recv_bytes(length)
 
-        status = self.get_word()
-        if status != 0:
-            print(status)
-            raise Exception
-
         return log_bytes
 
     def scmd_get_me_id(self):
