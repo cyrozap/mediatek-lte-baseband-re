@@ -132,6 +132,8 @@ some of these entries are complete guesses.
 * RXDFE: "RX Digital Front End"?
 * SBC: "Secure Boot Code"? Refers to secure boot functionality. When this is
   enabled, the BROM will only load and run properly signed boot code.
+* SIB: System Interface Box. A custom SWD/JTAG adapter used by MediaTek? Or a
+  hardware component inside the SoC's debug subsystem?
 * SLA: "Software Loader Authentication"? Some challenge-response auth to
   authenticate the program loading the DA? Challenge-response auth to
   authenticate the program communicating with the BROM? When this is enabled, it
