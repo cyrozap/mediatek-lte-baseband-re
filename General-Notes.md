@@ -101,7 +101,7 @@ some of these entries are complete guesses.
   the DA is code loaded over USB by the preloader (which itself may be loaded
   over USB in BROM USB Download Mode) that interacts with the host software to
   read from/write to eMMC.
-* DAA: "Download Agent Authentication"?
+* DAA: Download Agent Authentication. DA will be verified by Boot Rom before executed. 
 * DBF: DSP Binary Filter. As the name implies, this is binary filter data that
   is loaded into and parsed by the firmware running on the Coresonic DSP.
 * DCM: Dynamic Clock Management.
@@ -138,6 +138,7 @@ some of these entries are complete guesses.
   authenticate the program loading the DA? Challenge-response auth to
   authenticate the program communicating with the BROM? When this is enabled, it
   disables Download Agent (DA) functionality in the BROM.
+* SLA: Serial Link Authentification. MTK's Security Baseline. Verify tool communication chanel with Boot Rom.
 * SST: System Stability Tracker. This is the name of the system trace
   functionality included in the BP firmware.
 * SWLA: Software LA (Logic Analyzer?). It seems to be some kind of debug
