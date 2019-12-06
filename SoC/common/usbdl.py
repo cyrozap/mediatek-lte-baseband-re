@@ -481,6 +481,12 @@ class UsbDl:
             elapsed = end_time - start_time
             print("Wrote {} bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed, int(len(data)/elapsed)))
 
+    def wdt_reset(self):
+        self.cmd_write32(self.soc['toprgu'][0], [0x22000000 | 0x10 | 0x4])
+        time.sleep(0.001)
+        self.cmd_write32(self.soc['toprgu'][0] + 0x14, [0x1209])
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('port', type=str, help="The serial port you want to connect to.")
@@ -522,9 +528,9 @@ if __name__ == "__main__":
         usbdl.cmd_write32(usbdl.soc['usbdl'] + 0x20, [0])  # MISC_LOCK_KEY
 
         # WDT reset.
-        usbdl.cmd_write32(usbdl.soc['toprgu'][0], [0x22000000 | 0x10 | 0x4])
-        time.sleep(0.001)
-        usbdl.cmd_write32(usbdl.soc['toprgu'][0] + 0x14, [0x1209])
+        usbdl.wdt_reset()
+
+        # Exit because we won't be able to talk to the device any more.
         sys.exit(0)
 
     # Assume we have to use the CQDMA to access restricted memory.
