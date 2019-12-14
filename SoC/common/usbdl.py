@@ -15,6 +15,18 @@ def hex_int(i):
     return int(i, 16)
 
 
+class ChecksumError(Exception):
+    pass
+
+class EchoBytesMismatchException(Exception):
+    pass
+
+class NotEnoughDataException(Exception):
+    pass
+
+class ProtocolError(Exception):
+    pass
+
 class UsbDl:
     commands = {
         'CMD_C8': 0xC8, # Don't know the meaning of this yet.
@@ -124,14 +136,14 @@ class UsbDl:
             if self.debug:
                 print("<- {}".format(binascii.b2a_hex(echo_data)))
             if echo_data != data:
-                raise Exception
+                raise EchoBytesMismatchException
 
     def _recv_bytes(self, count):
         data = self.ser.read(count)
         if self.debug:
             print("<- {}".format(binascii.b2a_hex(data)))
         if len(data) != count:
-            raise Exception
+            raise NotEnoughDataException
         return bytes(data)
 
     def get_word(self):
@@ -183,8 +195,7 @@ class UsbDl:
 
         status = self.get_word()
         if status != 0:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
         return sub_data
 
@@ -202,16 +213,14 @@ class UsbDl:
 
         status = self.get_word()
         if status != 0:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
         for i in range(word_count):
             words.append(self.get_dword())
 
         status = self.get_word()
         if status != 0:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
         return words
 
@@ -227,16 +236,14 @@ class UsbDl:
 
         status = self.get_word()
         if status > 0xff:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
         for word in words:
             self.put_dword(word)
 
         status = self.get_word()
         if status > 0xff:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
     def cmd_jump_da(self, addr):
         self._send_bytes([self.commands['CMD_JUMP_DA']])
@@ -244,16 +251,14 @@ class UsbDl:
 
         status = self.get_word()
         if status > 0xff:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
     def cmd_jump_bl(self):
         self._send_bytes([self.commands['CMD_JUMP_BL']])
 
         status = self.get_word()
         if status > 0xff:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
     def cmd_send_da(self, load_addr, data, sig_length=0, print_speed=False):
         self._send_bytes([self.commands['CMD_SEND_DA']])
@@ -263,8 +268,7 @@ class UsbDl:
 
         status = self.get_word()
         if status > 0xff:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
         calc_checksum = 0
         padded_data = data
@@ -280,13 +284,11 @@ class UsbDl:
         remote_checksum = self.get_word()
 
         if remote_checksum != calc_checksum:
-            print("Checksum mismatch: Expected 0x{:04x}, got 0x{:04x}.".format(calc_checksum, remote_checksum))
-            raise Exception
+            raise ChecksumError("Checksum mismatch: Expected 0x{:04x}, got 0x{:04x}.".format(calc_checksum, remote_checksum))
 
         status = self.get_word()
         if status > 0xff:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
         if print_speed:
             elapsed = end_time - start_time
@@ -303,16 +305,14 @@ class UsbDl:
 
         status = self.get_word()
         if status > 0xff:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
     def cmd_uart1_log_enable(self):
         self._send_bytes([self.commands['CMD_UART1_LOG_EN']])
 
         status = self.get_word()
         if status != 0:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
     def cmd_uart1_set_baud(self, baud):
         self._send_bytes([self.commands['CMD_UART1_SET_BAUD']])
@@ -320,8 +320,7 @@ class UsbDl:
 
         status = self.get_word()
         if status != 0:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
     def cmd_get_brom_log(self):
         self._send_bytes([self.commands['CMD_GET_BROM_LOG']])
@@ -337,8 +336,7 @@ class UsbDl:
 
         status = self.get_word()
         if status != 0:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
         return me_id
 
@@ -350,8 +348,7 @@ class UsbDl:
 
         status = self.get_word()
         if status != 0:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
         return (hw_subcode, hw_ver, sw_ver)
 
@@ -361,8 +358,7 @@ class UsbDl:
 
         status = self.get_word()
         if status != 0:
-            print(status)
-            raise Exception
+            raise ProtocolError(status)
 
         return hw_code
 
