@@ -8,6 +8,12 @@ import sys
 import time
 
 
+class EchoBytesMismatchException(Exception):
+    pass
+
+class NotEnoughDataException(Exception):
+    pass
+
 class Bmo:
     commands = {
         'EXIT': ord(b'\r'),
@@ -38,14 +44,14 @@ class Bmo:
             if self.debug:
                 print("<- {}".format(binascii.b2a_hex(echo_data)))
             if echo_data != data:
-                raise Exception
+                raise EchoBytesMismatchException
 
     def _recv_bytes(self, count):
         data = self.ser.read(count)
         if self.debug:
             print("<- {}".format(binascii.b2a_hex(data)))
         if len(data) != count:
-            raise Exception
+            raise NotEnoughDataException
         return bytes(data)
 
     def get_dword(self):
