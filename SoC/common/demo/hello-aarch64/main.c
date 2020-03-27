@@ -255,7 +255,18 @@ static void print_dec(size_t value, size_t min_digits) {
 	}
 }
 
-static void print_hex(size_t value, size_t digits) {
+static void print_hex(size_t value, size_t min_digits) {
+	size_t digits = 0;
+	for (size_t remaining = value; remaining != 0; remaining >>= 4) {
+		digits++;
+	}
+	if (value == 0) {
+		digits = 1;
+	}
+	if (min_digits > 0 && min_digits > digits) {
+		digits = min_digits;
+	}
+
 	putchar('0');
 	putchar('x');
 	for (size_t i = 0; i < digits; i++) {
