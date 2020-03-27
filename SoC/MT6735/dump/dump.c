@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 	uint32_t length;
 	uint32_t pages;
 
-	if (argc < 3 || argc > 3) {
+	if (argc != 3) {
 		fprintf(stderr, "Usage: %s address length\n", argv[0]);
 		return -1;
 	}
