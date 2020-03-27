@@ -27,7 +27,7 @@ interfaces. The BP has either some or all of the DSP's memory space
 mapped, and I think the AP may be able to access that directly (for,
 e.g., DSP memory dumps), but I'm not entirely sure.
 
-== IC names and functions
+== IC Names and Functions
 
 * Cellular RF Frontends (RFICs)
 ** MT6169
