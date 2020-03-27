@@ -53,10 +53,10 @@ My current task list is in [Tasks.md](Tasks.md).
 
 ## Additional Information
 
-See the [General-Notes.md](General-Notes.md) file in this directory for
-general information about MediaTek's LTE modems and SoCs. Information on
-each subsystem can be found in the "Notes.md" file in the directory for
-that subsystem.
+See the [General-Notes.adoc](General-Notes.adoc) file in this directory
+for general information about MediaTek's LTE modems and SoCs.
+Information on each subsystem can be found in the "Notes.md" file in the
+directory for that subsystem.
 
 The [Documents.md](Documents.md) file contains a list of research papers,
 presentations, patents, and other documents that are or might be relevant
