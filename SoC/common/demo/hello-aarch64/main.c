@@ -232,6 +232,29 @@ static int parse_hex(uint32_t * value, const uint8_t * str) {
 	return 0;
 }
 
+static void print_dec(size_t value, size_t min_digits) {
+	size_t digits = 0;
+	for (size_t remaining = value; remaining != 0; remaining /= 10) {
+		digits++;
+	}
+	if (value == 0) {
+		digits = 1;
+	}
+	if (min_digits > 0 && min_digits > digits) {
+		digits = min_digits;
+	}
+	for (size_t i = 0; i < digits; i++) {
+		uint8_t digit = (value / (10 * (digits - i - 1))) % 10;
+		uint8_t chr = 0;
+		if (0 <= digit && digit <= 9) {
+			chr = digit + '0';
+		} else {
+			chr = '?';
+		}
+		putchar(chr);
+	}
+}
+
 static void print_hex(size_t value, size_t digits) {
 	putchar('0');
 	putchar('x');
@@ -431,7 +454,7 @@ static int usbdl_handler(size_t argc, const char * argv[]) {
 			println("no timeout.");
 		} else {
 			print("a timeout of ");
-			print_hex(timeout, 8);
+			print_dec(timeout, 0);
 			println(" seconds.");
 		}
 
