@@ -4,9 +4,9 @@
 
 The SoC/LTE Modem system consists of three main parts:
 
-. The Application Processor (AP), which is some ARM Cortex-A variant.
-. The Baseband Processor (BP/BB), which is a Cortex-R4.
-. The Baseband DSP (DSP), which is some Coresonic DSP.
+. The Application Processor (<<AP>>), which is some ARM Cortex-A variant.
+. The Baseband Processor (<<BP>>/BB), which is a Cortex-R4.
+. The Baseband DSP (<<DSP>>), which is some Coresonic DSP.
 
 This is actually a simplification, because there's a second,
 non-Coresonic DSP to handle 2G/3G signal processing (a
@@ -88,77 +88,145 @@ MediaTek uses a lot of acronyms in their code and documentation but
 rarely expands them, so this glossary is my attempt at fixing that.
 Please note that some of these entries are complete guesses.
 
-* AICE: Andes ICE. This is a JTAG adapter/"In-Circuit Emulator" made by
+[[AICE]]AICE::
+Andes ICE. This is a JTAG adapter/"In-Circuit Emulator" made by
 Andes Technology.
-* BROM: Boot ROM. The mask ROM baked into the silicon of the SoC that
+
+[[AP]]AP::
+Applications Processor. The CPU cores that Android/Linux run on.
+
+[[BP]]BP::
+Baseband Processor. The cellular modem.
+
+[[BROM]]BROM::
+Boot ROM. The mask ROM baked into the silicon of the SoC that
 holds the first code executed by the CPU. As it is a ROM, it is
 completely immutable.
-* C2CRF: "Coresonic to Cortex-R(4)F"? "Core to Core RF"? Related to
+
+[[C2CRF]]C2CRF::
+"Coresonic to Cortex-R(4)F"? "Core to Core RF"? Related to
 access between the CR4 and the Coresonic core, meant for debugging.
-* CCCI: Cross Core Communication Interface. This is the memory/DMA
-interface through which the AP and the BP communicate.
-* CONN: "Connectivity", usually refers to the connectivity subsystem.
+
+[[CCCI]]CCCI::
+Cross Core Communication Interface. This is the memory/DMA
+interface through which the <<AP>> and the <<BP>> communicate.
+
+[[CONN]]CONN::
+"Connectivity", usually refers to the connectivity subsystem.
 The connectivity subsystem includes the WiFi CPU core and possibly the
 Bluetooth CPU as well.
-* CQDMA: Command-Queue DMA. This is what MediaTek calls their DMA
+
+[[CQDMA]]CQDMA::
+Command-Queue DMA. This is what MediaTek calls their DMA
 controller.
-* DA: Download Agent. In the official MediaTek USB-based eMMC flashing
+
+[[DA]]DA::
+Download Agent. In the official MediaTek USB-based eMMC flashing
 flow, the DA is code loaded over USB by the preloader (which itself may
 be loaded over USB in BROM USB Download Mode) that interacts with the
 host software to read from/write to eMMC.
-* DAA: "Download Agent Authentication"?
-* DBF: DSP Binary Filter. As the name implies, this is binary filter
+
+[[DAA]]DAA::
+"Download Agent Authentication"?
+
+[[DBF]]DBF::
+DSP Binary Filter. As the name implies, this is binary filter
 data that is loaded into and parsed by the firmware running on the
 Coresonic DSP.
-* DCM: Dynamic Clock Management.
-* DEM: Debug Exchange Module/Data Exchange Module. This is a hardware
+
+[[DCM]]DCM::
+Dynamic Clock Management.
+
+[[DEM]]DEM::
+Debug Exchange Module/Data Exchange Module. This is a hardware
 block with registers that control reset, clocking, and I/O selection for
 the debug subsystem. For example, the JTAG enable/disable registers are
 part of this module.
-* GCE: Global Command Engine. A SoC peripheral that can be used to
+
+[[DSP]]DSP::
+Digital Signal Processor.
+
+[[GCE]]GCE::
+Global Command Engine. A SoC peripheral that can be used to
 program registers with strict timing requirements.
-* GCPU: General Copy Protection Unit. A SoC peripheral used for
+
+[[GCPU]]GCPU::
+General Copy Protection Unit. A SoC peripheral used for
 decrypting encrypted media. It's a microcontroller core (MD32?) with
 some ROM, SRAM, and hardware accelerators for AES, SHA, MD5, RC4, DES,
 CRC32, DMA, etc.
-* GCU: GPRS Cipher Unit. An accelerator for cryptographic ciphers used
+
+[[GCU]]GCU::
+GPRS Cipher Unit. An accelerator for cryptographic ciphers used
 in some GSM protocols.
-* HACC: Something to do with Anti-Clone or secure boot? Can do AES
-encryption/decryption. I think these regs are a subset of SEJ, or maybe
+
+[[HACC]]HACC::
+Something to do with Anti-Clone or secure boot? Can do AES
+encryption/decryption. I think these regs are a subset of <<SEJ>>, or maybe
 "HACC" is another term for "SEJ".
-* HIF: Host Interface. This is the interface between the SoC and the
+
+[[HIF]]HIF::
+Host Interface. This is the interface between the SoC and the
 Connectivity (WLAN/BT/GPS) core. The HIF is an abstraction layer over
 the physical interface (AHB/eHPI/PCIe/SDIO/USB).
-* INFRACFG: "Infrastructure system configuration". Refers to the block
+
+[[INFRACFG]]INFRACFG::
+"Infrastructure system configuration". Refers to the block
 of registers that control reset, clocking, and some miscellaneous
 control signals.
-* M4U: Multimedia Memory Management Unit. This is what MediaTek calls
+
+[[M4U]]M4U::
+Multimedia Memory Management Unit. This is what MediaTek calls
 their IOMMU.
-* MCU: Used to refer to different processor subsystems. e.g., "APMCU"
-refers to the main AP core cluster, while "MDMCU" refers to the BP CPU.
-"MCUSYS" seems to refer to the AP MCU system.
-* MFG: MFlexGraphics. Refers to the 3D GPU subsystem.
-* MSDC: Used to refer to their EMMC/SD card controller core. Possibly
+
+[[MCU]]MCU::
+Used to refer to different processor subsystems. e.g., "APMCU"
+refers to the main <<AP>> core cluster, while "MDMCU" refers to the <<BP>> CPU.
+"MCUSYS" seems to refer to the <<AP>> MCU system.
+
+[[MFG]]MFG::
+MFlexGraphics. Refers to the 3D GPU subsystem.
+
+[[MSDC]]MSDC::
+Used to refer to their EMMC/SD card controller core. Possibly
 "MediaTek SD Controller".
-* RXDFE: "RX Digital Front End"?
-* SBC: "Secure Boot Code"? Refers to secure boot functionality. When
+
+[[RXDFE]]RXDFE::
+"RX Digital Front End"?
+
+[[SBC]]SBC::
+"Secure Boot Code"? Refers to secure boot functionality. When
 this is enabled, the BROM will only load and run properly signed boot
 code.
-* SEJ: Security Engine with JTAG control. Has some regs to control JTAG
+
+[[SEJ]]SEJ::
+Security Engine with JTAG control. Has some regs to control JTAG
 enable/disable. Also has some encryption/decryption functionality (maybe
-encrypted JTAG?). See also: HACC.
-* SIB: System Interface Box. A custom SWD/JTAG adapter used by MediaTek?
+encrypted JTAG?). See also: <<HACC>>.
+
+[[SIB]]SIB::
+System Interface Box. A custom SWD/JTAG adapter used by MediaTek?
 Or a hardware component inside the SoC's debug subsystem?
-* SLA: "Software Loader Authentication"? Some challenge-response auth to
+
+[[SLA]]SLA::
+"Software Loader Authentication"? Some challenge-response auth to
 authenticate the program loading the DA? Challenge-response auth to
 authenticate the program communicating with the BROM? When this is
 enabled, it disables Download Agent (DA) functionality in the BROM.
-* SST: System Stability Tracker. This is the name of the system trace
-functionality included in the BP firmware.
-* SWLA: Software LA (Logic Analyzer?). It seems to be some kind of debug
-functionality in the BP firmware.
-* TRNG: Truly Random Number Generator.
-* WMT: Wireless Management Task. Refers to the WiFi/Bluetooth
+
+[[SST]]SST::
+System Stability Tracker. This is the name of the system trace
+functionality included in the <<BP>> firmware.
+
+[[SWLA]]SWLA::
+Software LA (Logic Analyzer?). It seems to be some kind of debug
+functionality in the <<BP>> firmware.
+
+[[TRNG]]TRNG::
+Truly Random Number Generator.
+
+[[WMT]]WMT::
+Wireless Management Task. Refers to the WiFi/Bluetooth
 drivers/API.
 
 == History
