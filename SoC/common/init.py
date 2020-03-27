@@ -19,6 +19,7 @@ class Bmo:
         'EXIT': ord(b'\r'),
         'READ': ord(b'R'),
         'WRITE': ord(b'W'),
+        'SETBAUD': ord(b'S'),
     }
 
     def __init__(self, port, baudrate=115200, timeout=1, write_timeout=1, debug=False):
@@ -33,6 +34,9 @@ class Bmo:
         ack = self._recv_bytes(5)
         print(ack)
         assert ack == b'\nOK\r\n'
+
+    def close(self):
+        self.ser.close()
 
     def _send_bytes(self, data, echo=False):
         data = bytes(data)
@@ -88,6 +92,13 @@ class Bmo:
         self._send_bytes([self.commands['WRITE']])
         self.put_dword(addr)
         self.put_dword(word)
+
+    def setbaud(self, baudrate):
+        '''Sets the baudrate.'''
+
+        self._send_bytes([self.commands['SETBAUD']])
+        self.put_dword(baudrate)
+        self.close()
 
     def memory_read(self, addr, count, print_speed=False):
         '''Read a range of memory to a byte array.
