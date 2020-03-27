@@ -116,6 +116,9 @@ some of these entries are complete guesses.
   and hardware accelerators for AES, SHA, MD5, RC4, DES, CRC32, DMA, etc.
 * GCU: GPRS Cipher Unit. An accelerator for cryptographic ciphers used in some
   GSM protocols.
+* HACC: Something to do with Anti-Clone or secure boot? Can do AES
+  encryption/decryption. I think these regs are a subset of SEJ, or maybe "HACC"
+  is another term for "SEJ".
 * HIF: Host Interface. This is the interface between the SoC and the
   Connectivity (WLAN/BT/GPS) core. The HIF is an abstraction layer over the
   physical interface (AHB/eHPI/PCIe/SDIO/USB).
@@ -135,7 +138,7 @@ some of these entries are complete guesses.
   enabled, the BROM will only load and run properly signed boot code.
 * SEJ: Security Engine with JTAG control. Has some regs to control JTAG
   enable/disable. Also has some encryption/decryption functionality (maybe
-  encrypted JTAG?).
+  encrypted JTAG?). See also: HACC.
 * SIB: System Interface Box. A custom SWD/JTAG adapter used by MediaTek? Or a
   hardware component inside the SoC's debug subsystem?
 * SLA: "Software Loader Authentication"? Some challenge-response auth to
