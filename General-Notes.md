@@ -183,6 +183,29 @@ some of these entries are complete guesses.
      * [Miasm](https://github.com/cea-sec/miasm): Reverse engineering framework in Python.
      * [Sibyl](https://github.com/cea-sec/Sibyl): A Miasm2 based function divination.
      * [r2m2](https://github.com/guedou/r2m2): Use miasm2 as a radare2 plugin.
+ * [DIY ARM Debugger for Wi-Fi Chips: Using Nexmon to Perform Single-Step Debugging and More on Proprietary Wi-Fi Chips](https://recon.cx/2018/brussels/resources/slides/RECON-BRX-2018-DIY-ARM-Debugger-for-Wi-Fi-Chips.pdf)
+   * Explains how "Monitor debug-mode" works on ARM.
+   * Monitor debug-mode can be used to debug code on targets without
+     accessible/enabled JTAG/SWD pins.
+     * This should be useful for debugging code running on the BP's Cortex-R4
+       core.
+ * [Remotely compromise devices by using bugs in Marvell Avastar Wi-Fi: from zero knowledge to zero-click RCE](https://web.archive.org/web/20190808113206/https://embedi.org/blog/remotely-compromise-devices-by-using-bugs-in-marvell-avastar-wi-fi-from-zero-knowledge-to-zero-click-rce/)
+   * Marvell Avastar WiFi firmware reverse engineering.
+   * Blog post based on [an earlier talk](https://2018.zeronights.ru/en/reports/researching-marvell-avastar-wi-fi-from-zero-knowledge-to-over-the-air-zero-touch-rce/)
+     * [Video](https://www.youtube.com/watch?v=Him_Lf5ZJ38),
+       [Slides](https://2018.zeronights.ru/wp-content/uploads/materials/19-Researching-Marvell-Avastar-Wi-Fi.pdf)
+   * Includes tips on fuzzing the firmware.
+     * Uses [afl-unicorn](https://github.com/Battelle/afl-unicorn) for fuzzing
+       functions in the Unicorn CPU emulator.
+ * [Exploiting Qualcomm WLAN and Modem Over-the-Air](https://www.blackhat.com/us-19/briefings/schedule/index.html#exploiting-qualcomm-wlan-and-modem-over-the-air-15481)
+   * [Video](https://www.youtube.com/watch?v=7lrm5tRJYSg),
+     [Slides](https://i.blackhat.com/USA-19/Thursday/us-19-Pi-Exploiting-Qualcomm-WLAN-And-Modem-Over-The-Air.pdf),
+     [White Paper](https://i.blackhat.com/USA-19/Thursday/us-19-Pi-Exploiting-Qualcomm-WLAN-And-Modem-Over-The-Air-wp.pdf)
+   * [DEF CON 27 talk](https://www.defcon.org/html/defcon-27/dc-27-speakers.html#Gong)
+     * [Video](https://media.defcon.org/DEF%20CON%2027/DEF%20CON%2027%20video%20and%20slides/DEF%20CON%2027%20Conference%20-%20Xiling%20Gong%20-%20Exploiting%20Qualcomm%20WLAN%20and%20Modem%20Over%20The%20Air.mp4)
+       ([Subtitles](https://media.defcon.org/DEF%20CON%2027/DEF%20CON%2027%20video%20and%20slides/DEF%20CON%2027%20Conference%20-%20Xiling%20Gong%20-%20Exploiting%20Qualcomm%20WLAN%20and%20Modem%20Over%20The%20Air.srt)),
+       [Video (YouTube)](https://www.youtube.com/watch?v=KxdfX9NxfA4),
+       [Slides](https://media.defcon.org/DEF%20CON%2027/DEF%20CON%2027%20presentations/DEFCON-27-Xiling-Gong-Peter-Pi-Exploiting-Qualcomm-WLAN-and-Modem-Over-The-Air.pdf)
  * [How to not break LTE crypto](https://www.sstic.org/media/SSTIC2016/SSTIC-actes/how_to_not_break_lte_crypto/SSTIC2016-Article-how_to_not_break_lte_crypto-michau_devine.pdf)
    * MediaTek-specific modem information is in section 3.3.
  * [Fun with the MTK 6573 Baseband (Patching / Replacing)](http://baseband-devel.722152.n3.nabble.com/Fun-with-the-MTK-6573-Baseband-Patching-Replacing-td4026683.html)
