@@ -14,6 +14,10 @@ def auto_int(i):
 def hex_int(i):
     return int(i, 16)
 
+def print_ranges(ranges):
+    for base, count in sorted(ranges.items()):
+        print("0x{:08X}: 0x{:08x}".format(base, count))
+
 
 class ChecksumError(Exception):
     pass
@@ -361,6 +365,51 @@ class UsbDl:
             raise ProtocolError(status)
 
         return hw_code
+
+    def memory_range_test(self, addr, byte_count, byte_granularity=4, print_speed=False):
+        '''Test a range of memory to see where we have contiguous read access.
+
+        addr: A 32-bit address as an int.
+        count: The length of data to read, in bytes.
+        '''
+        word_count = byte_count//4
+        if (byte_count % 4) > 0:
+            word_count += 1
+
+        assert byte_granularity > 0
+        assert byte_granularity % 4 == 0
+
+        ranges = {}
+        previous_ranges = ranges.copy()
+        base_addr = 0
+        bytes_to_read = word_count * 4
+        reset_base = True
+        start_time = time.time()
+        for offset in range(0, bytes_to_read, byte_granularity):
+            current_addr = addr + offset
+            if reset_base:
+                base_addr = current_addr
+            try:
+                self.cmd_read32(current_addr, byte_granularity // 4)
+                if not ranges.get(base_addr):
+                    ranges[base_addr] = 0
+                ranges[base_addr] += byte_granularity
+                reset_base = False
+            except ProtocolError:
+                reset_base = True
+                pass
+            if offset % (0x400 * byte_granularity) == 0 and offset > 0:
+                print("Reading range: {}% complete".format(int(offset / bytes_to_read * 100)))
+                if ranges != previous_ranges:
+                    print_ranges(ranges)
+                    previous_ranges = ranges.copy()
+        end_time = time.time()
+
+        if print_speed:
+            elapsed = end_time - start_time
+            print("Read {} bytes in {:.6f} seconds ({} bytes per second).".format(bytes_to_read, elapsed, int(bytes_to_read/elapsed)))
+
+        return ranges
 
     def cqdma_read32(self, addr, word_count):
         '''Read 32-bit words starting at an address, using the CQDMA peripheral.
