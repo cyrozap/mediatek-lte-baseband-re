@@ -127,6 +127,7 @@ some of these entries are complete guesses.
 * MCU: Used to refer to different processor subsystems. e.g., "APMCU" refers to
   the main AP core cluster, while "MDMCU" refers to the BP CPU. "MCUSYS" seems
   to refer to the AP MCU system.
+* MFG: MFlexGraphics. Refers to the 3D GPU subsystem.
 * MSDC: Used to refer to their EMMC/SD card controller core. Possibly "MediaTek
   SD Controller".
 * RXDFE: "RX Digital Front End"?
