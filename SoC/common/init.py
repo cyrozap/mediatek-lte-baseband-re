@@ -20,6 +20,8 @@ class Bmo:
         'READ': ord(b'R'),
         'WRITE': ord(b'W'),
         'SETBAUD': ord(b'S'),
+        'MEM_READ': ord(b'r'),
+        'MEM_WRITE': ord(b'w'),
     }
 
     def __init__(self, port, baudrate=115200, timeout=1, write_timeout=1, debug=False):
@@ -100,7 +102,7 @@ class Bmo:
         self.put_dword(baudrate)
         self.close()
 
-    def memory_read(self, addr, count, print_speed=False):
+    def memory_read(self, addr, count, fast=False, print_speed=False):
         '''Read a range of memory to a byte array.
 
         addr: A 32-bit address as an int.
@@ -111,10 +113,27 @@ class Bmo:
             word_count += 1
 
         data = b''
-        start_time = time.time()
-        for i in range(word_count):
-            data += struct.pack('<I', self.readw(addr + i * 4))
-        end_time = time.time()
+        if fast:
+            aligned_count = word_count * 4
+
+            self._send_bytes([self.commands['MEM_READ']])
+            self.put_dword(addr)
+            self.put_dword(aligned_count)
+
+            block_size = 0x1000
+            cbs = block_size
+            start_time = time.time()
+            for i in range(0, aligned_count, block_size):
+                if aligned_count - i < cbs:
+                    cbs = aligned_count - i
+                data += self._recv_bytes(cbs)
+                time.sleep(0.0001)
+            end_time = time.time()
+        else:
+            start_time = time.time()
+            for i in range(word_count):
+                data += struct.pack('<I', self.readw(addr + i * 4))
+            end_time = time.time()
         data = data[:count]
 
         if print_speed:
@@ -123,7 +142,7 @@ class Bmo:
 
         return data
 
-    def memory_write(self, addr, data, print_speed=False):
+    def memory_write(self, addr, data, fast=False, print_speed=False):
         '''Write a byte array to a range of memory.
 
         addr: A 32-bit address as an int.
@@ -137,10 +156,22 @@ class Bmo:
         if remaining_bytes > 0:
             padded_data += b'\0' * (4 - remaining_bytes)
 
-        start_time = time.time()
-        for i in range(0, len(padded_data), 4):
-            self.writew(addr + i, struct.unpack_from('<I', padded_data, i)[0])
-        end_time = time.time()
+        if fast:
+            self._send_bytes([self.commands['MEM_WRITE']])
+            self.put_dword(addr)
+            self.put_dword(len(padded_data))
+
+            block_size = 0x1000
+            start_time = time.time()
+            for i in range(0, len(padded_data), block_size):
+                self._send_bytes(padded_data[i:i+block_size])
+                time.sleep(0.0001)
+            end_time = time.time()
+        else:
+            start_time = time.time()
+            for i in range(0, len(padded_data), 4):
+                self.writew(addr + i, struct.unpack_from('<I', padded_data, i)[0])
+            end_time = time.time()
 
         if print_speed:
             elapsed = end_time - start_time
