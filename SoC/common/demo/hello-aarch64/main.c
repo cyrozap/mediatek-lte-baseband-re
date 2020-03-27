@@ -5,6 +5,7 @@ volatile uint32_t * const mem = (volatile uint32_t * const)(0x00000000);
 #define SRAM 0x00100000
 #define L2_SRAM 0x00200000
 
+static uint32_t UART_BASE;
 static uint32_t UART_RBR;
 static uint32_t UART_THR;
 static uint32_t UART_LSR;
@@ -109,7 +110,6 @@ void * memset (void * ptr, int value, size_t num) {
 }
 
 static void init(void) {
-	uint32_t UART_BASE;
 	uint32_t soc_id = readw(0x08000000);
 	switch(soc_id) {
 	case 0x0279:
@@ -351,6 +351,37 @@ static int mww_handler(size_t argc, const char * argv[]) {
 	return ret;
 }
 
+static int setbaud_handler(size_t argc, const char * argv[]) {
+	// Set high speed mode.
+	writew(UART_BASE + 0x24, 0x3);
+
+	// Calculate parameters.
+	uint32_t cpu_freq_hz = 26000000;
+	uint32_t baudrate = 921600;
+	uint32_t tmp = (cpu_freq_hz + (baudrate / 2)) / baudrate;
+	uint32_t divisor_latch = ((tmp + 255) >> 8);
+	uint32_t sample_count = tmp / divisor_latch;
+
+	// Write sample count.
+	writew(UART_BASE + 0x28, (sample_count - 1) & 0xff);
+
+	// Write sample point.
+	writew(UART_BASE + 0x2c, ((sample_count - 1) / 2) & 0xff);
+
+	// Write divisor latch.
+	writew(UART_BASE + 0xc, 0x80);
+	writew(UART_BASE + 0x0, divisor_latch & 0xff);
+	writew(UART_BASE + 0x4, (divisor_latch >> 8) & 0xff);
+
+	// Configure UART parameters: 8N1
+	writew(UART_BASE + 0xc, 0x3);
+
+	// Configure and initialize FIFO.
+	writew(UART_BASE + 0x8, 0x97);
+
+	return 0;
+}
+
 static int reset_handler(size_t argc, const char * argv[]) {
 	println("Resetting SoC...");
 
@@ -435,6 +466,7 @@ typedef enum bmo_commands {
 	EXIT = '\r',
 	READ = 'R',
 	WRITE = 'W',
+	SETBAUD = 'S',
 } bmo_command_t;
 
 static int bmo_handler(size_t argc, const char * argv[]) {
@@ -468,6 +500,9 @@ static int bmo_handler(size_t argc, const char * argv[]) {
 			}
 			writew(addr, val);
 			break;
+		case SETBAUD:
+			setbaud_handler(argc, argv);
+			break;
 		default:
 			break;
 		}
@@ -495,6 +530,7 @@ static const command cmd_table[] = {
 	{ "version", version_handler },
 	{ "mrw", mrw_handler },
 	{ "mww", mww_handler },
+	{ "setbaud", setbaud_handler },
 	{ "reset", reset_handler },
 	{ "usbdl", usbdl_handler },
 	{ "bmo", bmo_handler },
