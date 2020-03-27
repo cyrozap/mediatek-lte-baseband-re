@@ -22,6 +22,8 @@ static uint32_t USBDL;
 extern char const * const build_version;
 extern char const * const build_time;
 
+static char const * soc_name;
+
 static uint32_t readw(uint32_t reg) {
 	return mem[reg/4];
 }
@@ -115,19 +117,19 @@ static void init(void) {
 	uint32_t soc_id = readw(0x08000000);
 	switch(soc_id) {
 	case 0x0279:
-		// MT6797
+		soc_name = "MT6797";
 		UART_BASE = 0x11002000;
 		TOPRGU_BASE = 0x10007000;
 		USBDL = 0x10001680;
 		break;
 	case 0x0321:
-		// MT6735
+		soc_name = "MT6735";
 		UART_BASE = 0x11002000;
 		TOPRGU_BASE = 0x10212000;
 		USBDL = 0x10000818;
 		break;
 	case 0x0335:
-		// MT6737M
+		soc_name = "MT6737M";
 		UART_BASE = 0x11002000 + 0x1000; // UART1 base address.
 
 		// Configure UART1 pins.
@@ -153,12 +155,13 @@ static void init(void) {
 		USBDL = 0x10000818;
 		break;
 	case 0x8163:
-		// MT8163
+		soc_name = "MT8163";
 		UART_BASE = 0x11002000;
 		TOPRGU_BASE = 0x10007000;
 		USBDL = 0x10202050;
 		break;
 	default:
+		soc_name = "UNKNOWN";
 		UART_BASE = 0x11002000;
 		TOPRGU_BASE = 0x10007000;
 		USBDL = 0x10202050;
@@ -586,6 +589,8 @@ static int version_handler(size_t argc, const char * argv[]) {
 	println(build_version);
 	print("Build time: ");
 	println(build_time);
+	print("SoC name: ");
+	println(soc_name);
 	return 0;
 }
 
