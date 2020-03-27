@@ -467,6 +467,8 @@ typedef enum bmo_commands {
 	READ = 'R',
 	WRITE = 'W',
 	SETBAUD = 'S',
+	MEM_READ = 'r',
+	MEM_WRITE = 'w',
 } bmo_command_t;
 
 static int bmo_handler(size_t argc, const char * argv[]) {
@@ -477,6 +479,7 @@ static int bmo_handler(size_t argc, const char * argv[]) {
 	while (!done) {
 		uint32_t addr = 0;
 		uint32_t val = 0;
+		uint32_t len = 0;
 		bmo_command_t command = getchar();
 		switch (command) {
 		case EXIT:
@@ -502,6 +505,35 @@ static int bmo_handler(size_t argc, const char * argv[]) {
 			break;
 		case SETBAUD:
 			setbaud_handler(argc, argv);
+			break;
+		case MEM_READ:
+			for (int i = 0; i < 4; i++) {
+				addr |= getchar() << (i * 8);
+			}
+			for (int i = 0; i < 4; i++) {
+				len |= getchar() << (i * 8);
+			}
+			for (uint32_t off = 0; off < len; off += 4) {
+				val = readw(addr + off);
+				for (int i = 0; i < 4; i++) {
+					putbyte((val >> (i * 8)) & 0xff);
+				}
+			}
+			break;
+		case MEM_WRITE:
+			for (int i = 0; i < 4; i++) {
+				addr |= getchar() << (i * 8);
+			}
+			for (int i = 0; i < 4; i++) {
+				len |= getchar() << (i * 8);
+			}
+			for (uint32_t off = 0; off < len; off += 4) {
+				val = 0;
+				for (int i = 0; i < 4; i++) {
+					val |= getchar() << (i * 8);
+				}
+				writew(addr + off, val);
+			}
 			break;
 		default:
 			break;
