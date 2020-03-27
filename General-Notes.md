@@ -133,6 +133,9 @@ some of these entries are complete guesses.
 * RXDFE: "RX Digital Front End"?
 * SBC: "Secure Boot Code"? Refers to secure boot functionality. When this is
   enabled, the BROM will only load and run properly signed boot code.
+* SEJ: Security Engine with JTAG control. Has some regs to control JTAG
+  enable/disable. Also has some encryption/decryption functionality (maybe
+  encrypted JTAG?).
 * SIB: System Interface Box. A custom SWD/JTAG adapter used by MediaTek? Or a
   hardware component inside the SoC's debug subsystem?
 * SLA: "Software Loader Authentication"? Some challenge-response auth to
