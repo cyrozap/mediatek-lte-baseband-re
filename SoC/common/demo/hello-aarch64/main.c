@@ -109,6 +109,8 @@ void * memset (void * ptr, int value, size_t num) {
 	}
 }
 
+static void setbaud(uint32_t baudrate);
+
 static void init(void) {
 	uint32_t soc_id = readw(0x08000000);
 	switch(soc_id) {
@@ -144,32 +146,8 @@ static void init(void) {
 		gpio_mode |= (0x1 << 22) | (0x1 << 19);
 		writew(0x10211370, gpio_mode);
 
-		// Set high speed mode.
-		writew(UART_BASE + 0x24, 0x3);
-
-		// Calculate parameters.
-		uint32_t cpu_freq_hz = 26000000;
-		uint32_t baudrate = 115200;
-		uint32_t tmp = (cpu_freq_hz + (baudrate / 2)) / baudrate;
-		uint32_t divisor_latch = ((tmp + 255) >> 8);
-		uint32_t sample_count = tmp / divisor_latch;
-
-		// Write sample count.
-		writew(UART_BASE + 0x28, (sample_count - 1) & 0xff);
-
-		// Write sample point.
-		writew(UART_BASE + 0x2c, ((sample_count - 1) / 2) & 0xff);
-
-		// Write divisor latch.
-		writew(UART_BASE + 0xc, 0x80);
-		writew(UART_BASE + 0x0, divisor_latch & 0xff);
-		writew(UART_BASE + 0x4, (divisor_latch >> 8) & 0xff);
-
-		// Configure UART parameters: 8N1
-		writew(UART_BASE + 0xc, 0x3);
-
-		// Configure and initialize FIFO.
-		writew(UART_BASE + 0x8, 0x97);
+		// Configure UART1.
+		setbaud(115200);
 
 		TOPRGU_BASE = 0x10212000;
 		USBDL = 0x10000818;
@@ -351,13 +329,12 @@ static int mww_handler(size_t argc, const char * argv[]) {
 	return ret;
 }
 
-static int setbaud_handler(size_t argc, const char * argv[]) {
+static void setbaud(uint32_t baudrate) {
 	// Set high speed mode.
 	writew(UART_BASE + 0x24, 0x3);
 
 	// Calculate parameters.
 	uint32_t cpu_freq_hz = 26000000;
-	uint32_t baudrate = 921600;
 	uint32_t tmp = (cpu_freq_hz + (baudrate / 2)) / baudrate;
 	uint32_t divisor_latch = ((tmp + 255) >> 8);
 	uint32_t sample_count = tmp / divisor_latch;
@@ -378,6 +355,31 @@ static int setbaud_handler(size_t argc, const char * argv[]) {
 
 	// Configure and initialize FIFO.
 	writew(UART_BASE + 0x8, 0x97);
+}
+
+static int setbaud_handler(size_t argc, const char * argv[]) {
+	if (argc < 2) {
+		println("Error: Too few arguments.");
+		println("Usage: setbaud baudrate");
+		println("Examples:");
+		println("    setbaud 115200");
+		println("    setbaud 921600");
+		return -1;
+	}
+
+	uint32_t baudrate;
+	int ret = parse_dec(&baudrate, argv[1]);
+	if (ret != 0) {
+		println("Error: parse_dec(argv[1]) failed.");
+		return -1;
+	}
+
+	if (baudrate < 115200 || 921600 < baudrate) {
+		println("Error: baudrate must be between 115200 and 921600, inclusive.");
+		return -1;
+	}
+
+	setbaud(baudrate);
 
 	return 0;
 }
@@ -504,7 +506,10 @@ static int bmo_handler(size_t argc, const char * argv[]) {
 			writew(addr, val);
 			break;
 		case SETBAUD:
-			setbaud_handler(argc, argv);
+			for (int i = 0; i < 4; i++) {
+				val |= getchar() << (i * 8);
+			}
+			setbaud(val);
 			break;
 		case MEM_READ:
 			for (int i = 0; i < 4; i++) {
