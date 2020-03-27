@@ -22,7 +22,7 @@ diff -ur a/code/vendor/mediatek/proprietary/bootable/bootloader/preloader/platfo
  
  entry :
 +    /* Enable JTAG-over-SD */
-+    LDR r2, =0x10211410  /* MSDC1_GPIO_MODE18_ADDR */
++    LDR r2, =0x10211400  /* MSDC1_GPIO_MODE17_ADDR */
 +    LDR r0, =0x6db11249
 +    STR r0, [r2]
 +    LDR r2, =0xDEADBEFF  /* restore r2 */
