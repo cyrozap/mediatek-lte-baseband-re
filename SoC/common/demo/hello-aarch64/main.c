@@ -254,7 +254,7 @@ static int parse_hex(uint32_t * value, const uint8_t * str) {
 	return 0;
 }
 
-static void print_value(size_t value, size_t digits) {
+static void print_hex(size_t value, size_t digits) {
 	putchar('0');
 	putchar('x');
 	for (size_t i = 0; i < digits; i++) {
@@ -295,11 +295,11 @@ static int mrw_handler(size_t argc, const char * argv[]) {
 		println("Error: address must be 4-byte aligned.");
 		return -1;
 	}
-	print_value(ptr, 8);
+	print_hex(ptr, 8);
 	print(": ");
 
 	uint32_t value = readw(ptr);
-	print_value(value, 8);
+	print_hex(value, 8);
 	putchar('\n');
 
 	return 0;
@@ -330,9 +330,9 @@ static int mww_handler(size_t argc, const char * argv[]) {
 		println("Error: address must be 4-byte aligned.");
 		return -1;
 	}
-	print_value(ptr, 8);
+	print_hex(ptr, 8);
 	print(": ");
-	print_value(readw(ptr), 8);
+	print_hex(readw(ptr), 8);
 	putchar('\n');
 
 	uint32_t value = 0;
@@ -343,9 +343,9 @@ static int mww_handler(size_t argc, const char * argv[]) {
 	}
 	writew(ptr, value);
 
-	print_value(ptr, 8);
+	print_hex(ptr, 8);
 	print(": ");
-	print_value(readw(ptr), 8);
+	print_hex(readw(ptr), 8);
 	putchar('\n');
 
 	return ret;
@@ -429,7 +429,7 @@ static int usbdl_handler(size_t argc, const char * argv[]) {
 			println("no timeout.");
 		} else {
 			print("a timeout of ");
-			print_value(timeout, 8);
+			print_hex(timeout, 8);
 			println(" seconds.");
 		}
 
