@@ -78,8 +78,6 @@ class Bmo:
 
         addr: The 32-bit starting address as an int.
         '''
-        words = []
-
         self._send_bytes([self.commands['READ']])
         self.put_dword(addr)
 
