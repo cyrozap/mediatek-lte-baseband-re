@@ -1,6 +1,6 @@
 # Tasks
 
-- [ ] Load and execute arbitrary code on Cortex-R4.
+- [x] Load and execute arbitrary code on Cortex-R4.
 - [ ] Load and execute code on DSP.
 - [ ] Enable debugging on Cortex-R4 (hard).
 - [ ] Enable debugging on DSP (also hard).
