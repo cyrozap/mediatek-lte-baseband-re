@@ -24,8 +24,9 @@ class Bmo:
         'MEM_WRITE': ord(b'w'),
     }
 
-    def __init__(self, port, baudrate=115200, timeout=1, write_timeout=1, debug=False):
+    def __init__(self, port, baudrate=115200, timeout=1, write_timeout=1, debug=False, verbose=False):
         self.debug = debug
+        self.verbose = verbose or debug
         self.ser = serial.Serial(port, baudrate, timeout=timeout, write_timeout=write_timeout)
         self._send_bytes(b'\r' * 10)
         try:
@@ -81,7 +82,12 @@ class Bmo:
         self._send_bytes([self.commands['READ']])
         self.put_dword(addr)
 
-        return self.get_dword()
+        word = self.get_dword()
+
+        if self.verbose:
+            print("0x{:08x} => 0x{:08x}".format(addr, word))
+
+        return word
 
     def writew(self, addr, word):
         '''Write a 32 bit word.
@@ -89,6 +95,9 @@ class Bmo:
         addr: A 32-bit address as an int.
         word: The 32-bit word to write.
         '''
+        if self.verbose:
+            print("0x{:08x} <= 0x{:08x}".format(addr, word))
+
         self._send_bytes([self.commands['WRITE']])
         self.put_dword(addr)
         self.put_dword(word)
