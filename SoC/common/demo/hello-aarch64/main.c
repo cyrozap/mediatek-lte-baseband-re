@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-volatile uint32_t * const mem = (volatile uint32_t * const)(0x00000000);
+static uint32_t volatile * const mem = (uint32_t volatile * const)(0x00000000);
 #define SRAM 0x00100000
 #define L2_SRAM 0x00200000
 

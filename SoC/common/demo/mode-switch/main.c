@@ -1,9 +1,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
-volatile uint32_t * const mem = (volatile uint32_t * const)(0x00000000);
-volatile uint32_t * const sram = (volatile uint32_t * const)(0x00100000);
-volatile uint32_t * const l2_sram = (volatile uint32_t * const)(0x00200000);
+static uint32_t volatile * const mem = (uint32_t volatile * const)(0x00000000);
+static uint32_t volatile * const sram = (uint32_t volatile * const)(0x00100000);
+static uint32_t volatile * const l2_sram = (uint32_t volatile * const)(0x00200000);
 
 #define UART_BASE 0x11002000
 #define UART_RBR  (UART_BASE + 0x00)
