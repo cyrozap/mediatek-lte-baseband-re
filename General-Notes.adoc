@@ -1,10 +1,10 @@
 = General Notes
 
-:FD216: link:http://www.faraday-tech.com/download/techDocument/FD216_PB_v1.5.pdf
+:FD216: link:https://www.faraday-tech.com/download/techDocument/FD216_PB_v1.5.pdf
 :imgtech: link:https://www.mips.com/press/mediatek-selects-mips-for-lte-modems/
-:adi-acquisition: link:https://www.eetimes.com/document.asp?doc_id=1248601
-:acquisition: link:https://www.eetimes.com/document.asp?doc_id=1261529
-:mt6290: link:https://www.mediatek.com/press-room/press-releases/mediatek-announces-the-availability-of-multimode-lte-modem-chipset
+:adi-acquisition: link:https://www.eetimes.com/mediatek-buys-adis-cellular-chip-operations/
+:acquisition: link:https://www.eetimes.com/mediatek-buys-baseband-dsp-ip-licensor-coresonic/
+:mt6290: link:https://www.mediatek.com/news-events/press-releases/mediatek-announces-the-availability-of-multimode-lte-modem-chipset
 :low-IF: link:https://en.wikipedia.org/wiki/Low_IF_receiver
 :direct-conversion: link:https://en.wikipedia.org/wiki/Direct-conversion_receiver
 :cellular-frequencies: link:https://en.wikipedia.org/wiki/Cellular_frequencies
