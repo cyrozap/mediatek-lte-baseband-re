@@ -1,5 +1,7 @@
 = General Notes
 
+:toc:
+
 :FD216: link:https://www.faraday-tech.com/download/techDocument/FD216_PB_v1.5.pdf
 :imgtech: link:https://www.mips.com/press/mediatek-selects-mips-for-lte-modems/
 :adi-acquisition: link:https://www.eetimes.com/mediatek-buys-adis-cellular-chip-operations/
