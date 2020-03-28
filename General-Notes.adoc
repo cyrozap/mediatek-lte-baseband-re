@@ -1,6 +1,7 @@
 = General Notes
 
 :toc:
+:toc-placement: preamble
 
 :FD216: link:https://www.faraday-tech.com/download/techDocument/FD216_PB_v1.5.pdf
 :imgtech: link:https://www.mips.com/press/mediatek-selects-mips-for-lte-modems/
@@ -10,6 +11,9 @@
 :low-IF: link:https://en.wikipedia.org/wiki/Low_IF_receiver
 :direct-conversion: link:https://en.wikipedia.org/wiki/Direct-conversion_receiver
 :cellular-frequencies: link:https://en.wikipedia.org/wiki/Cellular_frequencies
+
+// Need some preamble to get TOC:
+{empty}
 
 == System Overview
 
