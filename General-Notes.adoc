@@ -9,14 +9,6 @@
 :direct-conversion: link:https://en.wikipedia.org/wiki/Direct-conversion_receiver
 :cellular-frequencies: link:https://en.wikipedia.org/wiki/Cellular_frequencies
 
-:toc:
-:toc-placement!:
-
-// Need some preamble to get TOC:
-{empty}
-
-toc::[]
-
 == System Overview
 
 The SoC/LTE Modem system consists of three main parts:
