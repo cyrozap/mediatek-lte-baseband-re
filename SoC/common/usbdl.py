@@ -281,9 +281,9 @@ class UsbDl:
         for i in range(0, len(padded_data), 2):
             calc_checksum ^= struct.unpack_from('<H', padded_data, i)[0]
 
-        start_time = time.time()
+        start_ns = time.perf_counter_ns()
         self._send_bytes(data, echo=False)
-        end_time = time.time()
+        end_ns = time.perf_counter_ns()
 
         remote_checksum = self.get_word()
 
@@ -295,8 +295,8 @@ class UsbDl:
             raise ProtocolError(status)
 
         if print_speed:
-            elapsed = end_time - start_time
-            print("Sent {} DA bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed, int(len(data)/elapsed)))
+            elapsed = end_ns - start_ns
+            print("Sent {} DA bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed/1000000000, len(data)*1000000000//elapsed))
 
     def cmd_get_target_config(self):
         self._send_bytes([self.commands['CMD_GET_TARGET_CONFIG']])
@@ -384,7 +384,7 @@ class UsbDl:
         base_addr = 0
         bytes_to_read = word_count * 4
         reset_base = True
-        start_time = time.time()
+        start_ns = time.perf_counter_ns()
         for offset in range(0, bytes_to_read, byte_granularity):
             current_addr = addr + offset
             if reset_base:
@@ -403,11 +403,11 @@ class UsbDl:
                 if ranges != previous_ranges:
                     print_ranges(ranges)
                     previous_ranges = ranges.copy()
-        end_time = time.time()
+        end_ns = time.perf_counter_ns()
 
         if print_speed:
-            elapsed = end_time - start_time
-            print("Read {} bytes in {:.6f} seconds ({} bytes per second).".format(bytes_to_read, elapsed, int(bytes_to_read/elapsed)))
+            elapsed = end_ns - start_ns
+            print("Read {} bytes in {:.6f} seconds ({} bytes per second).".format(bytes_to_read, elapsed/1000000000, bytes_to_read*1000000000//elapsed))
 
         return ranges
 
@@ -479,12 +479,12 @@ class UsbDl:
             word_count += 1
 
         words = []
-        start_time = time.time()
+        start_ns = time.perf_counter_ns()
         if cqdma:
             words = self.cqdma_read32(addr, word_count)
         else:
             words = self.cmd_read32(addr, word_count)
-        end_time = time.time()
+        end_ns = time.perf_counter_ns()
 
         data = b''
         for word in words:
@@ -492,8 +492,8 @@ class UsbDl:
         data = data[:count]
 
         if print_speed:
-            elapsed = end_time - start_time
-            print("Read {} bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed, int(len(data)/elapsed)))
+            elapsed = end_ns - start_ns
+            print("Read {} bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed/1000000000, len(data)*1000000000//elapsed))
 
         return data
 
@@ -515,16 +515,16 @@ class UsbDl:
         for i in range(0, len(padded_data), 4):
             words.append(struct.unpack_from('<I', padded_data, i)[0])
 
-        start_time = time.time()
+        start_ns = time.perf_counter_ns()
         if cqdma:
             self.cqdma_write32(addr, words)
         else:
             self.cmd_write32(addr, words)
-        end_time = time.time()
+        end_ns = time.perf_counter_ns()
 
         if print_speed:
-            elapsed = end_time - start_time
-            print("Wrote {} bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed, int(len(data)/elapsed)))
+            elapsed = end_ns - start_ns
+            print("Wrote {} bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed/1000000000, len(data)*1000000000//elapsed))
 
     def wdt_reset(self):
         self.cmd_write32(self.soc['toprgu'][0], [0x22000000 | 0x10 | 0x4])

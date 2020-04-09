@@ -129,23 +129,23 @@ class Bmo:
 
             block_size = 0x1000
             cbs = block_size
-            start_time = time.time()
+            start_ns = time.perf_counter_ns()
             for i in range(0, aligned_count, block_size):
                 if aligned_count - i < cbs:
                     cbs = aligned_count - i
                 data += self._recv_bytes(cbs)
                 time.sleep(0.0001)
-            end_time = time.time()
+            end_ns = time.perf_counter_ns()
         else:
-            start_time = time.time()
+            start_ns = time.perf_counter_ns()
             for i in range(word_count):
                 data += struct.pack('<I', self.readw(addr + i * 4))
-            end_time = time.time()
+            end_ns = time.perf_counter_ns()
         data = data[:count]
 
         if print_speed:
-            elapsed = end_time - start_time
-            print("Read {} bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed, int(len(data)/elapsed)))
+            elapsed = end_ns - start_ns
+            print("Read {} bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed/1000000000, len(data)*1000000000//elapsed))
 
         return data
 
@@ -169,20 +169,20 @@ class Bmo:
             self.put_dword(len(padded_data))
 
             block_size = 0x1000
-            start_time = time.time()
+            start_ns = time.perf_counter_ns()
             for i in range(0, len(padded_data), block_size):
                 self._send_bytes(padded_data[i:i+block_size])
                 time.sleep(0.0001)
-            end_time = time.time()
+            end_ns = time.perf_counter_ns()
         else:
-            start_time = time.time()
+            start_ns = time.perf_counter_ns()
             for i in range(0, len(padded_data), 4):
                 self.writew(addr + i, struct.unpack_from('<I', padded_data, i)[0])
-            end_time = time.time()
+            end_ns = time.perf_counter_ns()
 
         if print_speed:
-            elapsed = end_time - start_time
-            print("Wrote {} bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed, int(len(data)/elapsed)))
+            elapsed = end_ns - start_ns
+            print("Wrote {} bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed/1000000000, len(data)*1000000000//elapsed))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
