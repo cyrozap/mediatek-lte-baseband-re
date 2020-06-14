@@ -247,13 +247,11 @@ static void print_dec(size_t value, size_t min_digits) {
 		digits = min_digits;
 	}
 	for (size_t i = 0; i < digits; i++) {
-		uint8_t digit = (value / (10 * (digits - i - 1))) % 10;
-		uint8_t chr = 0;
-		if (0 <= digit && digit <= 9) {
-			chr = digit + '0';
-		} else {
-			chr = '?';
+		size_t digit = value;
+		for (size_t d = 1; d < digits - i; d++) {
+			digit /= 10;
 		}
+		uint8_t chr = (digit % 10) + '0';
 		putchar(chr);
 	}
 }
