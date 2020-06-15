@@ -2,7 +2,7 @@ PREFIX := aarch64-linux-gnu-
 AS := $(PREFIX)as
 ASFLAGS := -march=armv8-a
 CC := $(PREFIX)gcc
-CFLAGS := -march=armv8-a -nostdlib -nostartfiles -nodefaultlibs -fno-builtin -Os
+CFLAGS := -Wall -march=armv8-a -nostdlib -nostartfiles -nodefaultlibs -fno-builtin -Os
 LD := $(PREFIX)ld
 LDFLAGS := -T linker.ld -Map hello-aarch64.map
 OBJCOPY := $(PREFIX)objcopy

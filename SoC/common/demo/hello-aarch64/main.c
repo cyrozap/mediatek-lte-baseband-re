@@ -109,6 +109,8 @@ static void * memset (void * ptr, int value, size_t num) {
 	for (size_t i = 0; i < num; i++) {
 		((uint8_t *)ptr)[i] = (uint8_t)value;
 	}
+
+	return ptr;
 }
 
 static void setbaud(uint32_t baudrate);
@@ -175,7 +177,7 @@ static void init(void) {
 	writew(TOPRGU_BASE, 0x22000000);
 }
 
-static int parse_dec(uint32_t * value, const uint8_t * str) {
+static int parse_dec(uint32_t * value, const char * str) {
 	size_t len = strnlen(str, 11);
 	if (len > 10) {
 		println("Error: Decimal string too long.");
@@ -201,7 +203,7 @@ static int parse_dec(uint32_t * value, const uint8_t * str) {
 	return 0;
 }
 
-static int parse_hex(uint32_t * value, const uint8_t * str) {
+static int parse_hex(uint32_t * value, const char * str) {
 	size_t start = 0;
 	if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
 		start = 2;
@@ -740,7 +742,7 @@ static void cmdloop(void) {
 	}
 }
 
-void main(void) {
+int main(void) {
 	init();
 	println("Hello from AArch64!");
 	print("hello-aarch64 version ");
@@ -749,4 +751,5 @@ void main(void) {
 	print(build_time);
 	println(")");
 	cmdloop();
+	return 0;
 }
