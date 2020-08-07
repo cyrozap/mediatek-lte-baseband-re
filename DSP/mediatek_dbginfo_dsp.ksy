@@ -73,7 +73,7 @@ types:
           - id: file_association
             type: file_association
             repeat: expr
-            repeat-expr: 30  # Arbitrary limit because the array of file associations in null-terminated and Kaitai Struct doesn't have any "repeat until null" functionality.
+            repeat-expr: 30  # Arbitrary limit because the array of file associations is null-terminated and Kaitai Struct doesn't have any "repeat until null" functionality.
         types:
           file_association:
             seq:
