@@ -424,6 +424,9 @@ static int setbaud_handler(size_t argc, const char * argv[]) {
 static int reset_handler(size_t argc, const char * argv[]) {
 	println("Resetting SoC...");
 
+	// Wait for the UART to finish printing.
+	while ((readw(UART_LSR) & UART_LSR_THRE) == 0);
+
 	writew(TOPRGU_BASE, 0x22000000 | 0x10 | 0x4);
 	writew(TOPRGU_BASE + 0x14, 0x1209);
 
