@@ -174,10 +174,11 @@ def main():
     mu.mem_map(MMIO, MMIO_SIZE)
     mu.mem_map(DRAM, DRAM_SIZE)
 
-    # Load SRAM from SoC.
-    print("Loading SRAM from SoC...")
-    sram = bmo.memory_read(SRAM, SRAM_SIZE, fast=True, print_speed=True)
-    mu.mem_write(SRAM, sram)
+    # Optionally load SRAM from SoC.
+    if bmo:
+        print("Loading SRAM from SoC...")
+        sram = bmo.memory_read(SRAM, SRAM_SIZE, fast=True, print_speed=True)
+        mu.mem_write(SRAM, sram)
 
     # Load and execute the binary.
     binary = open(args.binary, 'rb').read()
