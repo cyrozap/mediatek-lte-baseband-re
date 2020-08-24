@@ -33,7 +33,7 @@ SOCS = {
             {
                 'base': 0x08000000,
                 'size': 0x1000,
-                'type': "SOC_ID",
+                'type': "MMIO",
             },
             {
                 'base': 0x10000000,
@@ -142,7 +142,6 @@ def hook_mmio(mu, access, addr, size, value, user_data):
     assert (addr_offset + size) <= 4
 
     rw_through = (
-        "SOC_ID",
         "MMIO",
         #"DRAM",
     )
