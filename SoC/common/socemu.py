@@ -118,7 +118,7 @@ def hook_mmio(mu, access, addr, size, value, user_data):
                 char = value & 0xff
                 uart_buf.write(bytes([char]))
                 uart_buf.flush()
-                if char == ord('\r'):
+                if char in b'\n\r':
                     buf = uart_buf.getvalue().replace(b'\r', b'\n')
                     if buf[-2] != ord('\n'):
                         print("{} log line: {}".format(pname, buf.rstrip(b'\n').split(b'\n')[-1].decode('utf-8')))
