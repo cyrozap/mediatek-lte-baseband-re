@@ -68,10 +68,10 @@ def hook_code(mu, addr, size, user_data):
 def hook_mmio(mu, access, addr, size, value, user_data):
     (soc, uart0, uart1, uart2, bmo) = user_data
 
-    region = "MMIO"
+    rtype = "MMIO"
     for region in soc['regions']:
         if addr in memory_region(region['base'], region['size']):
-            region = region['type']
+            rtype = region['type']
             break
 
     # WDT
@@ -147,18 +147,18 @@ def hook_mmio(mu, access, addr, size, value, user_data):
         #"DRAM",
     )
     if access == UC_MEM_READ:
-        if bmo and region in rw_through:
+        if bmo and rtype in rw_through:
             aligned_data = struct.pack('<I', bmo.readw(aligned_addr))
             data = aligned_data[addr_offset:addr_offset+size]
             mu.mem_write(addr, data)
         data_bytes = mu.mem_read(addr, size)
         data_int = struct.unpack(dfmt, data_bytes)[0]
         data_str = dstr.format(data_int)
-        print("{} read: *({} *)(0x{:08x}) = {}".format(region, dtype, addr, data_str))
+        print("{} read: *({} *)(0x{:08x}) = {}".format(rtype, dtype, addr, data_str))
     elif access == UC_MEM_WRITE:
         data_str = dstr.format(value)
-        print("{} write: *({} *)(0x{:08x}) = {}".format(region, dtype, addr, data_str))
-        if bmo and region in rw_through:
+        print("{} write: *({} *)(0x{:08x}) = {}".format(rtype, dtype, addr, data_str))
+        if bmo and rtype in rw_through:
             aligned_data = bytearray(struct.pack('<I', bmo.readw(aligned_addr)))
             aligned_data[addr_offset:addr_offset+size] = struct.pack('<I', value)[:size]
             bmo.writew(aligned_addr, struct.unpack('<I', aligned_data)[0])
