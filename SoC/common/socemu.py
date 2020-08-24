@@ -68,6 +68,12 @@ SOCS = {
                 'type': "UART",
             },
         },
+        'masked_registers': {
+            0x10211020: (1 << 13) | (1 << 12),
+            0x10211A50: 1 << 15,
+            0x10211A30: 1 << 15,
+            0x10211370: ((0x7 << 22) | (0x7 << 19)) | (0x1 << 22) | (0x1 << 19),
+        },
     },
 }
 
@@ -132,13 +138,8 @@ def hook_mmio(mu, access, addr, size, value, user_data):
                 print("Skipping WDT write: *0x{:08x} = 0x{:08x}".format(addr, value))
                 return
 
-    # UART1 GPIO config registers
-    masks = {
-        0x10211020: (1 << 13) | (1 << 12),
-        0x10211A50: 1 << 15,
-        0x10211A30: 1 << 15,
-        0x10211370: ((0x7 << 22) | (0x7 << 19)) | (0x1 << 22) | (0x1 << 19),
-    }
+    # Masked register accesses.
+    masks = soc.get('masked_registers', {})
     if addr in masks.keys() and access == UC_MEM_WRITE and bmo:
         mask = masks[addr]
         orig = copy(value)
