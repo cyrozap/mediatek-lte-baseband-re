@@ -89,6 +89,13 @@ def hook_code(mu, addr, size, user_data):
     if addr in (0x0000b9e8, 0x0000ba00):
         mu.reg_write(UC_ARM_REG_PC, addr + 0x14)
 
+    # Patch all timeouts to be at least 1 second.
+    if addr == 0x0021299a:
+        r5 = mu.reg_read(UC_ARM_REG_R5)
+        if (r5 / 13000000) < 1:
+            r5 = 1 * 13000000
+        mu.reg_write(UC_ARM_REG_R5, r5)
+
 def hook_mmio(mu, access, addr, size, value, user_data):
     (soc, bmo) = user_data
 
