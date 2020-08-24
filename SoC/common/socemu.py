@@ -46,6 +46,23 @@ SOCS = {
                 'type': "DRAM",
             },
         ),
+        'peripherals': {
+            "UART0": {
+                'base': 0x11002000,
+                'size': 0x1000,
+                'type': "UART",
+            },
+            "UART1": {
+                'base': 0x11003000,
+                'size': 0x1000,
+                'type': "UART",
+            },
+            "UART2": {
+                'base': 0x11004000,
+                'size': 0x1000,
+                'type': "UART",
+            },
+        },
     },
 }
 
@@ -66,7 +83,7 @@ def hook_code(mu, addr, size, user_data):
         mu.reg_write(UC_ARM_REG_PC, addr + size + 1)
 
 def hook_mmio(mu, access, addr, size, value, user_data):
-    (soc, uart0, uart1, uart2, bmo) = user_data
+    (soc, bmo) = user_data
 
     rtype = "MMIO"
     for region in soc['regions']:
@@ -80,26 +97,35 @@ def hook_mmio(mu, access, addr, size, value, user_data):
         print("Skipping WDT write: *0x{:08x} = 0x{:08x}".format(addr, value))
         return
 
-    # UARTs
-    uarts = (
-        (0x11002000, uart0, "UART0"),
-        (0x11003000, uart1, "UART1"),
-        (0x11004000, uart2, "UART2"),
-    )
-    for (base, uart, name) in uarts:
-        if addr in memory_region(base, 0x1000):
+    # Peripheral handler
+    for peripheral in soc['peripherals'].items():
+        (pname, pinfo) = peripheral
+        base = pinfo['base']
+
+        if addr not in memory_region(base, pinfo['size']):
+            continue
+
+        if pinfo['type'] == "UART":
             if addr == (base + 0x14) and access == UC_MEM_READ:
                 mu.mem_write(addr, struct.pack('<I', (1 << 6) | (1 << 5)))
-            elif addr == base and access == UC_MEM_WRITE:
+                return
+
+            if addr == base and access == UC_MEM_WRITE:
+                uart_buf = pinfo.get('buffer')
+                if uart_buf is None:
+                    return
+
                 char = value & 0xff
-                uart.write(bytes([char]))
-                uart.flush()
+                uart_buf.write(bytes([char]))
+                uart_buf.flush()
                 if char == ord('\r'):
-                    buf = uart.getvalue().replace(b'\r', b'\n')
+                    buf = uart_buf.getvalue().replace(b'\r', b'\n')
                     if buf[-2] != ord('\n'):
-                        print("{} log line: {}".format(name, buf.rstrip(b'\n').split(b'\n')[-1].decode('utf-8')))
-            else:
-                print("Skipping {} config write: *0x{:08x} = 0x{:08x}".format(name, addr, value))
+                        print("{} log line: {}".format(pname, buf.rstrip(b'\n').split(b'\n')[-1].decode('utf-8')))
+
+                return
+
+            print("Skipping {} config write: *0x{:08x} = 0x{:08x}".format(pname, addr, value))
             return
 
     # UART1 GPIO config registers
@@ -185,11 +211,6 @@ def main():
 
             bmo = Bmo(args.port, baudrate=args.baudrate_next, debug=False)
 
-    # Virtual UARTs
-    uart0 = io.BytesIO()
-    uart1 = io.BytesIO()
-    uart2 = io.BytesIO()
-
     # Create the machine.
     print("Initializing virtual CPU...")
     mu = Uc(UC_ARCH_ARM, UC_MODE_ARM)
@@ -208,11 +229,17 @@ def main():
             data = bmo.memory_read(base, size, fast=True, print_speed=True)
             mu.mem_write(base, data)
 
+    # Initialize peripherals.
+    for (pname, pinfo) in soc['peripherals'].items():
+        if pinfo['type'] == "UART":
+            # Virtual UART
+            pinfo['buffer'] = io.BytesIO()
+
     # Load and execute the binary.
     binary = open(args.binary, 'rb').read()
     mu.mem_write(int(args.load_address, 0), binary)
     mu.hook_add(UC_HOOK_CODE, hook_code)
-    mu.hook_add(UC_HOOK_MEM_READ | UC_HOOK_MEM_WRITE, hook_mmio, (soc, uart0, uart1, uart2, bmo))
+    mu.hook_add(UC_HOOK_MEM_READ | UC_HOOK_MEM_WRITE, hook_mmio, (soc, bmo))
     print("Starting emulator!")
     mu.emu_start(int(args.entrypoint, 0), len(binary))
 
