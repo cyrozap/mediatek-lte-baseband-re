@@ -89,10 +89,6 @@ def hook_code(mu, addr, size, user_data):
     if addr in (0x0000b9e8, 0x0000ba00):
         mu.reg_write(UC_ARM_REG_PC, addr + 0x14)
 
-    if addr == 0x00210e92:
-        print("Skipping RTC thing for now.")
-        mu.reg_write(UC_ARM_REG_PC, addr + size + 1)
-
 def hook_mmio(mu, access, addr, size, value, user_data):
     (soc, bmo) = user_data
 
