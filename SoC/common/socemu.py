@@ -47,6 +47,11 @@ SOCS = {
             },
         ),
         'peripherals': {
+            "TOPRGU": {
+                'base': 0x10212000,
+                'size': 0x1000,
+                'type': "TOPRGU",
+            },
             "UART0": {
                 'base': 0x11002000,
                 'size': 0x1000,
@@ -91,12 +96,6 @@ def hook_mmio(mu, access, addr, size, value, user_data):
             rtype = region['type']
             break
 
-    # WDT
-    wdt_base = 0x10212000
-    if addr in (wdt_base, wdt_base+0x14) and access == UC_MEM_WRITE:
-        print("Skipping WDT write: *0x{:08x} = 0x{:08x}".format(addr, value))
-        return
-
     # Peripheral handler
     for peripheral in soc['peripherals'].items():
         (pname, pinfo) = peripheral
@@ -127,6 +126,11 @@ def hook_mmio(mu, access, addr, size, value, user_data):
 
             print("Skipping {} config write: *0x{:08x} = 0x{:08x}".format(pname, addr, value))
             return
+
+        if pinfo['type'] == "TOPRGU":
+            if addr in (base, base+0x14) and access == UC_MEM_WRITE:
+                print("Skipping WDT write: *0x{:08x} = 0x{:08x}".format(addr, value))
+                return
 
     # UART1 GPIO config registers
     masks = {
