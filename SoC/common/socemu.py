@@ -22,6 +22,9 @@ MMIO_SIZE = 0x10000000
 DRAM = 0x40000000
 DRAM_SIZE = 3*1024*1024*1024
 
+def memory_region(address, size):
+    return range(address, address+size)
+
 def hook_code(mu, addr, size, user_data):
     print('>>> Tracing instruction at 0x{:08x}, instruction size = {}'.format(addr, size))
 
@@ -39,13 +42,13 @@ def hook_mmio(mu, access, addr, size, value, user_data):
     (bmo, uart0, uart1, uart2) = user_data
 
     region = "MMIO"
-    if addr in range(BROM, BROM + BROM_SIZE):
+    if addr in memory_region(BROM, BROM_SIZE):
         region = "BROM"
-    if addr in range(SRAM, SRAM + SRAM_SIZE):
+    if addr in memory_region(SRAM, SRAM_SIZE):
         region = "SRAM"
-    if addr in range(L2_SRAM, L2_SRAM + L2_SRAM_SIZE):
+    if addr in memory_region(L2_SRAM, L2_SRAM_SIZE):
         region = "L2 SRAM"
-    if addr in range(DRAM, DRAM + DRAM_SIZE):
+    if addr in memory_region(DRAM, DRAM_SIZE):
         region = "DRAM"
 
     # WDT
@@ -61,7 +64,7 @@ def hook_mmio(mu, access, addr, size, value, user_data):
         (0x11004000, uart2, "UART2"),
     )
     for (base, uart, name) in uarts:
-        if addr in range(base, base + 0x1000):
+        if addr in memory_region(base, 0x1000):
             if addr == (base + 0x14) and access == UC_MEM_READ:
                 mu.mem_write(addr, struct.pack('<I', (1 << 6) | (1 << 5)))
             elif addr == base and access == UC_MEM_WRITE:
