@@ -17,33 +17,33 @@ SOCS = {
             {
                 'base': 0x00000000,
                 'size': 64*1024,
-                'name': "BROM",
+                'type': "BROM",
             },
             {
                 'base': 0x00100000,
                 'size': 64*1024,
-                'name': "SRAM",
+                'type': "SRAM",
                 'load': True,
             },
             {
                 'base': 0x00200000,
                 'size': 256*1024,
-                'name': "L2_SRAM",
+                'type': "L2_SRAM",
             },
             {
                 'base': 0x08000000,
                 'size': 0x1000,
-                'name': "SOC_ID",
+                'type': "SOC_ID",
             },
             {
                 'base': 0x10000000,
                 'size': 0x10000000,
-                'name': "MMIO",
+                'type': "MMIO",
             },
             {
                 'base': 0x40000000,
                 'size': 3*1024*1024*1024,
-                'name': "DRAM",
+                'type': "DRAM",
             },
         ),
     },
@@ -71,7 +71,7 @@ def hook_mmio(mu, access, addr, size, value, user_data):
     region = "MMIO"
     for region in soc['regions']:
         if addr in memory_region(region['base'], region['size']):
-            region = region['name']
+            region = region['type']
             break
 
     # WDT
@@ -198,8 +198,8 @@ def main():
     for region in soc['regions']:
         base = region['base']
         size = region['size']
-        name = region['name']
-        print("Mapping {} region from 0x{:08x} to 0x{:08x}.".format(name, base, base+size-1))
+        rtype = region['type']
+        print("Mapping {} region from 0x{:08x} to 0x{:08x}.".format(rtype, base, base+size-1))
         mu.mem_map(base, size)
 
         # Optionally load region from SoC.
