@@ -142,6 +142,7 @@ def hook_mmio(mu, access, addr, size, value, user_data):
     assert (addr_offset + size) <= 4
 
     rw_through = (
+        "SOC_ID",
         "MMIO",
         #"DRAM",
     )
