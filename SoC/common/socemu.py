@@ -11,16 +11,43 @@ from unicorn.arm_const import *
 from init import Bmo
 
 
-BROM = 0x00000000
-BROM_SIZE = 64*1024
-SRAM = 0x00100000
-SRAM_SIZE = 64*1024
-L2_SRAM = 0x00200000
-L2_SRAM_SIZE = 256*1024
-MMIO = 0x10000000
-MMIO_SIZE = 0x10000000
-DRAM = 0x40000000
-DRAM_SIZE = 3*1024*1024*1024
+SOCS = {
+    "MT6737M": {
+        'regions': (
+            {
+                'base': 0x00000000,
+                'size': 64*1024,
+                'name': "BROM",
+            },
+            {
+                'base': 0x00100000,
+                'size': 64*1024,
+                'name': "SRAM",
+                'load': True,
+            },
+            {
+                'base': 0x00200000,
+                'size': 256*1024,
+                'name': "L2_SRAM",
+            },
+            {
+                'base': 0x08000000,
+                'size': 0x1000,
+                'name': "SOC_ID",
+            },
+            {
+                'base': 0x10000000,
+                'size': 0x10000000,
+                'name': "MMIO",
+            },
+            {
+                'base': 0x40000000,
+                'size': 3*1024*1024*1024,
+                'name': "DRAM",
+            },
+        ),
+    },
+}
 
 def memory_region(address, size):
     return range(address, address+size)
@@ -39,17 +66,13 @@ def hook_code(mu, addr, size, user_data):
         mu.reg_write(UC_ARM_REG_PC, addr + size + 1)
 
 def hook_mmio(mu, access, addr, size, value, user_data):
-    (bmo, uart0, uart1, uart2) = user_data
+    (soc, uart0, uart1, uart2, bmo) = user_data
 
     region = "MMIO"
-    if addr in memory_region(BROM, BROM_SIZE):
-        region = "BROM"
-    if addr in memory_region(SRAM, SRAM_SIZE):
-        region = "SRAM"
-    if addr in memory_region(L2_SRAM, L2_SRAM_SIZE):
-        region = "L2 SRAM"
-    if addr in memory_region(DRAM, DRAM_SIZE):
-        region = "DRAM"
+    for region in soc['regions']:
+        if addr in memory_region(region['base'], region['size']):
+            region = region['name']
+            break
 
     # WDT
     wdt_base = 0x10212000
@@ -142,12 +165,15 @@ def hook_mmio(mu, access, addr, size, value, user_data):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('binary', type=str, help="The binary you want to load.")
+    parser.add_argument('-S', '--soc', type=str, choices=SOCS.keys(), default="MT6737M", help="The SoC you want to emulate. Default: MT6737M")
     parser.add_argument('-l', '--load-address', type=str, default="0", help="The address you want to load the binary at. Default: 0")
     parser.add_argument('-e', '--entrypoint', type=str, default="0", help="The address you want to start executing from (add 1 for Thumb mode). Default: 0")
     parser.add_argument('-p', '--port', type=str, help="The BMO serial port you want to connect to.")
     parser.add_argument('-b', '--baudrate', type=int, default=115200, help="The baud rate you want to connect at. Default: 115200")
     parser.add_argument('-s', '--baudrate-next', type=int, default=115200, help="The baud rate you want to switch to. Default: 115200")
     args = parser.parse_args()
+
+    soc = SOCS[args.soc]
 
     bmo = None
     if args.port:
@@ -169,25 +195,24 @@ def main():
     mu = Uc(UC_ARCH_ARM, UC_MODE_ARM)
 
     # Map memory.
-    #mu.mem_map(BROM, BROM_SIZE, UC_PROT_READ | UC_PROT_EXEC)  # Preloader likes to write to BROM sometimes.
-    mu.mem_map(BROM, BROM_SIZE)
-    mu.mem_map(SRAM, SRAM_SIZE)
-    mu.mem_map(L2_SRAM, L2_SRAM_SIZE)
-    mu.mem_map(0x08000000, 0x1000)  # Chip ID
-    mu.mem_map(MMIO, MMIO_SIZE)
-    mu.mem_map(DRAM, DRAM_SIZE)
+    for region in soc['regions']:
+        base = region['base']
+        size = region['size']
+        name = region['name']
+        print("Mapping {} region from 0x{:08x} to 0x{:08x}.".format(name, base, base+size-1))
+        mu.mem_map(base, size)
 
-    # Optionally load SRAM from SoC.
-    if bmo:
-        print("Loading SRAM from SoC...")
-        sram = bmo.memory_read(SRAM, SRAM_SIZE, fast=True, print_speed=True)
-        mu.mem_write(SRAM, sram)
+        # Optionally load region from SoC.
+        if bmo and region.get('load', False):
+            print("Loading {} from SoC...")
+            data = bmo.memory_read(base, size, fast=True, print_speed=True)
+            mu.mem_write(base, data)
 
     # Load and execute the binary.
     binary = open(args.binary, 'rb').read()
     mu.mem_write(int(args.load_address, 0), binary)
     mu.hook_add(UC_HOOK_CODE, hook_code)
-    mu.hook_add(UC_HOOK_MEM_READ | UC_HOOK_MEM_WRITE, hook_mmio, (bmo, uart0, uart1, uart2))
+    mu.hook_add(UC_HOOK_MEM_READ | UC_HOOK_MEM_WRITE, hook_mmio, (soc, uart0, uart1, uart2, bmo))
     print("Starting emulator!")
     mu.emu_start(int(args.entrypoint, 0), len(binary))
 
