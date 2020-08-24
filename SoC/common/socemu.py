@@ -149,7 +149,7 @@ def hook_mmio(mu, access, addr, size, value, user_data):
         diff = orig ^ new
         if diff != 0:
             value = new
-            print("Masking UART1 GPIO config write. Before: *0x{:08x} = 0x{:08x}, after: *0x{:08x} = 0x{:08x}, diff: 0x{:08x}".format(
+            print("Masking register write. Before: *0x{:08x} = 0x{:08x}, after: *0x{:08x} = 0x{:08x}, diff: 0x{:08x}".format(
                 addr, orig, addr, value, diff))
 
     assert size <= 4
