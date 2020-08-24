@@ -143,10 +143,14 @@ def hook_mmio(mu, access, addr, size, value, user_data):
     if addr in masks.keys() and access == UC_MEM_WRITE and bmo:
         mask = masks[addr]
         orig = copy(value)
-        value &= (~mask) & 0xffffffff
-        value |= bmo.readw(addr) & mask
-        print("Masking UART1 GPIO config write. Before: *0x{:08x} = 0x{:08x}, after: *0x{:08x} = 0x{:08x}, diff: 0x{:08x}".format(
-            addr, orig, addr, value, orig ^ value))
+        new = copy(value)
+        new &= (~mask) & 0xffffffff
+        new |= bmo.readw(addr) & mask
+        diff = orig ^ new
+        if diff != 0:
+            value = new
+            print("Masking UART1 GPIO config write. Before: *0x{:08x} = 0x{:08x}, after: *0x{:08x} = 0x{:08x}, diff: 0x{:08x}".format(
+                addr, orig, addr, value, diff))
 
     assert size <= 4
 
