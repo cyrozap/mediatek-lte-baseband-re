@@ -181,7 +181,7 @@ def hook_mmio(mu, access, addr, size, value, user_data):
 
     rw_through = (
         "MMIO",
-        #"DRAM",
+        "DRAM",
     )
     if access == UC_MEM_READ:
         if bmo and rtype in rw_through:
