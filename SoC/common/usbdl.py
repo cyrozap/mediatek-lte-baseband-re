@@ -43,6 +43,7 @@ class UsbDl:
         'CMD_UART1_LOG_EN': 0xDB,
         'CMD_UART1_SET_BAUD': 0xDC, # Not sure what the real name of this command is.
         'CMD_GET_BROM_LOG': 0xDD, # Not sure what the real name of this command is.
+        'CMD_JUMP_DA_64': 0xDE, # Not sure what the real name of this command is.
         'SCMD_GET_ME_ID': 0xE1,
         'CMD_GET_HW_SW_VER': 0xFC,
         'CMD_GET_HW_CODE': 0xFD,
@@ -332,6 +333,24 @@ class UsbDl:
         log_bytes = self._recv_bytes(length)
 
         return log_bytes
+
+    def cmd_jump_da_64(self, addr):
+        self._send_bytes([self.commands['CMD_JUMP_DA_64']])
+        self.put_dword(addr)
+
+        self._send_bytes([0x01])  # Must be 1. If it's 0, boot_aarch64_magic
+                                  # must not be sent, and the BROM will jump to
+                                  # the DA in 32-bit mode.
+
+        status = self.get_word()
+        if status != 0:
+            raise ProtocolError(status)
+
+        self._send_bytes([0x64])  # boot_aarch64_magic
+
+        status = self.get_word()
+        if status > 0xff:
+            raise ProtocolError(status)
 
     def scmd_get_me_id(self):
         self._send_bytes([self.commands['SCMD_GET_ME_ID']])
