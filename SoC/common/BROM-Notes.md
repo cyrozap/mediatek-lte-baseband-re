@@ -39,6 +39,10 @@
    - `YYYY`: Preloader sector offset. The BROM searches for preloaders
      at 2048-byte boundaries, so this number will be the byte offset of
      the preloader divided by 2048.
+ - `G0: XXXX YYZZ`
+   - `XXXX`: Bits [15:0] of `gfh_brom_cfg_v3.reserved.flags`.
+   - `YY`: `gfh_brom_cfg_v3.reserved.usbdl_bulk_com_support`.
+   - `ZZ`: `gfh_brom_cfg_v3.reserved.reserved1`.
  - `T0: XXXX XXXX [YYYY]`
    - Boot time?
    - `XXXXXXXX`: 32-bit BROM execution time in ms.
