@@ -15,6 +15,7 @@ static uint32_t UART_LSR;
 
 static uint32_t TOPRGU_BASE;
 static uint32_t USBDL;
+static uint8_t volatile * BROM_LOG;
 
 #define MAX_CMD_LEN 100
 #define MAX_ARGS 3
@@ -155,6 +156,7 @@ static void init(void) {
 
 		TOPRGU_BASE = 0x10212000;
 		USBDL = 0x10000818;
+		BROM_LOG = (uint8_t volatile *)0x00105274;
 		break;
 	case 0x8163:
 		soc_name = "MT8163";
@@ -504,6 +506,25 @@ static int usbdl_handler(size_t argc, const char * argv[]) {
 	return 0;
 }
 
+static int blog_handler(size_t argc, const char * argv[]) {
+	if (BROM_LOG == NULL) {
+		println("Error: Printing the BROM log is not supported on this platform.");
+		return -1;
+	}
+
+	println("BROM log:");
+
+	for (size_t i = 0; ; i++) {
+		if (BROM_LOG[i] < ' ' && BROM_LOG[i] != '\n' && BROM_LOG[i] != '\r')
+			break;
+		if (BROM_LOG[i] > '~')
+			break;
+		putbyte(BROM_LOG[i]);
+	}
+
+	return 0;
+}
+
 typedef enum bmo_commands {
 	EXIT = '\r',
 	READ = 'R',
@@ -612,6 +633,7 @@ static const command cmd_table[] = {
 	{ "setbaud", setbaud_handler },
 	{ "reset", reset_handler },
 	{ "usbdl", usbdl_handler },
+	{ "blog", blog_handler },
 	{ "bmo", bmo_handler },
 	{ 0, 0 },
 };
