@@ -90,7 +90,7 @@ def hook_code(mu, addr, size, user_data):
         mu.reg_write(UC_ARM_REG_PC, addr + 0x14)
 
     # Patch all timeouts to be at least 1 second.
-    if addr == 0x0021299a:
+    if addr == 0x00212a6a:
         r5 = mu.reg_read(UC_ARM_REG_R5)
         if (r5 / 13000000) < 1:
             r5 = 1 * 13000000
