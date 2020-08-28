@@ -3,20 +3,20 @@
 '''\
 Create "preloader" images suitable for booting on MediaTek platforms.
 
-Provide an ARMv7-A/ARMv8-A (AArch32-only) binary as an input, and this
-tool will convert it into an image that, depending on your selected
+Provide an ARMv7-A/ARMv8-A (AArch32 or AArch64) binary as an input, and
+this tool will convert it into an image that, depending on your selected
 options, will be able to be booted from either eMMC flash or an SD card.
 
-For example, to create an eMMC image, run:
+For example, to create an AArch32 eMMC image, run:
 
     ./make_image.py -b eMMC -o preloader-emmc.img code.bin
 
 This can be written to the eMMC BOOT0 hardware partition using
 MediaTek's SPFT utility, the same way any other preloader is written.
 
-To create an SD image, run:
+To create an AArch64 SD image, run:
 
-    ./make_image.py -b SD -o preloader-sd.img code.bin
+    ./make_image.py -a aarch64 -b SD -o preloader-sd.img code.bin
 
 To write the image to an SD card, run:
 
