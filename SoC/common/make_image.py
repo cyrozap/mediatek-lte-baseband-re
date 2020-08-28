@@ -26,18 +26,50 @@ Where `/dev/DEVICE` is the path to your SD card, e.g., `/dev/sdX` or
 `/dev/mmcblkX`.
 
 This command writes the SD preloader to byte offset 2048 (LBA 4,
-512-byte blocks) on the card, so if you want to create a partition table
-on the card, you MUST you an MBR (DOS) scheme--writing a GPT after
-flashing the preloader will likely overwrite the preloader, and writing
-the preloader after creating the GPT will likely corrupt the GPT. It is
-equally important to ensure that your first partition starts at sector
-(LBA) 4096--this will give enough space for the largest possible
+512-byte blocks) on the card, so you need to be careful how you
+partition it.
+
+With MBR, you can partition the device and write the preloader in any
+order, so long as you make sure the first partition starts at sector
+(LBA) 4096. This will give enough space for the largest possible
 preloader size (1 MiB, the size of the L2 SRAM on some higher-end SoCs),
 plus it will ensure your partitions are nicely aligned. 4096 is largely
 an arbitrary number, since the smallest LBA number to avoid the first
 partition overwriting the preloader is 2052 (LBA 4 + 1 MiB / 512 B), so
 in theory you could use that (or an even smaller number for devices with
 a 256 KiB L2 SRAM), but 4096 is a nice power of 2 so I like that better.
+
+With GPT, you can also partition the device and write the preloader in
+any order, but you have to take care when writing the partition table.
+By default, the GPT partition entry table starts at LBA 2, and ends
+before LBA 34. This conflicts with the requirements of the BROM since it
+will only boot preloaders on SD from LBA 4 (and LBA 0, but that's not
+terribly useful since it means you can't partition the card at all), and
+that's where the 9th and following partition entries would normally be
+in the partition entry array. To account for this, the partition entry
+array needs to be relocated to another sector. To support a maximum
+preloader size of 1 MiB, the partition entry array needs to be moved to
+LBA 2052 (see the previous section for calculations).
+
+Fortunately, `gdisk` provides an easy way to do this. To start, run
+gdisk on your SD card:
+
+    sudo gdisk /dev/DEVICE
+
+Where `/dev/DEVICE` is the path to your SD card, e.g., `/dev/sdX` or
+`/dev/mmcblkX`.
+
+Next, type "x" to enter the "extra functionality (experts only)" menu,
+then type "j" to enter the "move the main partition table" dialog. Next,
+enter the number of the sector (LBA) for the partition table to start at
+(2052, as calculated previously). Then, return to the main menu with "m"
+and continue partitioning normally. By default, gdisk will align
+partitions on 1 MiB boundaries, so it will offer to place the first
+partition at LBA 4096. If you need more space, because the partition
+entry array was set to an offset beyond the maximum preloader size, and
+the earliest a partition can start is after that table, you can safely
+go down to the minimum sector offset offered without overwriting the
+preloader.
 
 '''
 
