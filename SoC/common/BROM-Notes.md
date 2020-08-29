@@ -33,9 +33,9 @@
      - 0x04000000: Preloader on boot medium is 64-bit.
      - 0x08000000: USB DL HS (High Speed?) enabled.
      - 0x10000000: `gfh_brom_cfg_v3.reserved.reserved3` bit 0 is set.
-     - 0x20000000: M_SW_RES bit 5 cleared.
-     - 0x40000000: M_SW_RES bit 4 cleared.
-     - 0x80000000: M_SW_RES bit 3 cleared.
+     - 0x20000000: `M_SW_RES` bit 5 cleared.
+     - 0x40000000: `M_SW_RES` bit 4 cleared.
+     - 0x80000000: `M_SW_RES` bit 3 cleared.
    - `YYYY`: Preloader sector offset. The BROM searches for preloaders
      at 2048-byte boundaries, so this number will be the byte offset of
      the preloader divided by 2048.
