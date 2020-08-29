@@ -7,7 +7,7 @@ seq:
   - id: bootrom_header
     type: bootrom_header
     size: 512 * 4
-    if: magic == "EMM"
+    if: magic == "EMM" or magic == "SDM"
   - id: file_info
     type: gfh_file_info
   - id: bl_info
@@ -115,19 +115,19 @@ enums:
 types:
   bootrom_header:
     seq:
-      - id: emmc_header
-        type: emmc_header
+      - id: device_header
+        type: device_header
         size: 512
       - id: bootrom_layout
         type: bootrom_layout
         size: 512
-  emmc_header:
+  device_header:
     seq:
       - id: identifier
         type: strz
         size: 12
         encoding: ASCII
-        doc: Should be "EMMC_BOOT".
+        doc: Should be "EMMC_BOOT" or "SDMMC_BOOT".
       - id: version
         type: u4
       - id: dev_rw_unit
