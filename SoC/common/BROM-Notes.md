@@ -59,3 +59,8 @@
      - The JTAG delay is the amount of time the BROM will busy-wait
        before executing the main function. This gives a developer time
        to connect a JTAG dongle and halt the CPU.
+ - `Vn: XXXX YYYY [ZZZZ]`
+   - `n`: Bootloader descriptor index (0-7).
+   - `XXXX`: Most recent status code (`code_1`).
+   - `YYYY`: Previous status code (`code_2`).
+   - `ZZZZ`: Bootloader descriptor `bl_type`.
