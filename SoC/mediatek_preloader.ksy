@@ -96,6 +96,47 @@ enums:
 
     # slt_load_file
     0x8000: gfh_file_type_for_mt6290
+  gfh_type:
+    0x0000: gfh_file_info
+    0x0001: gfh_bl_info
+    0x0002: gfh_anti_clone
+    0x0003: gfh_bl_sec_key
+    0x0004: gfh_sctrl_cert
+    0x0005: gfh_tool_auth
+    0x0006: gfh_mtk_reserved1
+    0x0007: gfh_brom_cfg
+    0x0008: gfh_brom_sec_cfg
+    0x0009: gfh_mtk_reserved2
+    0x000a: gfh_mtk_reserved3
+    0x000b: gfh_root_cert
+    0x000c: gfh_exp_chk
+    0x000d: gfh_epp_param
+    0x000e: gfh_chip_ver
+    0x000f: gfh_mtk_reserved4
+    0x0010: gfh_md_sec_cfg
+    0x0100: gfh_epp_info
+    0x0101: gfh_emi_list
+    0x0102: gfh_cmem_id_info
+    0x0103: gfh_cmem_nor_info
+    0x0104: gfh_dsp_info
+    0x0200: gfh_maui_info
+    0x0201: gfh_maui_sec
+    0x0202: gfh_maui_code_key         # maui_sec_key for code part
+    0x0203: gfh_maui_secure_ro_key    # maui_sec_key for secure ro part
+    0x0204: gfh_maui_resource_key     # maui_sec_key for resource part
+    0x0205: gfh_secure_ro_info
+    0x0206: gfh_dl_package_info
+    0x0207: gfh_flash_info
+    0x0208: gfh_macr_info
+    0x0209: gfh_arm_bl_info
+    0x020a: gfh_emmc_booting_info
+    0x020b: gfh_fota_info
+    0x020c: gfh_cbr_record_info
+    0x020d: gfh_confidential_bin_info
+    0x020e: gfh_cbr_info
+    0x020f: gfh_mba_info
+    0x0210: gfh_binary_location
+    0x0300: gfh_boot_cert_ctrl_content
   gfh_flash_dev:
     0: flash_dev_none
     1: f_nor
@@ -179,48 +220,6 @@ types:
       - id: type
         type: u2
         enum: gfh_type
-    enums:
-      gfh_type:
-        0x0000: gfh_file_info
-        0x0001: gfh_bl_info
-        0x0002: gfh_anti_clone
-        0x0003: gfh_bl_sec_key
-        0x0004: gfh_sctrl_cert
-        0x0005: gfh_tool_auth
-        0x0006: gfh_mtk_reserved1
-        0x0007: gfh_brom_cfg
-        0x0008: gfh_brom_sec_cfg
-        0x0009: gfh_mtk_reserved2
-        0x000a: gfh_mtk_reserved3
-        0x000b: gfh_root_cert
-        0x000c: gfh_exp_chk
-        0x000d: gfh_epp_param
-        0x000e: gfh_chip_ver
-        0x000f: gfh_mtk_reserved4
-        0x0010: gfh_md_sec_cfg
-        0x0100: gfh_epp_info
-        0x0101: gfh_emi_list
-        0x0102: gfh_cmem_id_info
-        0x0103: gfh_cmem_nor_info
-        0x0104: gfh_dsp_info
-        0x0200: gfh_maui_info
-        0x0201: gfh_maui_sec
-        0x0202: gfh_maui_code_key         # maui_sec_key for code part
-        0x0203: gfh_maui_secure_ro_key    # maui_sec_key for secure ro part
-        0x0204: gfh_maui_resource_key     # maui_sec_key for resource part
-        0x0205: gfh_secure_ro_info
-        0x0206: gfh_dl_package_info
-        0x0207: gfh_flash_info
-        0x0208: gfh_macr_info
-        0x0209: gfh_arm_bl_info
-        0x020a: gfh_emmc_booting_info
-        0x020b: gfh_fota_info
-        0x020c: gfh_cbr_record_info
-        0x020d: gfh_confidential_bin_info
-        0x020e: gfh_cbr_info
-        0x020f: gfh_mba_info
-        0x0210: gfh_binary_location
-        0x0300: gfh_boot_cert_ctrl_content
     types:
       magic_ver:
         seq:
