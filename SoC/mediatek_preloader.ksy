@@ -202,7 +202,7 @@ types:
             gfh_type::gfh_file_info: gfh_file_info
             gfh_type::gfh_bl_info: gfh_bl_info
             gfh_type::gfh_anti_clone: gfh_anti_clone_v1
-            gfh_type::gfh_bl_sec_key: gfh_bl_sec_key_v1
+            gfh_type::gfh_bl_sec_key: gfh_bl_sec_key
             gfh_type::gfh_brom_cfg: gfh_brom_cfg
             gfh_type::gfh_brom_sec_cfg: gfh_brom_sec_cfg
   gfh_sections:
@@ -390,27 +390,35 @@ types:
                 type: b1
               - id: usbdl_by_flag_timeout_en
                 type: b1
-  gfh_bl_sec_key_v1:
+  gfh_bl_sec_key:
     seq:
-      - id: pubkey_type
-        type: u4
-      - id: rsa_n_words
-        type: u4
-        doc: Number of 16-bit words in the RSA modulus.
-      - id: unk2
-        type: u2
-      - id: rsa_n_words_minus_1
-        type: u2
-        doc: rsa_n_words - 1
-      - id: rsa_e
-        type: u4
-        doc: RSA exponent.
-      - id: rsa_n_padding
-        size: _io.size - 16 - 2 * rsa_n_words
-        doc: Padding, derived from scrambling the RSA modulus.
-      - id: rsa_n
-        size: 2 * rsa_n_words
-        doc: RSA modulus, stored as little-endian 16-bit words, in big-endian word order.
+      - id: bl_sec_key
+        type:
+          switch-on: _parent.header.magic_ver.ver
+          cases:
+            1: gfh_bl_sec_key_v1
+    types:
+      gfh_bl_sec_key_v1:
+        seq:
+          - id: pubkey_type
+            type: u4
+          - id: rsa_n_words
+            type: u4
+            doc: Number of 16-bit words in the RSA modulus.
+          - id: unk2
+            type: u2
+          - id: rsa_n_words_minus_1
+            type: u2
+            doc: rsa_n_words - 1
+          - id: rsa_e
+            type: u4
+            doc: RSA exponent.
+          - id: rsa_n_padding
+            size: _io.size - 16 - 2 * rsa_n_words
+            doc: Padding, derived from scrambling the RSA modulus.
+          - id: rsa_n
+            size: 2 * rsa_n_words
+            doc: RSA modulus, stored as little-endian 16-bit words, in big-endian word order.
   gfh_anti_clone_v1:
     seq:
       - id: ac_b2k
