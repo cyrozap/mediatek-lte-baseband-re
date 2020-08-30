@@ -438,15 +438,16 @@ types:
           - id: brom_magic_cmd_mode_permanent_dis
             type: u4
             doc: Magic is 0xc975e033.
-      flags:
-        doc: "Flag bits in the following order: [7:0]"
-        seq:
-          - id: reserved
-            type: b6
-          - id: debug_en
-            type: b1
-          - id: jtag_en
-            type: b1
+        types:
+          flags:
+            doc: "Flag bits in the following order: [7:0]"
+            seq:
+              - id: reserved
+                type: b6
+              - id: debug_en
+                type: b1
+              - id: jtag_en
+                type: b1
   preloader:
     seq:
       - id: code
