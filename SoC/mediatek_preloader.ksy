@@ -8,29 +8,8 @@ seq:
     type: bootrom_header
     size: 512 * 4
     if: magic == "EMM" or magic == "SDM"
-  - id: file_info
-    type: gfh_file_info
-  - id: bl_info
-    type: gfh_bl_info
-  - id: brom_cfg_v3
-    type: gfh_brom_cfg_v3
-  - id: bl_sec_key
-    type: gfh_bl_sec_key_v1
-  - id: anti_clone
-    type: gfh_anti_clone_v1
-  - id: brom_sec_cfg
-    type: gfh_brom_sec_cfg_v1
-  - id: preloader
-    type: preloader
-    size: file_info.file_len - file_info.content_offset - file_info.sig_len
-  - id: signature
-    size: file_info.sig_len
-    type:
-      switch-on: file_info.sig_type
-      cases:
-        gfh_sig_type::sig_phash: signature_phash
-        gfh_sig_type::sig_single: signature_single
-        gfh_sig_type::sig_single_and_phash: signature_single_and_phash
+  - id: gfh_file_info_container
+    type: gfh_file_info_container
 instances:
   magic:
     pos: 0
@@ -211,6 +190,50 @@ types:
         type: u4
       - id: bl_attribute
         type: u4
+  gfh_section:
+    seq:
+      - id: header
+        type: gfh_header
+      - id: body
+        size: header.size-8
+        type:
+          switch-on: header.type
+          cases:
+            gfh_type::gfh_file_info: gfh_file_info
+            gfh_type::gfh_bl_info: gfh_bl_info
+            gfh_type::gfh_anti_clone: gfh_anti_clone_v1
+            gfh_type::gfh_bl_sec_key: gfh_bl_sec_key_v1
+            gfh_type::gfh_brom_cfg: gfh_brom_cfg_v3
+            gfh_type::gfh_brom_sec_cfg: gfh_brom_sec_cfg_v1
+  gfh_sections:
+    seq:
+      - id: sections
+        type: gfh_section
+        repeat: expr
+        repeat-expr: 5
+  gfh_file_info_container:
+    seq:
+      - id: file_info_header
+        type: gfh_header
+      - id: file_info
+        type: gfh_file_info
+      - id: gfh_sections
+        type: gfh_sections
+        size: file_info.content_offset - 0x38
+      - id: content
+        size: file_info.file_len - file_info.content_offset - file_info.sig_len
+        type:
+          switch-on: file_info.file_type
+          cases:
+            gfh_file_type::arm_bl: preloader
+      - id: signature
+        size: file_info.sig_len
+        type:
+          switch-on: file_info.sig_type
+          cases:
+            gfh_sig_type::sig_phash: signature_phash
+            gfh_sig_type::sig_single: signature_single
+            gfh_sig_type::sig_single_and_phash: signature_single_and_phash
   gfh_header:
     seq:
       - id: magic_ver
@@ -229,8 +252,6 @@ types:
             type: u1
   gfh_file_info:
     seq:
-      - id: gfh_header
-        type: gfh_header
       - id: identifier
         type: strz
         size: 12
@@ -279,11 +300,8 @@ types:
             type: b1
   gfh_bl_info:
     seq:
-      - id: gfh_header
-        type: gfh_header
       - id: bl_attr
         type: bl_attr
-        size: gfh_header.size-8
     types:
       bl_attr:
         doc: "Flag bits in the following order: [7:0]"
@@ -294,11 +312,8 @@ types:
             type: b1
   gfh_brom_cfg_v3:
     seq:
-      - id: gfh_header
-        type: gfh_header
       - id: reserved
         type: reserved
-        size: gfh_header.size-8
     types:
       reserved:
         seq:
@@ -374,8 +389,6 @@ types:
                 type: b1
   gfh_bl_sec_key_v1:
     seq:
-      - id: gfh_header
-        type: gfh_header
       - id: pubkey_type
         type: u4
       - id: rsa_n_words
@@ -390,15 +403,13 @@ types:
         type: u4
         doc: RSA exponent.
       - id: rsa_n_padding
-        size: gfh_header.size - 8 - 16 - 2 * rsa_n_words
+        size: _io.size - 16 - 2 * rsa_n_words
         doc: Padding, derived from scrambling the RSA modulus.
       - id: rsa_n
         size: 2 * rsa_n_words
         doc: RSA modulus, stored as little-endian 16-bit words, in big-endian word order.
   gfh_anti_clone_v1:
     seq:
-      - id: gfh_header
-        type: gfh_header
       - id: ac_b2k
         type: u2
       - id: ac_b2c
@@ -409,11 +420,8 @@ types:
         type: u4
   gfh_brom_sec_cfg_v1:
     seq:
-      - id: gfh_header
-        type: gfh_header
       - id: reserved
         type: reserved
-        size: gfh_header.size-8
     types:
       reserved:
         seq:
