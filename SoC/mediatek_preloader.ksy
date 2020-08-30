@@ -204,7 +204,7 @@ types:
             gfh_type::gfh_anti_clone: gfh_anti_clone_v1
             gfh_type::gfh_bl_sec_key: gfh_bl_sec_key_v1
             gfh_type::gfh_brom_cfg: gfh_brom_cfg
-            gfh_type::gfh_brom_sec_cfg: gfh_brom_sec_cfg_v1
+            gfh_type::gfh_brom_sec_cfg: gfh_brom_sec_cfg
   gfh_sections:
     seq:
       - id: sections
@@ -421,12 +421,15 @@ types:
         type: u4
       - id: ac_len
         type: u4
-  gfh_brom_sec_cfg_v1:
+  gfh_brom_sec_cfg:
     seq:
-      - id: reserved
-        type: reserved
+      - id: brom_sec_cfg
+        type:
+          switch-on: _parent.header.magic_ver.ver
+          cases:
+            1: gfh_brom_sec_cfg_v1
     types:
-      reserved:
+      gfh_brom_sec_cfg_v1:
         seq:
           - id: flags
             type: flags
