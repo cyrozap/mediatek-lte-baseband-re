@@ -203,7 +203,7 @@ types:
             gfh_type::gfh_bl_info: gfh_bl_info
             gfh_type::gfh_anti_clone: gfh_anti_clone_v1
             gfh_type::gfh_bl_sec_key: gfh_bl_sec_key_v1
-            gfh_type::gfh_brom_cfg: gfh_brom_cfg_v3
+            gfh_type::gfh_brom_cfg: gfh_brom_cfg
             gfh_type::gfh_brom_sec_cfg: gfh_brom_sec_cfg_v1
   gfh_sections:
     seq:
@@ -310,12 +310,15 @@ types:
             type: b7
           - id: bl_attr_load_by_bootrom
             type: b1
-  gfh_brom_cfg_v3:
+  gfh_brom_cfg:
     seq:
-      - id: reserved
-        type: reserved
+      - id: brom_cfg
+        type:
+          switch-on: _parent.header.magic_ver.ver
+          cases:
+            3: gfh_brom_cfg_v3
     types:
-      reserved:
+      gfh_brom_cfg_v3:
         seq:
           - id: flags
             type: flags
