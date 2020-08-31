@@ -210,8 +210,8 @@ types:
     seq:
       - id: sections
         type: gfh_section
-        repeat: expr
-        repeat-expr: 5
+        repeat: until
+        repeat-until: (_io.size - _io.pos) < 8
   gfh_file_info_container:
     seq:
       - id: file_info_header
