@@ -32,7 +32,7 @@
      - 0x00000200: `SEJ + 0xc0` (`SEJ_CON1`) bits [11:8] are not clear.
      - 0x04000000: Preloader on boot medium is 64-bit.
      - 0x08000000: USB DL HS (High Speed?) enabled.
-     - 0x10000000: `gfh_brom_cfg_v3.reserved.reserved3` bit 0 is set.
+     - 0x10000000: `gfh_brom_cfg.gfh_brom_cfg_v3.reserved3` bit 0 is set.
      - 0x20000000: `M_SW_RES` bit 5 cleared.
      - 0x40000000: `M_SW_RES` bit 4 cleared.
      - 0x80000000: `M_SW_RES` bit 3 cleared.
@@ -49,9 +49,9 @@
    - `XXXX`: Most recent status code.
    - `YYYY`: Previous status code.
  - `G0: XXXX YYZZ`
-   - `XXXX`: Bits [15:0] of `gfh_brom_cfg_v3.reserved.flags`.
-   - `YY`: `gfh_brom_cfg_v3.reserved.usbdl_bulk_com_support`.
-   - `ZZ`: `gfh_brom_cfg_v3.reserved.reserved1`.
+   - `XXXX`: Bits [15:0] of `gfh_brom_cfg.gfh_brom_cfg_v3.flags`.
+   - `YY`: `gfh_brom_cfg.gfh_brom_cfg_v3.usbdl_bulk_com_support`.
+   - `ZZ`: `gfh_brom_cfg.gfh_brom_cfg_v3.reserved1`.
  - `T0: XXXX XXXX [YYYY]`
    - Boot time?
    - `XXXXXXXX`: 32-bit BROM execution time in ms.
