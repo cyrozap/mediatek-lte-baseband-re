@@ -21,7 +21,7 @@
  - `BP: XXXX XXXX [YYYY]`
    - Boot parameters?
    - `XXXXXXXX`: 32-bit bitfield of boot parameters.
-     - 0x00000001: Unknown.
+     - 0x00000001: Preloader found on boot medium.
      - 0x00000002: USB synced for DL mode.
      - 0x00000008: JTAG is disabled.
      - 0x00000010: USB failed to sync for DL mode.
