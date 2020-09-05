@@ -16,8 +16,8 @@
    - `AA`: 0x00 if there is no DL mode timeout, 0x01 if there is a valid
      timeout.
    - `BB`: Unknown, usually 0x03 or 0x07.
-   - `CC`: `SEJ + 0x00` bits [3:0] when bits [3:0] are 1, 2, or 3,
-     0x04 if bits [3:0] are 7, and 0xff otherwise.
+   - `CC`: `SEJ + 0x00` (`SEJ_CON`) bits [3:0] when bits [3:0] are 1, 2,
+     or 3, 0x04 if bits [3:0] are 7, and 0xff otherwise.
  - `BP: XXXX XXXX [YYYY]`
    - Boot parameters?
    - `XXXXXXXX`: 32-bit bitfield of boot parameters.
@@ -29,7 +29,7 @@
      - 0x00000040: UART failed to sync for DL mode.
      - 0x00000080: `YYYY` is non-zero.
      - 0x00000100: Unknown.
-     - 0x00000200: `SEJ + 0xc0` bits [11:8] are not clear.
+     - 0x00000200: `SEJ + 0xc0` (`SEJ_CON1`) bits [11:8] are not clear.
      - 0x04000000: Preloader on boot medium is 64-bit.
      - 0x08000000: USB DL HS (High Speed?) enabled.
      - 0x10000000: `gfh_brom_cfg_v3.reserved.reserved3` bit 0 is set.
