@@ -141,6 +141,9 @@ SOCS = {
         'masked_registers': {
         },
         'brom_skip': {
+            # Skip JTAG delay
+            0x00000098: 4,
+
             # Skip mrrc/mcrr instructions.
             0x0000c2d4: 0x14,
             0x0000c2ec: 0x14,
