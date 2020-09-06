@@ -138,6 +138,11 @@ SOCS = {
         },
         'masked_registers': {
         },
+        'brom_skip': {
+            # Skip mrrc/mcrr instructions.
+            0x0000c2d4: 0x14,
+            0x0000c2ec: 0x14,
+        },
     },
 }
 
