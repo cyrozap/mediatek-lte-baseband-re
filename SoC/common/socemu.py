@@ -3,12 +3,14 @@
 import argparse
 import io
 import struct
+import time
 from copy import copy
 
 from unicorn import *
 from unicorn.arm_const import *
 
 from init import Bmo
+from openocd import OpenOcd
 
 
 SOCS = {
@@ -145,6 +147,54 @@ SOCS = {
         },
     },
 }
+
+
+class BmOcd:
+    def __init__(self, address, port, debug=False, verbose=False):
+        self.debug = debug
+        self.verbose = verbose or debug
+        self.ocd = OpenOcd(tclRpcIp=address, tclRpcPort=port, verbose=self.verbose)
+        self.ocd.__enter__()
+
+    def close(self):
+        self.ocd.__exit__()
+
+    def readw(self, addr):
+        result = self.ocd.send("mdw 0x{:08x}".format(addr))
+        word = int(result.split(": ")[1].strip(), 16)
+        return word
+
+    def writew(self, addr, word):
+        self.ocd.send("mww 0x{:08x} 0x{:08x}".format(addr, word))
+        time.sleep(0.0001)
+
+    def setbaud(self, *args, **kwargs):
+        print("Warning: setbaud not supported for BmOcd.")
+
+    def memory_read(self, addr, count, fast=False, print_speed=False):
+        '''Read a range of memory to a byte array.
+
+        addr: A 32-bit address as an int.
+        count: The length of data to read, in bytes.
+        '''
+        word_count = count//4
+        if (count % 4) > 0:
+            word_count += 1
+
+        data = b''
+        start_ns = time.perf_counter_ns()
+        for i in range(word_count):
+            data += struct.pack('<I', self.readw(addr + i * 4))
+        end_ns = time.perf_counter_ns()
+
+        data = data[:count]
+
+        if print_speed:
+            elapsed = end_ns - start_ns
+            print("Read {} bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed/1000000000, len(data)*1000000000//elapsed))
+
+        return data
+
 
 def memory_region(address, size):
     return range(address, address+size)
@@ -283,7 +333,10 @@ def main():
     parser.add_argument('-p', '--port', type=str, help="The BMO serial port you want to connect to.")
     parser.add_argument('-b', '--baudrate', type=int, default=115200, help="The baud rate you want to connect at. Default: 115200")
     parser.add_argument('-s', '--baudrate-next', type=int, default=115200, help="The baud rate you want to switch to. Default: 115200")
+    parser.add_argument('-O', '--openocd', type=str, help="The OpenOCD address and port you want to connect to.")
     args = parser.parse_args()
+
+    assert not (args.port and args.openocd)
 
     soc = SOCS[args.soc]
 
@@ -296,6 +349,9 @@ def main():
             bmo.setbaud(args.baudrate_next)
 
             bmo = Bmo(args.port, baudrate=args.baudrate_next, debug=False)
+    elif args.openocd:
+        address, port = args.openocd.split(":")
+        bmo = BmOcd(address, int(port), debug=False)
 
     # Create the machine.
     print("Initializing virtual CPU...")
