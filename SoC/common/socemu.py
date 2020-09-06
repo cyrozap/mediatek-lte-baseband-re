@@ -367,7 +367,7 @@ def main():
 
         # Optionally load region from SoC.
         if bmo and region.get('load', False):
-            print("Loading {} from SoC...")
+            print("Loading {} from SoC...".format(rtype))
             data = bmo.memory_read(base, size, fast=True, print_speed=True)
             mu.mem_write(base, data)
 
