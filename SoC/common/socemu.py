@@ -74,6 +74,11 @@ SOCS = {
             0x10211A30: 1 << 15,
             0x10211370: (0x7 << 22) | (0x7 << 19),
         },
+        'brom_skip': {
+            # Skip mrrc/mcrr instructions.
+            0x0000b9e8: 0x14,
+            0x0000ba00: 0x14,
+        },
     },
     "MT6797": {
         'regions': (
@@ -142,11 +147,16 @@ def memory_region(address, size):
 def hook_code(mu, addr, size, user_data):
     print('>>> Tracing instruction at 0x{:08x}, instruction size = {}'.format(addr, size))
 
+    soc = user_data
+
+    if addr in soc.get('brom_skip', {}).keys():
+        skip_len = soc['brom_skip'][addr]
+        mu.reg_write(UC_ARM_REG_PC, addr + skip_len)
+        return
+
     # Skip mrrc/mcrr instructions.
     if addr == 0x00201080:
         mu.reg_write(UC_ARM_REG_PC, addr + 0x10)
-    if addr in (0x0000b9e8, 0x0000ba00):
-        mu.reg_write(UC_ARM_REG_PC, addr + 0x14)
 
     # Patch all timeouts to be at least 1 second.
     if addr == 0x00212a6a:
@@ -309,7 +319,7 @@ def main():
     # Load and execute the binary.
     binary = open(args.binary, 'rb').read()
     mu.mem_write(int(args.load_address, 0), binary)
-    mu.hook_add(UC_HOOK_CODE, hook_code)
+    mu.hook_add(UC_HOOK_CODE, hook_code, soc)
     mu.hook_add(UC_HOOK_MEM_READ | UC_HOOK_MEM_WRITE, hook_mmio, (soc, bmo))
     print("Starting emulator!")
     mu.emu_start(int(args.entrypoint, 0), len(binary))
