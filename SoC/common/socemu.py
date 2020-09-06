@@ -101,6 +101,13 @@ SOCS = {
                 'type': "L2_SRAM",
             },
             {
+                # This region doesn't actually exist, but we define it
+                # anyways because the preloader tries reading from it.
+                'base': 0x01000000,
+                'size': 0x07000000,
+                'type': "MMIO",
+            },
+            {
                 'base': 0x08000000,
                 'size': 0x1000,
                 'type': "MMIO",
