@@ -137,6 +137,11 @@ SOCS = {
                 'size': 0x1000,
                 'type': "UART",
             },
+            "UART3": {
+                'base': 0x11005000,
+                'size': 0x1000,
+                'type': "UART",
+            },
         },
         'masked_registers': {
         },
