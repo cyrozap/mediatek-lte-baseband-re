@@ -75,6 +75,65 @@ SOCS = {
             0x10211370: (0x7 << 22) | (0x7 << 19),
         },
     },
+    "MT6797": {
+        'regions': (
+            {
+                'base': 0x00000000,
+                'size': 80*1024,
+                'type': "BROM",
+            },
+            {
+                'base': 0x00100000,
+                'size': 192*1024,
+                'type': "SRAM",
+                'load': True,
+            },
+            {
+                'base': 0x00200000,
+                'size': 1024*1024,
+                'type': "L2_SRAM",
+            },
+            {
+                'base': 0x08000000,
+                'size': 0x1000,
+                'type': "MMIO",
+            },
+            {
+                'base': 0x10000000,
+                'size': 0x10000000,
+                'type': "MMIO",
+            },
+            {
+                'base': 0x40000000,
+                'size': 3*1024*1024*1024,
+                'type': "DRAM",
+            },
+        ),
+        'peripherals': {
+            "TOPRGU": {
+                'base': 0x10007000,
+                'size': 0x1000,
+                'type': "TOPRGU",
+            },
+            "UART0": {
+                'base': 0x11002000,
+                'size': 0x1000,
+                'type': "UART",
+            },
+            "UART1": {
+                'base': 0x11003000,
+                'size': 0x1000,
+                'type': "UART",
+            },
+            "UART2": {
+                'base': 0x11004000,
+                'size': 0x1000,
+                'type': "UART",
+            },
+        },
+        'masked_registers': {
+        },
+    },
 }
 
 def memory_region(address, size):
