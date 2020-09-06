@@ -327,6 +327,14 @@ def hook_mmio(mu, access, addr, size, value, user_data):
             aligned_data[addr_offset:addr_offset+size] = struct.pack('<I', value)[:size]
             bmo.writew(aligned_addr, struct.unpack('<I', aligned_data)[0])
 
+def hook_unmapped(mu, access, addr, size, value, user_data):
+    access_string = {
+        UC_MEM_READ_UNMAPPED: "read",
+        UC_MEM_WRITE_UNMAPPED: "write",
+        UC_MEM_FETCH_UNMAPPED: "fetch",
+    }.get(access)
+    print("Error: Failed to {} {} bytes of unmapped memory at 0x{:016x}.".format(access_string, size, addr))
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('binary', type=str, help="The binary you want to load.")
@@ -385,6 +393,7 @@ def main():
     mu.mem_write(int(args.load_address, 0), binary)
     mu.hook_add(UC_HOOK_CODE, hook_code, soc)
     mu.hook_add(UC_HOOK_MEM_READ | UC_HOOK_MEM_WRITE, hook_mmio, (soc, bmo))
+    mu.hook_add(UC_HOOK_MEM_UNMAPPED, hook_unmapped)
     print("Starting emulator!")
     mu.emu_start(int(args.entrypoint, 0), len(binary))
 
