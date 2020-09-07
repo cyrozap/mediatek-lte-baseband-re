@@ -103,8 +103,8 @@ SOCS = {
             {
                 # This region doesn't actually exist, but we define it
                 # anyways because the preloader tries reading from it.
-                'base': 0x01000000,
-                'size': 0x07000000,
+                'base': 0x00300000,
+                'size': 0x07d00000,
                 'type': "MMIO",
             },
             {
