@@ -52,6 +52,11 @@
    - `XXXX`: Bits [15:0] of `gfh_brom_cfg.gfh_brom_cfg_v3.flags`.
    - `YY`: `gfh_brom_cfg.gfh_brom_cfg_v3.usbdl_bulk_com_support`.
    - `ZZ`: `gfh_brom_cfg.gfh_brom_cfg_v3.reserved1`.
+ - `nn: XXXX YYYY`
+   - `nn`: An integer that starts at zero and auto-increments after
+     every `nn` line printed. e.g., `00`, `01`, `02`, etc.
+   - `XXXX`: Status code.
+   - `YYYY`: Extra context-specific data.
  - `T0: XXXX XXXX [YYYY]`
    - Boot time?
    - `XXXXXXXX`: 32-bit BROM execution time in ms.
