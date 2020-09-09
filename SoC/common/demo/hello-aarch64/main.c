@@ -12,6 +12,7 @@ static uint32_t UART_LSR;
 
 #define UART_LSR_DR   (1 << 0)
 #define UART_LSR_THRE (1 << 5)
+#define UART_LSR_TEMT (1 << 6)
 
 static uint32_t TOPRGU_BASE;
 static uint32_t USBDL;
@@ -427,7 +428,7 @@ static int reset_handler(size_t argc, const char * argv[]) {
 	println("Resetting SoC...");
 
 	// Wait for the UART to finish printing.
-	while ((readw(UART_LSR) & UART_LSR_THRE) == 0);
+	while ((readw(UART_LSR) & UART_LSR_TEMT) == 0);
 
 	writew(TOPRGU_BASE, 0x22000000 | 0x10 | 0x4);
 	writew(TOPRGU_BASE + 0x14, 0x1209);
