@@ -35,9 +35,9 @@
      - 0x10000000: `gfh_brom_cfg.gfh_brom_cfg_v3.reserved3` bit 0 and
        `gfh_brom_cfg.gfh_brom_cfg_v3.flags.reserved1` are set, or
        `M_SW_RES` bit 6 is set.
-     - 0x20000000: `M_SW_RES` bit 5 cleared.
-     - 0x40000000: `M_SW_RES` bit 4 cleared.
-     - 0x80000000: `M_SW_RES` bit 3 cleared.
+     - 0x20000000: `M_SW_RES` bit 5 set.
+     - 0x40000000: `M_SW_RES` bit 4 set.
+     - 0x80000000: `M_SW_RES` bit 3 set.
    - `YYYY`: Preloader offset. The BROM searches for preloaders on
      2048-byte boundaries, so this number will be the byte offset of
      the preloader divided by 2048.
