@@ -348,7 +348,8 @@ types:
           - id: usbdl_hs_en
             type: u1
           - id: reserved3
-            size: 1
+            type: u1
+            doc: Magic is 1. Requires "flags.reserved1" to be set.
           - id: usbdl_by_kcol0_timeout_ms
             type: u4
             doc: Values below 3000 ms will be rounded up to 3000 ms.
