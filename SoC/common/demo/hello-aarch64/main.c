@@ -433,6 +433,9 @@ static int reset_handler(size_t argc, const char * argv[]) {
 	writew(TOPRGU_BASE, 0x22000000 | 0x10 | 0x4);
 	writew(TOPRGU_BASE + 0x14, 0x1209);
 
+	// WFI loop until the SoC resets.
+	while (1) asm("wfi");
+
 	return 0;
 }
 
