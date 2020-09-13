@@ -132,6 +132,7 @@ enums:
     2: sig_single
     3: sig_single_and_phash
     4: sig_multi
+    5: sig_5
 types:
   bootrom_header:
     seq:
@@ -282,6 +283,7 @@ types:
             gfh_sig_type::sig_phash: signature_phash
             gfh_sig_type::sig_single: signature_single
             gfh_sig_type::sig_single_and_phash: signature_single_and_phash
+            gfh_sig_type::sig_5: signature_5
   gfh_header:
     seq:
       - id: magic_ver
@@ -659,3 +661,53 @@ types:
         size: 0x20
       - id: signature
         size: 0x100
+  signature_5:
+    seq:
+      - id: unk0
+        type: u4
+      - id: unk1
+        type: unk1
+        repeat: expr
+        repeat-expr: 2
+    types:
+      unk1:
+        seq:
+          - id: unk0
+            type: u4
+          - id: unk1
+            type: u2
+          - id: unk2
+            type: u2
+          - id: len
+            type: u4
+          - id: sig_len
+            type: u2
+          - id: type
+            type: u2
+          - id: body
+            size: len - 16 - sig_len
+            type:
+              switch-on: type
+              cases:
+                1: unk2
+                2: unk3
+          - id: signature
+            size: sig_len
+      unk2:
+        seq:
+          - id: unk0
+            type: pubkey
+            repeat: expr
+            repeat-expr: _io.size / 524
+          - id: unk1
+            type: u4
+      unk3:
+        seq:
+          - id: unk0
+            type: u4
+          - id: unk1
+            type: u4
+          - id: unk2
+            type: u4
+          - id: unk3
+            size: 0x20
