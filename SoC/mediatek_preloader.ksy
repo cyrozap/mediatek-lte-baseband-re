@@ -318,6 +318,7 @@ types:
         type:
           switch-on: _parent.header.magic_ver.ver
           cases:
+            1: gfh_brom_cfg_v3
             3: gfh_brom_cfg_v3
     types:
       gfh_brom_cfg_v3:
