@@ -221,6 +221,7 @@ types:
       - id: gfh_sections
         type: gfh_sections
         size: file_info.content_offset - 0x38
+        if: (file_info.content_offset - 0x38) > 0
       - id: content
         size: file_info.file_len - file_info.content_offset - file_info.sig_len
         type:
