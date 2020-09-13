@@ -190,6 +190,52 @@ types:
         type: u4
       - id: bl_attribute
         type: u4
+  pubkey:
+    seq:
+      - id: version
+        type: u4
+      - id: pubkey
+        size: 520
+        type:
+          switch-on: version
+          cases:
+            2: pubkey_v2
+            3: pubkey_v3
+    types:
+      pubkey_v2:
+        seq:
+          - id: rsa_n_words
+            type: u4
+            doc: Number of 16-bit words in the RSA modulus.
+          - id: unk2
+            type: u2
+          - id: rsa_n_words_minus_1
+            type: u2
+            doc: rsa_n_words - 1
+          - id: rsa_e
+            type: u4
+            doc: RSA exponent.
+          - id: rsa_n_padding
+            size: _io.size - 12 - 2 * rsa_n_words
+            doc: Padding, derived from scrambling the RSA modulus.
+          - id: rsa_n
+            size: 2 * rsa_n_words
+            doc: RSA modulus, stored as little-endian 16-bit words, in big-endian word order.
+      pubkey_v3:
+        seq:
+          - id: rsa_n_bytes
+            type: u4
+            doc: Number of bytes in the RSA modulus.
+          - id: padding1
+            size: 4
+          - id: rsa_e
+            type: u4
+            doc: RSA exponent.
+          - id: padding2
+            size: _io.size - 12 - rsa_n_bytes
+          - id: rsa_n
+            size: rsa_n_bytes
+            doc: RSA modulus, stored as little-endian 16-bit words (?), in big-endian word order (?).
   gfh_section:
     seq:
       - id: header
@@ -400,29 +446,7 @@ types:
         type:
           switch-on: _parent.header.magic_ver.ver
           cases:
-            1: gfh_bl_sec_key_v1
-    types:
-      gfh_bl_sec_key_v1:
-        seq:
-          - id: pubkey_type
-            type: u4
-          - id: rsa_n_words
-            type: u4
-            doc: Number of 16-bit words in the RSA modulus.
-          - id: unk2
-            type: u2
-          - id: rsa_n_words_minus_1
-            type: u2
-            doc: rsa_n_words - 1
-          - id: rsa_e
-            type: u4
-            doc: RSA exponent.
-          - id: rsa_n_padding
-            size: _io.size - 16 - 2 * rsa_n_words
-            doc: Padding, derived from scrambling the RSA modulus.
-          - id: rsa_n
-            size: 2 * rsa_n_words
-            doc: RSA modulus, stored as little-endian 16-bit words, in big-endian word order.
+            1: pubkey
   gfh_anti_clone_v1:
     seq:
       - id: ac_b2k
@@ -481,7 +505,7 @@ types:
         instances:
           keys:
             pos: 0x16c
-            type: gfh_tool_auth_key_v0
+            type: pubkey
             size: 524
             repeat: expr
             repeat-expr: 3
@@ -496,48 +520,10 @@ types:
         instances:
           keys:
             pos: 0x16c
-            type: gfh_tool_auth_key_v1
+            type: pubkey
             size: 524
             repeat: expr
             repeat-expr: 3
-      gfh_tool_auth_key_v0:
-        seq:
-          - id: pubkey_type
-            type: u4
-          - id: rsa_n_words
-            type: u4
-            doc: Number of 16-bit words in the RSA modulus.
-          - id: unk2
-            type: u2
-          - id: rsa_n_words_minus_1
-            type: u2
-            doc: rsa_n_words - 1
-          - id: rsa_e
-            type: u4
-            doc: RSA exponent.
-          - id: rsa_n_padding
-            size: _io.size - 16 - 2 * rsa_n_words
-            doc: Padding, derived from scrambling the RSA modulus (?).
-          - id: rsa_n
-            size: 2 * rsa_n_words
-            doc: RSA modulus, stored as little-endian 16-bit words (?), in big-endian word order (?).
-      gfh_tool_auth_key_v1:
-        seq:
-          - id: pubkey_type
-            type: u4
-          - id: rsa_n_bytes
-            type: u4
-            doc: Number of bytes in the RSA modulus.
-          - id: padding1
-            size: 4
-          - id: rsa_e
-            type: u4
-            doc: RSA exponent.
-          - id: padding2
-            size: _io.size - 16 - rsa_n_bytes
-          - id: rsa_n
-            size: rsa_n_bytes
-            doc: RSA modulus, stored as little-endian 16-bit words (?), in big-endian word order (?).
   preloader:
     seq:
       - id: code
