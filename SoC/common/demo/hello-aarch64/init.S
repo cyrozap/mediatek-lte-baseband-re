@@ -44,10 +44,8 @@ _data_init:
 _data_init_loop:
 	cmp x1, x2
 	beq _bss_init
-	ldr x3, [x0]
-	add x0, x0, 8
-	str x3, [x1]
-	add x1, x1, 8
+	ldp x3, x4, [x0], 16
+	stp x3, x4, [x1], 16
 	b   _data_init_loop
 
 _bss_init:
@@ -55,8 +53,7 @@ _bss_init:
 _bss_init_loop:
 	cmp x1, x2
 	beq _cleanup
-	str xzr, [x1]
-	add x1, x1, 8
+	stp xzr, xzr, [x1], 16
 	b   _bss_init_loop
 
 _cleanup:
@@ -64,6 +61,7 @@ _cleanup:
 	mov x1, xzr
 	mov x2, xzr
 	mov x3, xzr
+	mov x4, xzr
 
 _jump_to_main:
 	bl  main
