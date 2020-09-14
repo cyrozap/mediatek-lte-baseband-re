@@ -34,7 +34,7 @@ _start:
 	mov x30, xzr
 
 _stack_init:
-	ldr x0, =0x00108000
+	ldr x0, =_stack_base
 	mov sp, x0
 
 _data_init:

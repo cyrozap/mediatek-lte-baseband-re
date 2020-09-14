@@ -6,6 +6,8 @@ MEMORY
 
 ENTRY(_start)
 
+_stack_base = ORIGIN(ram) + LENGTH(ram) - 16;
+
 SECTIONS
 {
 	.text : {
