@@ -107,7 +107,7 @@ static int strncmp (const char * str1, const char * str2, size_t num) {
 	return ret;
 }
 
-static void * memset (void * ptr, int value, size_t num) {
+void * memset (void * ptr, int value, size_t num) {
 	for (size_t i = 0; i < num; i++) {
 		((uint8_t *)ptr)[i] = (uint8_t)value;
 	}
