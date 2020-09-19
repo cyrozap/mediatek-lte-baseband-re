@@ -101,9 +101,9 @@ class UsbDl:
         },
         0x0788: {
             'name': "MT6771 (Helio P60)/MT8183",
-            'brom': (0x00000000, 0), # TODO: Find out how large the BROM is.
+            'brom': (0x00000000, 0x18000),
             'sram': (0x00100000, 0x20000),
-            'l2_sram': (0x00200000, 0x80000),
+            'l2_sram': (0x00200000, 0x200000),
             'toprgu': (0x10007000, 0x1000),
             'efusec': (0x11F10000, 0x1000),
         },
