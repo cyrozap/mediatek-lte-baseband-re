@@ -15,7 +15,7 @@
  * [Implementation of Programmable Baseband Processors](https://www.da.isy.liu.se/pubs/dake/dake-ccic2004.pdf)
  * [An 11 mm^2, 70 mW Fully Programmable Baseband Processor for Mobile WiMAX and DVB-T/H in 0.12 um CMOS](https://web.archive.org/web/20120425072150/http://www.coresonic.com:80/Coresonic_IEEE_JSSC_Jan09.pdf)
  * [Bridging Dream and Reality: Programmable Baseband Processors for Software-Defined Radio](https://web.archive.org/web/20120511140351/http://editme.bits2life.com/system/editme/4/Coresonic_IEEE_Sept09.pdf)
- * [MediaDSP: An Application Specific Heterogeneous Multiprocessor SoC](https://pdfs.semanticscholar.org/bc0e/70ee308ae793bbd68592bb7346d30c591e1b.pdf)
+ * [MediaDSP: An Application Specific Heterogeneous Multiprocessor SoC](https://www.da.isy.liu.se/pubs/diwu/diwu-ssocc2006.pdf)
 
 
 ## Patents

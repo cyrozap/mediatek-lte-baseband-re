@@ -49,5 +49,5 @@
 
 
 [Coresonic]: https://web.archive.org/web/20120415124337/http://www.coresonic.com/12/Products/Technology.html
-[MediaDSP]: https://pdfs.semanticscholar.org/bc0e/70ee308ae793bbd68592bb7346d30c591e1b.pdf
+[MediaDSP]: https://www.da.isy.liu.se/pubs/diwu/diwu-ssocc2006.pdf
 [devicetree-bindings]: https://github.com/freedomtan/kernel-3.18-X20-96-board/blob/a0fd09200a4a4f7de5d366d20e43027f8dc6709a/Documentation/devicetree/bindings/misc/mediatek-md32.txt
