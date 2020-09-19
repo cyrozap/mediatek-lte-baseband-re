@@ -163,6 +163,7 @@ static void init(void) {
 		soc_name = "MT6771/MT8183";
 		UART_BASE = 0x11002000;
 		TOPRGU_BASE = 0x10007000;
+		USBDL = 0x1001A080;
 		break;
 	case 0x8163:
 		soc_name = "MT8163";
