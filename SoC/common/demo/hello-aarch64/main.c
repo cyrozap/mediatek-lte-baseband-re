@@ -164,6 +164,7 @@ static void init(void) {
 		UART_BASE = 0x11002000;
 		TOPRGU_BASE = 0x10007000;
 		USBDL = 0x1001A080;
+		BROM_LOG = (uint8_t volatile *)0x001065D0;
 		break;
 	case 0x8163:
 		soc_name = "MT8163";
