@@ -100,7 +100,7 @@ class UsbDl:
             'brom_g_da_verified': 0x001030C0,
         },
         0x0788: {
-            'name': "MT6771 (Helio P60)/MT8183",
+            'name': "MT6771",  # a.k.a, Helio P60, MT8183
             'brom': (0x00000000, 0x18000),
             'sram': (0x00100000, 0x20000),
             'l2_sram': (0x00200000, 0x200000),
