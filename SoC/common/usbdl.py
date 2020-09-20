@@ -47,6 +47,7 @@ class UsbDl:
         'CMD_GET_BROM_LOG_NEW': 0xDF,  # Not sure what the real name of this command is.
         'SCMD_GET_ME_ID': 0xE1,
         'SCMD_SEND_AUTH': 0xE2,
+        'SCMD_GET_SOC_ID': 0xE7,  # The "SCMD" part of the name is a guess.
         'CMD_GET_HW_SW_VER': 0xFC,
         'CMD_GET_HW_CODE': 0xFD,
     }
@@ -422,6 +423,17 @@ class UsbDl:
         if print_speed:
             elapsed = end_ns - start_ns
             print("Sent {} TOOL_AUTH bytes in {:.6f} seconds ({} bytes per second).".format(len(auth), elapsed/1000000000, len(auth)*1000000000//elapsed))
+
+    def scmd_get_soc_id(self):
+        self._send_bytes([self.commands['SCMD_GET_SOC_ID']])
+        length = self.get_dword()
+        soc_id = self._recv_bytes(length)
+
+        status = self.get_word()
+        if status != 0:
+            raise ProtocolError(status)
+
+        return soc_id
 
     def cmd_get_hw_sw_ver(self):
         self._send_bytes([self.commands['CMD_GET_HW_SW_VER']])
