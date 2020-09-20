@@ -108,6 +108,20 @@ class UsbDl:
             'toprgu': (0x10007000, 0x1000),
             'efusec': (0x11F10000, 0x1000),
             'usbdl': 0x1001A080,
+            'brom_g_bounds_check': (
+                (0x00102830, 0x00200008),  # Static permission table pointer
+                (0x00102834, 2),  # Static permission table entry count
+                (0x00200000, 0x00000000),  # Memory region minimum address
+                (0x00200004, 0xfffffffc),  # Memory region maximum address
+                (0x00200008, 0x00000200),  # Memory read command bitmask
+                (0x0020000c, 0x00200000),  # Memory region array pointer
+                (0x00200010, 0x00000001),  # Memory region array length
+                (0x00200014, 0x00000400),  # Memory write command bitmask
+                (0x00200018, 0x00200000),  # Memory region array pointer
+                (0x0020001c, 0x00000001),  # Memory region array length
+                (0x00106A60, 0),  # Dynamic permission table entry count?
+            ),
+            'brom_g_da_verified': 0x00102B68,
         },
         0x8163: {
             'name': "MT8163",
