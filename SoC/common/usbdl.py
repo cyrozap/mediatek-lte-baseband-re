@@ -22,6 +22,9 @@ def print_ranges(ranges):
 class ChecksumError(Exception):
     pass
 
+class DeviceResetException(Exception):
+    pass
+
 class EchoBytesMismatchException(Exception):
     pass
 
@@ -156,6 +159,30 @@ class UsbDl:
             raise SocNotRecognizedError("SoC with HW code 0x{:04x} not recognized.".format(hw_code))
 
         print("{} detected!".format(self.soc['name']))
+
+        # Check if the device is in BROM DL mode.
+        brom = self.check_is_brom()
+        if not brom:
+            # Best-effort attempt to reboot into BROM DL mode.
+            print("Error: Not in BROM DL mode. Attempting to reboot into BROM DL mode...")
+            usbdl_base = self.soc.get('usbdl')
+            if usbdl_base is None:
+                raise ValueError("Address of BROM DL safe mode register is unknown.")
+
+            timeout = 60 # 0x3fff is no timeout. Less than that is timeout in seconds.
+            usbdl_flag = (0x444C << 16) | (timeout << 2) | 0x00000001 # USBDL_BIT_EN
+            self.cmd_write32(usbdl_base + 0x00, [usbdl_flag])  # USBDL_FLAG/BOOT_MISC0
+
+            # Make sure USBDL_FLAG is not reset by the WDT.
+            self.cmd_write32(usbdl_base + 0x20, [0xAD98])  # MISC_LOCK_KEY
+            self.cmd_write32(usbdl_base + 0x28, [0x00000001])  # RST_CON
+            self.cmd_write32(usbdl_base + 0x20, [0])  # MISC_LOCK_KEY
+
+            # WDT reset.
+            self.wdt_reset()
+
+            # Raise exception because we won't be able to talk to the device any more.
+            raise DeviceResetException("The device has been reset to enter BROM DL mode.")
 
     def _send_bytes(self, data, echo=True):
         data = bytes(data)
@@ -644,7 +671,11 @@ if __name__ == "__main__":
     parser.add_argument('port', type=str, help="The serial port you want to connect to.")
     args = parser.parse_args()
 
-    usbdl = UsbDl(args.port, debug=False)
+    try:
+        usbdl = UsbDl(args.port, debug=False)
+    except DeviceResetException as e:
+        print(e)
+        sys.exit(0)
 
     # Get the security configuration of the target.
     usbdl.cmd_get_target_config()
@@ -668,22 +699,7 @@ if __name__ == "__main__":
         # The C8 B1 command disables caches.
         usbdl.cmd_C8('B1')
     except:
-        # The C8 command is not available in Preloader mode.
-        print("Error: Not in BROM DL mode. Attempting to reboot into BROM DL mode...")
-        timeout = 60 # 0x3fff is no timeout. Less than that is timeout in seconds.
-        usbdl_flag = (0x444C << 16) | (timeout << 2) | 0x00000001 # USBDL_BIT_EN
-        usbdl.cmd_write32(usbdl.soc['usbdl'] + 0x00, [usbdl_flag])  # USBDL_FLAG/BOOT_MISC0
-
-        # Make sure USBDL_FLAG is not reset by the WDT.
-        usbdl.cmd_write32(usbdl.soc['usbdl'] + 0x20, [0xAD98])  # MISC_LOCK_KEY
-        usbdl.cmd_write32(usbdl.soc['usbdl'] + 0x28, [0x00000001])  # RST_CON
-        usbdl.cmd_write32(usbdl.soc['usbdl'] + 0x20, [0])  # MISC_LOCK_KEY
-
-        # WDT reset.
-        usbdl.wdt_reset()
-
-        # Exit because we won't be able to talk to the device any more.
-        sys.exit(0)
+        pass
 
     # Assume we have to use the CQDMA to access restricted memory.
     use_cqdma = True
