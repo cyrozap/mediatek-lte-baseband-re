@@ -340,6 +340,10 @@ class UsbDl:
         self._send_bytes(data, echo=False)
         end_ns = time.perf_counter_ns()
 
+        if print_speed:
+            elapsed = end_ns - start_ns
+            print("Sent {} DA bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed/1000000000, len(data)*1000000000//elapsed))
+
         remote_checksum = self.get_word()
 
         if remote_checksum != calc_checksum:
@@ -348,10 +352,6 @@ class UsbDl:
         status = self.get_word()
         if status > 0xff:
             raise ProtocolError(status)
-
-        if print_speed:
-            elapsed = end_ns - start_ns
-            print("Sent {} DA bytes in {:.6f} seconds ({} bytes per second).".format(len(data), elapsed/1000000000, len(data)*1000000000//elapsed))
 
     def cmd_get_target_config(self):
         self._send_bytes([self.commands['CMD_GET_TARGET_CONFIG']])
@@ -438,6 +438,10 @@ class UsbDl:
         self._send_bytes(cert, echo=False)
         end_ns = time.perf_counter_ns()
 
+        if print_speed:
+            elapsed = end_ns - start_ns
+            print("Sent {} certificate bytes in {:.6f} seconds ({} bytes per second).".format(len(cert), elapsed/1000000000, len(cert)*1000000000//elapsed))
+
         remote_checksum = self.get_word()
 
         if remote_checksum != calc_checksum:
@@ -446,10 +450,6 @@ class UsbDl:
         status = self.get_word()
         if status > 0xff:
             raise ProtocolError(status)
-
-        if print_speed:
-            elapsed = end_ns - start_ns
-            print("Sent {} certificate bytes in {:.6f} seconds ({} bytes per second).".format(len(cert), elapsed/1000000000, len(cert)*1000000000//elapsed))
 
     def scmd_get_me_id(self):
         self._send_bytes([self.commands['SCMD_GET_ME_ID']])
@@ -481,6 +481,10 @@ class UsbDl:
         self._send_bytes(auth, echo=False)
         end_ns = time.perf_counter_ns()
 
+        if print_speed:
+            elapsed = end_ns - start_ns
+            print("Sent {} TOOL_AUTH bytes in {:.6f} seconds ({} bytes per second).".format(len(auth), elapsed/1000000000, len(auth)*1000000000//elapsed))
+
         remote_checksum = self.get_word()
 
         if remote_checksum != calc_checksum:
@@ -489,10 +493,6 @@ class UsbDl:
         status = self.get_word()
         if status > 0xff:
             raise ProtocolError(status)
-
-        if print_speed:
-            elapsed = end_ns - start_ns
-            print("Sent {} TOOL_AUTH bytes in {:.6f} seconds ({} bytes per second).".format(len(auth), elapsed/1000000000, len(auth)*1000000000//elapsed))
 
     def scmd_get_soc_id(self):
         self._send_bytes([self.commands['SCMD_GET_SOC_ID']])
