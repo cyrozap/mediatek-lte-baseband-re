@@ -6,13 +6,13 @@ _start:
 	push	{r0, r1, r2, r3, r4, lr}
 
 	// Send the USB response to avoid a timeout.
-	mov	r0, 0
-	mov	r1, 0
-	mov	r2, 1
 	adr	r3, args + 0
 	ldr	r3, [r3]  // Address of send_usb_response function, with Thumb bit set appropriately.
 	cmp	r3, 0
 	beq	reg_write_init
+	mov	r0, 0  // send_usb_response arg 0.
+	mov	r1, 0  // send_usb_response arg 1.
+	mov	r2, 1  // send_usb_response arg 2.
 	blx	r3
 
 reg_write_init:
