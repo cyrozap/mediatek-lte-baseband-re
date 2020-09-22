@@ -50,6 +50,7 @@ class UsbDl:
         'SCMD_GET_SOC_ID': 0xE7,  # The "SCMD" part of the name is a guess.
         'CMD_GET_HW_SW_VER': 0xFC,
         'CMD_GET_HW_CODE': 0xFD,
+        'CMD_GET_BL_VER': 0xFE,  # Not available in BROM mode, use to detect BROM DL mode.
     }
 
     socs = {
@@ -456,6 +457,14 @@ class UsbDl:
             raise ProtocolError(status)
 
         return hw_code
+
+    def check_is_brom(self):
+        try:
+            self._send_bytes([self.commands['CMD_GET_BL_VER']])
+        except EchoBytesMismatchException:
+            return False
+
+        return True
 
     def memory_range_test(self, addr, byte_count, byte_granularity=4, print_speed=False):
         '''Test a range of memory to see where we have contiguous read access.
