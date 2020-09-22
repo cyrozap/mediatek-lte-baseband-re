@@ -31,6 +31,9 @@ class NotEnoughDataException(Exception):
 class ProtocolError(Exception):
     pass
 
+class SocNotRecognizedError(Exception):
+    pass
+
 class UsbDl:
     commands = {
         'CMD_C8': 0xC8, # Don't know the meaning of this yet.
@@ -146,8 +149,12 @@ class UsbDl:
     def __init__(self, port, timeout=1, write_timeout=1, debug=False):
         self.debug = debug
         self.ser = serial.Serial(port, timeout=timeout, write_timeout=write_timeout)
+
         hw_code = self.cmd_get_hw_code()
-        self.soc = self.socs[hw_code]
+        self.soc = self.socs.get(hw_code)
+        if self.soc is None:
+            raise SocNotRecognizedError("SoC with HW code 0x{:04x} not recognized.".format(hw_code))
+
         print("{} detected!".format(self.soc['name']))
 
     def _send_bytes(self, data, echo=True):
