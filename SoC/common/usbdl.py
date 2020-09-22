@@ -57,7 +57,7 @@ class UsbDl:
             'name': "MT6797",
             'brom': (0x00000000, 0x14000),
             'sram': (0x00100000, 0x30000),
-            'l2_sram': (0x00200000, 0x100000), # Functional spec says address is 0x00400000, but that's incorrect.
+            'l2_sram': (0x00200000, 0x40000),  # Functional spec says address is 0x00400000 and size is 0x100000, but that's incorrect.
             'toprgu': (0x10007000, 0x1000),
             'efusec': (0x10206000, 0x1000),
             'usbdl': 0x10001680,
