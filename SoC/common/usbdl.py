@@ -51,6 +51,7 @@ class UsbDl:
         'CMD_GET_BROM_LOG': 0xDD, # Not sure what the real name of this command is.
         'CMD_JUMP_DA_64': 0xDE, # Not sure what the real name of this command is.
         'CMD_GET_BROM_LOG_NEW': 0xDF,  # Not sure what the real name of this command is.
+        'SCMD_SEND_CERT': 0xE0,
         'SCMD_GET_ME_ID': 0xE1,
         'SCMD_SEND_AUTH': 0xE2,
         'SCMD_GET_SOC_ID': 0xE7,  # The "SCMD" part of the name is a guess.
@@ -417,6 +418,38 @@ class UsbDl:
             raise ProtocolError(status)
 
         return log_bytes
+
+    def scmd_send_cert(self, cert, print_speed=False):
+        self._send_bytes([self.commands['SCMD_SEND_CERT']])
+        self.put_dword(len(cert))
+
+        status = self.get_word()
+        if status > 0xff:
+            raise ProtocolError(status)
+
+        calc_checksum = 0
+        padded_cert = cert
+        if len(padded_cert) % 2 != 0:
+            padded_cert += b'\0'
+        for i in range(0, len(padded_cert), 2):
+            calc_checksum ^= struct.unpack_from('<H', padded_cert, i)[0]
+
+        start_ns = time.perf_counter_ns()
+        self._send_bytes(cert, echo=False)
+        end_ns = time.perf_counter_ns()
+
+        remote_checksum = self.get_word()
+
+        if remote_checksum != calc_checksum:
+            raise ChecksumError("Checksum mismatch: Expected 0x{:04x}, got 0x{:04x}.".format(calc_checksum, remote_checksum))
+
+        status = self.get_word()
+        if status > 0xff:
+            raise ProtocolError(status)
+
+        if print_speed:
+            elapsed = end_ns - start_ns
+            print("Sent {} certificate bytes in {:.6f} seconds ({} bytes per second).".format(len(cert), elapsed/1000000000, len(cert)*1000000000//elapsed))
 
     def scmd_get_me_id(self):
         self._send_bytes([self.commands['SCMD_GET_ME_ID']])
