@@ -9,12 +9,8 @@ SECTIONS
 {
 	.text : {
 		*(.text.start)
-		*(.text*)
-		*(.rodata*)
 		. = ALIGN(4);
 	} >rom
 
-	args = .;
-
-	/DISCARD/ : { *(.data*) *(.bss*) *(.eh_frame) }
+	/DISCARD/ : { *(.text*) *(.rodata*) *(.data*) *(.bss*) *(.eh_frame) }
 }
