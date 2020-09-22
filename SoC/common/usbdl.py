@@ -365,6 +365,8 @@ class UsbDl:
         if status > 0xff:
             raise ProtocolError(status)
 
+        return target_config
+
     def cmd_uart1_log_enable(self):
         self._send_bytes([self.commands['CMD_UART1_LOG_EN']])
 
