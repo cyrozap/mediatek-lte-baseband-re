@@ -363,6 +363,9 @@ class UsbDl:
         print("\tDAA enabled: {}".format(True if (target_config & 0x4) else False))
         print("\tEPP_PARAM section exists at offset 0x600 after EMMC_BOOT/SDMMC_BOOT: {}".format(True if (target_config & 0x8) else False))
         print("\tRoot cert required: {}".format(True if (target_config & 0x10) else False))
+        print("\tMemory read command requires permissions: {}".format(True if (target_config & 0x20) else False))
+        print("\tMemory write command requires permissions: {}".format(True if (target_config & 0x40) else False))
+        print("\tCMD_C8 disabled: {}".format(True if (target_config & 0x80) else False))
 
         status = self.get_word()
         if status > 0xff:
