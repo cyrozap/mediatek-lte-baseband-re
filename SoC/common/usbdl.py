@@ -361,6 +361,8 @@ class UsbDl:
         print("\tSBC enabled: {}".format(True if (target_config & 0x1) else False))
         print("\tSLA enabled: {}".format(True if (target_config & 0x2) else False))
         print("\tDAA enabled: {}".format(True if (target_config & 0x4) else False))
+        print("\tEPP_PARAM section exists at offset 0x600 after EMMC_BOOT/SDMMC_BOOT: {}".format(True if (target_config & 0x8) else False))
+        print("\tRoot cert required: {}".format(True if (target_config & 0x10) else False))
 
         status = self.get_word()
         if status > 0xff:
