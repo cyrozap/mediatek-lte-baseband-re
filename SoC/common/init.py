@@ -8,6 +8,9 @@ import sys
 import time
 
 
+class BmoInitError(Exception):
+    pass
+
 class EchoBytesMismatchException(Exception):
     pass
 
@@ -34,9 +37,10 @@ class Bmo:
         except:
             pass
         self._send_bytes(b'bmo\r', echo=True)
-        ack = self._recv_bytes(5)
-        print(ack)
-        assert ack == b'\nOK\r\n'
+        expected_ack = b'\nOK\r\n'
+        ack = self._recv_bytes(len(expected_ack))
+        if ack != expected_ack:
+            raise BmoInitError("Invalid BMO ACK bytes: {} ({})".format(ack.hex(), repr(ack)))
 
     def close(self):
         self.ser.close()
