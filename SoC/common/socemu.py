@@ -82,6 +82,79 @@ SOCS = {
             0x0000ba00: 0x14,
         },
     },
+    "MT6771": {
+        'regions': (
+            {
+                'base': 0x00000000,
+                'size': 96*1024,
+                'type': "BROM",
+            },
+            {
+                'base': 0x00100000,
+                'size': 128*1024,
+                'type': "SRAM",
+                'load': True,
+            },
+            {
+                'base': 0x00200000,
+                'size': 512*1024,
+                'type': "L2_SRAM",
+            },
+            {
+                'base': 0x08000000,
+                'size': 0x1000,
+                'type': "MMIO",
+            },
+            {
+                'base': 0x0c530000,
+                'size': 0x10000,
+                'type': "MMIO",
+            },
+            {
+                'base': 0x10000000,
+                'size': 0x10000000,
+                'type': "MMIO",
+            },
+            {
+                'base': 0x40000000,
+                'size': 3*1024*1024*1024,
+                'type': "DRAM",
+            },
+        ),
+        'peripherals': {
+            "TOPRGU": {
+                'base': 0x10007000,
+                'size': 0x1000,
+                'type': "TOPRGU",
+            },
+            "UART0": {
+                'base': 0x11002000,
+                'size': 0x1000,
+                'type': "UART",
+            },
+            "UART1": {
+                'base': 0x11003000,
+                'size': 0x1000,
+                'type': "UART",
+            },
+            "UART2": {
+                'base': 0x11004000,
+                'size': 0x1000,
+                'type': "UART",
+            },
+        },
+        'masked_registers': {
+        },
+        'brom_skip': {
+            # Skip JTAG delay.
+            0x0000009c: 4,
+
+            # Skip mrrc/mcrr instructions.
+            0x00010f54: 0x14,
+            0x00010f6c: 0x14,
+            0x00010f84: 0x10,
+        },
+    },
     "MT6797": {
         'regions': (
             {
