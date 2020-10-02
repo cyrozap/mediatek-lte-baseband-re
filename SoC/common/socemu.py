@@ -488,7 +488,7 @@ def main():
     mu.hook_add(UC_HOOK_MEM_READ | UC_HOOK_MEM_WRITE, hook_mmio, (soc, bmo))
     mu.hook_add(UC_HOOK_MEM_UNMAPPED, hook_unmapped)
     print("Starting emulator!")
-    mu.emu_start(entrypoint, bin_size)
+    mu.emu_start(entrypoint, load_addr + bin_size)
 
 if __name__ == "__main__":
     main()
