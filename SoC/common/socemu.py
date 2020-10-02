@@ -426,6 +426,7 @@ def main():
     parser.add_argument('-S', '--soc', type=str, choices=SOCS.keys(), default="MT6737M", help="The SoC you want to emulate. Default: MT6737M")
     parser.add_argument('-l', '--load-address', type=str, default="0", help="The address you want to load the binary at. Default: 0")
     parser.add_argument('-e', '--entrypoint', type=str, default="0", help="The address you want to start executing from (add 1 for Thumb mode). Default: 0")
+    parser.add_argument('-E', '--exitpoint', type=str, help="The address you want to stop executing at.")
     parser.add_argument('-p', '--port', type=str, help="The BMO serial port you want to connect to.")
     parser.add_argument('-b', '--baudrate', type=int, default=115200, help="The baud rate you want to connect at. Default: 115200")
     parser.add_argument('-s', '--baudrate-next', type=int, default=115200, help="The baud rate you want to switch to. Default: 115200")
@@ -444,6 +445,10 @@ def main():
     load_addr = int(args.load_address, 0)
     entrypoint = int(args.entrypoint, 0)
     assert entrypoint in memory_region(load_addr, bin_size)
+
+    exitpoint = load_addr + bin_size
+    if args.exitpoint:
+        exitpoint = int(args.exitpoint, 0)
 
     bmo = None
     if args.port:
@@ -488,7 +493,7 @@ def main():
     mu.hook_add(UC_HOOK_MEM_READ | UC_HOOK_MEM_WRITE, hook_mmio, (soc, bmo))
     mu.hook_add(UC_HOOK_MEM_UNMAPPED, hook_unmapped)
     print("Starting emulator!")
-    mu.emu_start(entrypoint, load_addr + bin_size)
+    mu.emu_start(entrypoint, exitpoint)
 
 if __name__ == "__main__":
     main()
