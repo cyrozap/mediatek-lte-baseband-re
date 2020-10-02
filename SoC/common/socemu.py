@@ -436,6 +436,15 @@ def main():
 
     soc = SOCS[args.soc]
 
+    # Read the binary.
+    binary = open(args.binary, 'rb').read()
+    bin_size = len(binary)
+
+    # Make sure the entrypoint is within the bounds of the loaded binary.
+    load_addr = int(args.load_address, 0)
+    entrypoint = int(args.entrypoint, 0)
+    assert entrypoint in memory_region(load_addr, bin_size)
+
     bmo = None
     if args.port:
         print("Initializing BMO...")
@@ -474,13 +483,12 @@ def main():
             pinfo['buffer'] = io.BytesIO()
 
     # Load and execute the binary.
-    binary = open(args.binary, 'rb').read()
-    mu.mem_write(int(args.load_address, 0), binary)
+    mu.mem_write(load_addr, binary)
     mu.hook_add(UC_HOOK_CODE, hook_code, soc)
     mu.hook_add(UC_HOOK_MEM_READ | UC_HOOK_MEM_WRITE, hook_mmio, (soc, bmo))
     mu.hook_add(UC_HOOK_MEM_UNMAPPED, hook_unmapped)
     print("Starting emulator!")
-    mu.emu_start(int(args.entrypoint, 0), len(binary))
+    mu.emu_start(entrypoint, bin_size)
 
 if __name__ == "__main__":
     main()
