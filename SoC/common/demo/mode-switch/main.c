@@ -84,7 +84,7 @@ static const uint32_t get_rvbar(void) {
 static void jump_to_aarch64(uint32_t addr) {
 	uint32_t rvbar = get_rvbar();
 	asm(
-		"str %0, [%1]\n"
+		"str %[addr], [%[rvbar]]\n"
 		"dsb sy\n"
 		"isb sy\n"
 		"mrc 15, 0, r0, cr12, cr0, 2\n"
@@ -92,7 +92,7 @@ static void jump_to_aarch64(uint32_t addr) {
 		"mcr 15, 0, r0, cr12, cr0, 2\n"
 		"isb sy\n"
 		: /* No outputs. */
-		: "r" (addr), "r" (rvbar)
+		: [addr] "r" (addr), [rvbar] "r" (rvbar)
 		: "r0"
 	);
 
