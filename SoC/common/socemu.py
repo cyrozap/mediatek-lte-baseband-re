@@ -330,7 +330,8 @@ def hook_mmio(mu, access, addr, size, value, user_data):
                 mu.mem_write(addr, struct.pack('<I', (1 << 6) | (1 << 5)))
                 return
 
-            if addr == base and access == UC_MEM_WRITE:
+            dlab = mu.mem_read(base + 0xc, 1)[0] & (1 << 7)
+            if addr == base and dlab == 0 and access == UC_MEM_WRITE:
                 uart_buf = pinfo.get('buffer')
                 if uart_buf is None:
                     return
