@@ -70,6 +70,9 @@ static const uint32_t get_rvbar(void) {
 	case 0x0335:
 		// MT6737M
 		return 0x10200038;
+	case 0x0788:
+		// MT6771/MT8183
+		return 0x0c530038;
 	case 0x8163:
 		// MT8163
 		return 0x10200038;
