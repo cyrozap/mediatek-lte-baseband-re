@@ -135,6 +135,9 @@ static void init(void) {
 	case 0x0335:
 		soc_name = "MT6737M";
 		UART_BASE = 0x11002000 + 0x1000; // UART1 base address.
+		TOPRGU_BASE = 0x10212000;
+		USBDL = 0x10000818;
+		BROM_LOG = (uint8_t volatile *)0x00105274;
 
 		// Configure UART1 pins.
 		uint32_t gpio_dir = readw(0x10211020);
@@ -155,9 +158,6 @@ static void init(void) {
 		// Configure UART1.
 		setbaud(115200);
 
-		TOPRGU_BASE = 0x10212000;
-		USBDL = 0x10000818;
-		BROM_LOG = (uint8_t volatile *)0x00105274;
 		break;
 	case 0x0788:
 		soc_name = "MT6771/MT8183";
