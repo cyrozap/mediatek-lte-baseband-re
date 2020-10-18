@@ -9,7 +9,7 @@ from copy import copy
 from unicorn import *
 from unicorn.arm_const import *
 
-from init import Bmo
+from bmo import Bmo
 from openocd import OpenOcd
 
 
