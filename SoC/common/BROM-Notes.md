@@ -22,24 +22,23 @@
  - `BP: XXXX XXXX [YYYY]`
    - Boot parameters?
    - `XXXXXXXX`: 32-bit bitfield of boot parameters.
-     - `0x00000001`: Preloader found on boot medium.
-     - `0x00000002`: USB synced for DL mode.
-     - `0x00000008`: JTAG is disabled.
-     - `0x00000010`: USB failed to sync for DL mode.
-     - `0x00000020`: UART synced for DL mode.
-     - `0x00000040`: UART failed to sync for DL mode.
-     - `0x00000080`: `YYYY` is non-zero.
-     - `0x00000100`: Unknown.
-     - `0x00000200`: `SEJ + 0xc0` (`SEJ_CON1`) bits [11:8] are not
-       clear.
-     - `0x04000000`: Preloader on boot medium is 64-bit.
-     - `0x08000000`: USB DL HS (High Speed?) enabled.
-     - `0x10000000`: `gfh_brom_cfg.gfh_brom_cfg_v3.reserved3` bit 0 and
+     - 0x00000001: Preloader found on boot medium.
+     - 0x00000002: USB synced for DL mode.
+     - 0x00000008: JTAG is disabled.
+     - 0x00000010: USB failed to sync for DL mode.
+     - 0x00000020: UART synced for DL mode.
+     - 0x00000040: UART failed to sync for DL mode.
+     - 0x00000080: `YYYY` is non-zero.
+     - 0x00000100: Unknown.
+     - 0x00000200: `SEJ + 0xc0` (`SEJ_CON1`) bits [11:8] are not clear.
+     - 0x04000000: Preloader on boot medium is 64-bit.
+     - 0x08000000: USB DL HS (High Speed?) enabled.
+     - 0x10000000: `gfh_brom_cfg.gfh_brom_cfg_v3.reserved3` bit 0 and
        `gfh_brom_cfg.gfh_brom_cfg_v3.flags.reserved1` are set, or
        `M_SW_RES` bit 6 is set.
-     - `0x20000000`: `M_SW_RES` bit 5 set.
-     - `0x40000000`: `M_SW_RES` bit 4 set.
-     - `0x80000000`: `M_SW_RES` bit 3 set.
+     - 0x20000000: `M_SW_RES` bit 5 set.
+     - 0x40000000: `M_SW_RES` bit 4 set.
+     - 0x80000000: `M_SW_RES` bit 3 set.
    - `YYYY`: Preloader offset. The BROM searches for preloaders on
      2048-byte boundaries, so this number will be the byte offset of
      the preloader divided by 2048.
