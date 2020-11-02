@@ -1,4 +1,4 @@
-# Common SoC tools
+# Common SoC tools and information
 
 ## handshake
 
