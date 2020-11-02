@@ -1,5 +1,6 @@
 # BROM Notes
 
+
 ## Decoding the BROM log
 
  - `[DL] XXXXXXXX YYYYYYYY AABBCC`
@@ -71,3 +72,37 @@
    - `XXXX`: Most recent status code (`code_1`).
    - `YYYY`: Previous status code (`code_2`).
    - `ZZZZ`: Bootloader descriptor `bl_type`.
+
+
+## Hashes and sizes of various SoC BROMs
+
+ - MT6735
+   - Size: 65536 bytes
+   - MD5: `4111199bba0afe2437d1082c1dcc4bb2`
+   - SHA1: `fadb35104a805974d1e8514b2c78d083e8aa8a32`
+   - SHA256: `72ccdd7dece9cf295f76cae3c7a98a2815835e9b8c2b769a6813ef1d84c38f9d`
+   - SHA512: `3da06abbf9eafa83a79f4b9502e02c7983db349d293bd6c9655e056c7c5660c6cae2537bcd9a016adfec5db06fc27b412dda426b5a65af9592b69f1e830e4589`
+ - MT6737M
+   - Size: 65536 bytes
+   - MD5: `e258ecea1ec865500c750b309cf1859a`
+   - SHA1: `169d7983a8f709bb6b32398c200b969026da6fb8`
+   - SHA256: `179dc0aa7c65fb85cb1e9e9c95ea2c9424eecc6b9267a343c7c9511cd546267a`
+   - SHA512: `fdba3cf632adc23bebde115c765db1a0969c1c377a93f736a0e02f17d9c4ccd62f1d9081f26f1a0386b42da24806a8c63d5656f3a60c1461a55c938e6fa24dde`
+ - MT6771/MT8183
+   - Size: 98304 bytes
+   - MD5: `88f78c13206b84fe6063966b775aba5f`
+   - SHA1: `cbcf5f2cb4bc9e71bbe8cee41cccea2d51b947d7`
+   - SHA256: `0b84ebc200233fdfd4284407be63cce4ccbd1c3ceb3ad939e167c523da688ac2`
+   - SHA512: `462672ccb63f4f1e633846380c6506257fe8266926ea881a9671092f8841b1ec92ff3ad0a66e9379f1cc02aeb79ab3fdad6961249aa5d504633dc689e830906d`
+ - MT6797
+   - Size: 81920 bytes
+   - MD5: `9c0b56cbfbd3d1a2e0b278e120123b87`
+   - SHA1: `80f64a862b63bccd2ea0a8a15a3f3c5404ff1971`
+   - SHA256: `8192a6b554dea105e8f731771e7955b21709f97febdbbf593ccd4f57f5db9bf1`
+   - SHA512: `64f1ff741f862ca4b02c3896ad8ac8c5f287e4e2b5d3a59d24e81897c1045182caef0c4c32ceea4b7cf5305a7d80aaca38aabb84ded4df9803d1f90ca9131233`
+ - MT8163
+   - Size: 81920 bytes
+   - MD5: `9ad089946a4b117a036a6165a22d846a`
+   - SHA1: `7543c1f93e1525bcaa14c1acffef9ac9deb7cb31`
+   - SHA256: `0969b97512db38fde33e89e9e1fdfbc5508624015c74390d69719ef9d457ef8f`
+   - SHA512: `744e498414ce6339ab33b594726200cf7f683f0162fea1c8d92bd3c418c140c48fdc0a90525d59fb6abee3160fc652eff9840617b5eb172576b20fbffb79a2c1`
