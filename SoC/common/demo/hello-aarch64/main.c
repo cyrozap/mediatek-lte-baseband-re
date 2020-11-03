@@ -159,6 +159,12 @@ static void init(void) {
 		setbaud(115200);
 
 		break;
+	case 0x0337:
+		soc_name = "MT6753";
+		UART_BASE = 0x11002000;
+		TOPRGU_BASE = 0x10212000;
+		USBDL = 0x10000818;
+		break;
 	case 0x0788:
 		soc_name = "MT6771/MT8183";
 		UART_BASE = 0x11002000;
