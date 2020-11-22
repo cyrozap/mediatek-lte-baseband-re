@@ -202,6 +202,7 @@ types:
           cases:
             2: pubkey_v2
             3: pubkey_v3
+            4: pubkey_v4
     types:
       pubkey_v2:
         seq:
@@ -237,6 +238,21 @@ types:
           - id: rsa_n
             size: rsa_n_bytes
             doc: RSA modulus, stored as little-endian 16-bit words (?), in big-endian word order (?).
+      pubkey_v4:
+        seq:
+          - id: rsa_n_bytes
+            type: u4
+            doc: Number of bytes in the RSA modulus.
+          - id: padding1
+            size: 4
+          - id: rsa_e
+            type: u4be
+            doc: RSA exponent.
+          - id: padding2
+            size: _io.size - 12 - rsa_n_bytes
+          - id: rsa_n
+            size: rsa_n_bytes
+            doc: RSA modulus, stored as little-endian 16-bit words (?), in big-endian word order (?).
   gfh_section:
     seq:
       - id: header
@@ -253,6 +269,7 @@ types:
             gfh_type::gfh_tool_auth: gfh_tool_auth
             gfh_type::gfh_brom_cfg: gfh_brom_cfg
             gfh_type::gfh_brom_sec_cfg: gfh_brom_sec_cfg
+            gfh_type::gfh_maui_code_key: pubkey
   gfh_sections:
     seq:
       - id: sections
