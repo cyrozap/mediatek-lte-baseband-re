@@ -4,6 +4,14 @@ import argparse
 import json
 
 
+def count_mask_prefix_bits(mask):
+    bits = 0
+    for i in range(32)[::-1]:
+        if mask & (1 << i) == 0:
+            break
+        bits += 1
+    return bits
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("instructions", type=str, help="The JSON file with instructions you want to parse.")
@@ -19,6 +27,10 @@ def main():
 
     print("Instructions, sorted by opcode:")
     for opcode in sorted(opcode_list, key=lambda e: e[3]):
+        print("  {0} ({1}): mask = 0x{2:08x}, masked opcode = 0x{3:08x}".format(*opcode))
+
+    print("Instructions, sorted by mask prefix bits:")
+    for opcode in sorted(opcode_list, key=lambda e: count_mask_prefix_bits(e[2])):
         print("  {0} ({1}): mask = 0x{2:08x}, masked opcode = 0x{3:08x}".format(*opcode))
 
 
