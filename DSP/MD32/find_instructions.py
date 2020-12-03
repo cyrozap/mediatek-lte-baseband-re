@@ -42,6 +42,7 @@ class Opcodes:
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("-t", "--timeout", type=float, default=1, help="The number of seconds to wait for Z3 to generate an instruction before trying a random one.")
     parser.add_argument("instructions", type=str, help="The JSON file with the list of instructions you want to read/write.")
     arguments = parser.parse_args()
 
@@ -49,7 +50,7 @@ def main():
 
     instr = BitVec("instr", 32)
 
-    timeout = 1
+    timeout = arguments.timeout
 
     extra_seeds = set()
 
