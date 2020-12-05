@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import json
 import multiprocessing
 import os
@@ -31,6 +32,10 @@ def process_dword(dword):
     return (instr, mnemonic, argfmt)
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("instructions", type=str, help="The JSON file with the list of instructions you want to read/write.")
+    arguments = parser.parse_args()
+
     opcodes = set()
 
     processes = os.cpu_count()
@@ -105,7 +110,7 @@ def main():
 
             opcodes.add((mnemonic, argfmt, min(instrs), max(instrs)))
 
-    opcodes_file = open('opcodes-16-brute.json', 'w')
+    opcodes_file = open(args.instructions, 'w')
     json.dump(list(opcodes), opcodes_file)
     opcodes_file.close()
 
