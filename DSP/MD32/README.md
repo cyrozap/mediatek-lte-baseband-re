@@ -11,6 +11,15 @@ instruction. The [Z3 theorem prover][z3] is used to help generate instructions
 to feed into the disassembler.
 
 
+## find_16bit_instructions.py
+
+This tool will search through the 16-bit instruction space of the MD32 to find
+and define decoding rules for each instruction. Like `find_instructions.py`,
+this script also uses [Z3][z3], but instead of using it to generate
+instructions, it uses Z3 to prove the correctness of the generated
+instruction-decoding rules.
+
+
 ## instruction_info.py
 
 This tool will print a nice summary of the instructions you've found with
