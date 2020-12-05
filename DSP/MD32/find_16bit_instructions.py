@@ -64,9 +64,43 @@ def main():
             print("{} ({}): {}".format(mnemonic, argfmt, simplify(model)))
 
             s = Solver()
+            s.push()
             s.add(Not(actual == model))
             if s.check() == sat:
                 print("Error: Model does not match reality. Counterexample: instr = 0x{:08x}".format(s.model()[instr].as_long()))
+
+                s.push()
+                counterexamples = set()
+                while s.check() == sat:
+                    counterexample = s.model()[instr].as_long()
+                    counterexamples.add(counterexample)
+                    s.add(instr != BitVecVal(counterexample, 32))
+                s.pop()
+
+                # Split the instruction definition.
+                s.pop()
+                new_model = And(
+                    (instr & 0x0000ffff) == BitVecVal(0, 32),
+                    Or(
+                        And(
+                            ULE(instr, max(instrs)),
+                            UGT(instr, max(counterexamples)),
+                        ),
+                        And(
+                            ULT(instr, min(counterexamples)),
+                            UGE(instr, min(instrs)),
+                        ),
+                    ),
+                )
+                s.add(Not(actual == new_model))
+
+                if s.check() == sat:
+                    print("Error: Still not equal. Counterexample: instr = 0x{:08x}".format(s.model()[instr].as_long()))
+                    continue
+
+                print("Found new model: {} ({}): {}".format(mnemonic, argfmt, simplify(new_model)))
+                opcodes.add((mnemonic, argfmt, min(instrs), min(counterexamples) - (1 << 16)))
+                opcodes.add((mnemonic, argfmt, max(counterexamples) + (1 << 16), max(instrs)))
                 continue
 
             opcodes.add((mnemonic, argfmt, min(instrs), max(instrs)))
