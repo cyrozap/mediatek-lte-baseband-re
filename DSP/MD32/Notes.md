@@ -10,3 +10,4 @@
 * Including the reset vector (zero), the vector table looks like it has at
   least 16 slots.
 * Stack seems to grow upward, though that doesn't appear to be hard-coded.
+* Separate program and data memory address spaces.
