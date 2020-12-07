@@ -32,5 +32,14 @@ This is the Python module that wraps the MD32's `objdump` binary, to make it
 easier to dynamically disassemble arbitrary instructions.
 
 
+## swap_endian.py
+
+Use this to swap the endianness of an MD32 binary. The VPU firmware binaries
+distributed in linux-firmware and the binaries extrated from the DSP binary
+file are all in little-endian form, but the MD32 parses instructions in
+big-endian byte order, so you need to run `swap_endian.py` on these files
+before disassembly in order to correct for this.
+
+
 [notes]: Notes.md
 [z3]: https://github.com/Z3Prover/z3
