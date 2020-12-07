@@ -3,6 +3,9 @@
 This directory contains tools for reverse engineering the MD32 ISA, as well as
 some [reverse engineering notes][notes] about the CPU/ISA.
 
+Binaries can be disassembled and decompiled using [Ghidra][ghidra] with the
+[MD32 Ghidra processor module][ghidra-md32].
+
 
 ## find_instructions.py
 
@@ -42,4 +45,6 @@ before disassembly in order to correct for this.
 
 
 [notes]: Notes.md
+[ghidra]: https://github.com/NationalSecurityAgency/ghidra
+[ghidra-md32]: https://github.com/cyrozap/ghidra-md32
 [z3]: https://github.com/Z3Prover/z3
