@@ -190,16 +190,18 @@ def main():
 
     pcm.pcm_reset()
 
-    pcm.print_regs()
-
     program = raw(0x17c07c1f) * 0x200
     program += raw(0x17c07c1f) * 0x20
     program += instr_loop_forever(program)
 
     pcm.im_load(0x00108000, program)
 
+    print("Before:")
+    pcm.print_regs()
+
     pcm.pcm_run()
 
+    print("After:")
     pcm.print_regs()
 
 
