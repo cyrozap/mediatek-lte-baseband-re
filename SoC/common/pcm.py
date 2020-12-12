@@ -139,14 +139,31 @@ class Pcm(Bmo):
 def raw(value):
     return struct.pack('<I', value)
 
-def instr(opcode, rd=0, inv=0, shl=0, sh=0, rx=0, ry=0, rs=0):
-    return struct.pack('<I', (opcode << 27) | (rd << 22) | (inv << 21) | (shl << 20) | (sh << 15) | (rx << 10) | (ry << 5) | rs)
+def instr(opcode, rd=0, inv=0, shl=0, sh=0, rx=0, ry=0, rs=0, rxry=0, rxryrs=0):
+    instruction = (
+        (opcode << 27) |
+        (rd << 22) |
+        (inv << 21) |
+        (shl << 20) |
+        (sh << 15) |
+        (rx << 10) |
+        (ry << 5) | (rxry << 5) |
+        (rs << 0) | (rxryrs << 0)
+    )
+
+    print("instr: 0x{:08x}".format(instruction))
+    return struct.pack('<I', instruction)
 
 def instr_set_reg(reg, value):
-    return struct.pack('<II', 0x18000000 | (reg << 22) | (31 << 0), value)
+    instruction = 0x18000000 | (reg << 22) | (31 << 0)
+    print("instr_set_reg(r{}, 0x{:08x}): 0x{:08x}, 0x{:08x}".format(reg, value, instruction, value))
+    return struct.pack('<II', instruction, value)
 
 def instr_loop_forever(instrs):
-    return struct.pack('<II', 0xd0000000 | ((len(instrs) // 4) << 5), 0x17c07c1f)
+    instruction = 0xd0000000 | ((len(instrs) // 4) << 5)
+    nop = 0x17c07c1f
+    print("instr_loop_forever: 0x{:08x}, 0x{:08x}".format(instruction, nop))
+    return struct.pack('<II', instruction, nop)
 
 def main():
     parser = argparse.ArgumentParser()
