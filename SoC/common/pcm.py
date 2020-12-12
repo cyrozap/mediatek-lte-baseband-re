@@ -136,8 +136,11 @@ class Pcm(Bmo):
         self.im_mode(0)
 
 
-def instr(value):
+def raw(value):
     return struct.pack('<I', value)
+
+def instr(opcode, rd=0, inv=0, shl=0, sh=0, rx=0, ry=0, rs=0):
+    return struct.pack('<I', (opcode << 27) | (rd << 22) | (inv << 21) | (shl << 20) | (sh << 15) | (rx << 10) | (ry << 5) | rs)
 
 def instr_set_reg(reg, value):
     return struct.pack('<II', 0x18000000 | (reg << 22) | (31 << 0), value)
@@ -172,8 +175,8 @@ def main():
 
     pcm.print_regs()
 
-    program = instr(0x17c07c1f) * 0x200
-    program += instr(0x17c07c1f) * 0x20
+    program = raw(0x17c07c1f) * 0x200
+    program += raw(0x17c07c1f) * 0x20
     program += instr_loop_forever(program)
 
     pcm.im_load(0x00108000, program)
