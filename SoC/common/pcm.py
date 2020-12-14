@@ -139,9 +139,10 @@ class Pcm(Bmo):
 def raw(value):
     return struct.pack('<I', value)
 
-def instr(opcode, rd=0, inv=0, shl=0, sh=0, rx=0, ry=0, rs=0, rxry=0, rxryrs=0):
+def instr(opcode, imm=0, rd=0, inv=0, shl=0, sh=0, rx=0, ry=0, rs=0, rxry=0, rxryrs=0):
     instruction = (
-        (opcode << 27) |
+        (opcode << 28) |
+        (imm << 27) |
         (rd << 22) |
         (inv << 21) |
         (shl << 20) |
