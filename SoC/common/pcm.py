@@ -190,8 +190,9 @@ def main():
 
     pcm.pcm_reset()
 
-    program = raw(0x17c07c1f) * 0x200
-    program += raw(0x17c07c1f) * 0x20
+    program = bytes()
+    program += instr_set_reg(1, 0x12345678)
+    program += instr_set_reg(2, 0xcafef00d)
     program += instr_loop_forever(program)
 
     pcm.im_load(0x00108000, program)
