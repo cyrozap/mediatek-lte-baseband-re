@@ -79,7 +79,7 @@ def main():
                 if new_args:
                     new_argfmt = type(new_args).__name__
                 new_mnemonic = test_dis[2]
-                if new_argfmt and opcodes.get_by_mnemonic_and_argfmt(new_mnemonic, new_argfmt):
+                if new_argfmt and opcodes.get_by_mnemonic_and_argfmt(new_mnemonic, new_argfmt) and opcodes.get_by_instr(test_instr):
                     continue
                 extra_seeds.add(test_instr)
     except (FileNotFoundError, json.decoder.JSONDecodeError):
@@ -128,7 +128,7 @@ def main():
             opcode_item = None
             if argfmt:
                 opcode_item = opcodes.get_by_mnemonic_and_argfmt(mnemonic, argfmt)
-            if opcode_item:
+            if opcode_item and opcodes.get_by_instr(seed):
                 # Don't test instructions we've already tested.
                 print("Already tested {0} ({1}) (mask = 0x{2:08x}, masked opcode = 0x{3:08x}).".format(*opcode_item))
                 continue
@@ -160,7 +160,7 @@ def main():
                 new_argfmt = type(new_args).__name__
             new_mnemonic = test_dis[2]
             if new_mnemonic != mnemonic or new_argfmt != argfmt:
-                if not new_argfmt or not opcodes.get_by_mnemonic_and_argfmt(new_mnemonic, new_argfmt):
+                if not new_argfmt or not opcodes.get_by_mnemonic_and_argfmt(new_mnemonic, new_argfmt) or not opcodes.get_by_instr(test_instr):
                     # Found a new opcode?
                     extra_seeds.add(test_instr)
                 continue
