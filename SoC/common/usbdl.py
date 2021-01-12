@@ -37,6 +37,9 @@ class ProtocolError(Exception):
 class SocNotRecognizedError(Exception):
     pass
 
+class NotHandshakedError(Exception):
+    pass
+
 class UsbDl:
     commands = {
         'CMD_C8': 0xC8, # Don't know the meaning of this yet.
@@ -210,6 +213,8 @@ class UsbDl:
             echo_data = self.ser.read(len(data))
             if self.debug:
                 print("<- {}".format(binascii.b2a_hex(echo_data)))
+            if echo_data[0] == data[0]+0x1:
+                raise NotHandshakedError
             if echo_data != data:
                 raise EchoBytesMismatchException
 
