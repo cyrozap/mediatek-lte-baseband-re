@@ -213,7 +213,7 @@ class UsbDl:
             echo_data = self.ser.read(len(data))
             if self.debug:
                 print("<- {}".format(binascii.b2a_hex(echo_data)))
-            if echo_data[0] == data[0]+0x1:
+            if echo_data and echo_data[0] == data[0]+0x1:
                 raise NotHandshakedError
             if echo_data != data:
                 raise EchoBytesMismatchException
