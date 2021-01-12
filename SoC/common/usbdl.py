@@ -109,6 +109,22 @@ class UsbDl:
             ),
             'brom_g_da_verified': 0x001030C0,
         },
+        0x0337: {
+            'name': "MT6753",
+            'brom': (0x00000000, 0x10000),
+            'sram': (0x00100000, 0x10000),
+            'l2_sram': (0x00200000, 0x40000),
+            'toprgu': (0x10212000, 0x1000),
+            'efusec': (0x10206000, 0x1000),
+            'usbdl': 0x10000818,
+            'cqdma_base': 0x10217C00,
+            'tmp_addr': 0x110001A0,
+            'brom_g_bounds_check': (
+                (0x00102760, 0x00000000),
+                (0x00105704, 0x00000000),
+            ),
+            'brom_g_da_verified': 0x001030C0,
+        },
         0x0788: {
             'name': "MT6771",  # a.k.a, Helio P60, MT8183
             'brom': (0x00000000, 0x18000),
