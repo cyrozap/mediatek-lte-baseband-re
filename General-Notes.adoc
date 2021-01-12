@@ -119,7 +119,8 @@ flow, the DA is code loaded over USB by the preloader (which itself may be
 loaded over USB in BROM USB Download Mode) that interacts with the host
 software to read from/write to eMMC.
 
-[[DAA]]DAA:: "Download Agent Authentication"?
+[[DAA]]DAA:: "Download Agent Authentication"? When this is enabled, the
+<<BROM>> will authenticate the <<DA>> before executing it.
 
 [[DBF]]DBF:: DSP Binary Filter. As the name implies, this is binary filter
 data that is loaded into and parsed by the firmware running on the Coresonic
