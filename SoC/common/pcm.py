@@ -182,7 +182,7 @@ def main():
     pcm.soc_reset()
     time.sleep(1)
 
-    pcm = Pcm(args.port, baudrate=115200, debug=False, verbose=verbose, spm_base=spm_base)
+    pcm = Pcm(args.port, baudrate=args.baudrate, debug=False, verbose=verbose, spm_base=spm_base)
     if args.baudrate_next != args.baudrate:
         print("Switching to baudrate to {}...".format(args.baudrate_next))
         pcm.setbaud(args.baudrate_next)
