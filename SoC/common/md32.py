@@ -111,10 +111,16 @@ class Md32(Bmo):
         return value
 
     def reg_write(self, reg : int, value : int):
-        val_hi = value >> 16
-        val_lo = value & 0xffff
-        self.exec_instr(0x0f000000 | (val_hi << 8) | reg)
-        self.exec_instr(0x0d000000 | (val_lo << 8) | (reg << 4) | reg)
+        value &= 0xffffffff
+        if ((value >> 20) == 0) or ((value >> 20) == 0xfff):
+            masked = value & 0x1fffff
+            self.exec_instr(0x00000000 | (masked << 4) | reg)
+        else:
+            val_hi = value >> 16
+            val_lo = value & 0xffff
+            self.exec_instr(0x0f000000 | (val_hi << 8) | reg)
+            if val_lo:
+                self.exec_instr(0x0d000000 | (val_lo << 8) | (reg << 4) | reg)
 
     def regs_read(self):
         # Save the value of r15.
