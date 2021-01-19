@@ -35,6 +35,13 @@ class Arguments:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
+    def __repr__(self):
+        return "<{}.{} {}>".format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.__dict__,
+        )
+
 class ArgsRegImmImmImm(Arguments):
     @classmethod
     def from_args(cls, args : str):
