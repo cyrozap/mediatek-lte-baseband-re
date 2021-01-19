@@ -7,7 +7,7 @@ import os
 
 from z3 import *
 
-from md32_dis import disassemble_dword, parse_args
+from md32_dis import Instruction, disassemble_dword
 
 
 def process_dword(dword):
@@ -15,21 +15,23 @@ def process_dword(dword):
     if disassembled is None:
         return None
 
-    instr, instr_size, mnemonic, args = disassembled
+    if not isinstance(disassembled, Instruction):
+        # We're not testing instruction bundles.
+        return None
 
-    if instr_size > 2:
+    if disassembled.size > 2:
         # We're not testing 32-bit instructions.
         #print("Not testing {}.".format(mnemonic))
         return None
 
-    args = parse_args(args)
+    args = disassembled.args
     argfmt = None
     if args:
         argfmt = type(args).__name__
     if not argfmt:
         raise ValueError("Unknown argument format: \"{}\"".format(args))
 
-    return (instr, mnemonic, argfmt)
+    return (disassembled.value, disassembled.mnemonic, argfmt)
 
 def main():
     parser = argparse.ArgumentParser()

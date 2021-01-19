@@ -221,6 +221,37 @@ class ArgsNone(Arguments):
 
         return cls()
 
+class Instruction:
+    def __init__(self, size, value, mnemonic, args):
+        self.size = size
+        self.value = value
+        self.mnemonic = mnemonic
+        self.args = parse_args(args)
+
+    def __repr__(self):
+        value = "{:08x}".format(self.value)
+        if self.size == 2:
+            value = "{:04x}".format(self.value)
+        return "<{}.{} size:{} value:0x{} mnemonic:{} args:{}>".format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.size,
+            value,
+            self.mnemonic,
+            self.args,
+        )
+
+class InstructionBundle:
+    def __init__(self, instrs):
+        self.instrs = instrs
+
+    def __repr__(self):
+        return "<{}.{} {}>".format(
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.instrs,
+        )
+
 
 def gen_elf_for_code(code):
     shstrtab_array = [
@@ -309,11 +340,23 @@ def disassemble_dword(dword : int, debug=False):
                 if instr_size == 4:
                     instr = struct.unpack('>I', bytes.fromhex((groups['b0'] + groups['b1'] + groups['b2'] + groups['b3']).decode('ascii')))[0]
                 else:
-                    instr = struct.unpack('>H', bytes.fromhex((groups['b0'] + groups['b1']).decode('ascii')))[0] << 16
+                    instr = struct.unpack('>H', bytes.fromhex((groups['b0'] + groups['b1']).decode('ascii')))[0]
                 mnemonic = groups['instr0'].decode('ascii')
                 args = groups['args0']
                 if not args:
                     args = b''
                 args = args.decode('ascii')
-                if mnemonic != "illegal":
-                    return (instr, instr_size, mnemonic, args)
+                if mnemonic == "illegal":
+                    return None
+                dec_instr = Instruction(instr_size, instr, mnemonic, args)
+                mnemonic = groups.get('instr1')
+                if mnemonic is None:
+                    return dec_instr
+                mnemonic = mnemonic.decode('ascii')
+                instr = struct.unpack('>H', bytes.fromhex((groups['b2'] + groups['b3']).decode('ascii')))[0]
+                args = groups['args1']
+                if not args:
+                    args = b''
+                args = args.decode('ascii')
+                dec_instrs = InstructionBundle([dec_instr, Instruction(instr_size, instr, mnemonic, args)])
+                return dec_instrs

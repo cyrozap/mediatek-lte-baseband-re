@@ -8,7 +8,7 @@ import time
 
 from z3 import *
 
-from md32_dis import disassemble_dword, parse_args
+from md32_dis import Instruction, disassemble_dword
 
 
 class Opcodes:
@@ -72,13 +72,13 @@ def main():
                 candidate = candidate_bits.pop()
                 test_instr = opcode ^ (1 << candidate)
                 test_dis = disassemble_dword(test_instr)
-                if not test_dis:
+                if not test_dis or not isinstance(test_dis, Instruction):
                     continue
-                new_args = parse_args(test_dis[3])
+                new_args = test_dis.args
                 new_argfmt = None
                 if new_args:
                     new_argfmt = type(new_args).__name__
-                new_mnemonic = test_dis[2]
+                new_mnemonic = test_dis.mnemonic
                 if new_argfmt and opcodes.get_by_mnemonic_and_argfmt(new_mnemonic, new_argfmt) and opcodes.get_by_instr(test_instr):
                     continue
                 extra_seeds.add(test_instr)
@@ -115,13 +115,17 @@ def main():
                 # Check the model to "commit" the result.
                 s.check()
 
-            instr_size = disassembled[1]
-            mnemonic = disassembled[2]
+            if not isinstance(disassembled, Instruction):
+                # We're not testing instruction bundles.
+                print("Not testing {}.".format(disassembled))
+                continue
+            instr_size = disassembled.size
+            mnemonic = disassembled.mnemonic
             if instr_size < 4:
                 # We're not testing 16-bit instructions yet.
                 print("Not testing {}.".format(mnemonic))
                 continue
-            args = parse_args(disassembled[3])
+            args = disassembled.args
             argfmt = None
             if args:
                 argfmt = type(args).__name__
@@ -152,13 +156,13 @@ def main():
             candidate = candidate_bits.pop()
             test_instr = seed ^ (1 << candidate)
             test_dis = disassemble_dword(test_instr)
-            if not test_dis:
+            if not test_dis or not isinstance(test_dis, Instruction):
                 continue
-            new_args = parse_args(test_dis[3])
+            new_args = test_dis.args
             new_argfmt = None
             if new_args:
                 new_argfmt = type(new_args).__name__
-            new_mnemonic = test_dis[2]
+            new_mnemonic = test_dis.mnemonic
             if new_mnemonic != mnemonic or new_argfmt != argfmt:
                 if not new_argfmt or not opcodes.get_by_mnemonic_and_argfmt(new_mnemonic, new_argfmt) or not opcodes.get_by_instr(test_instr):
                     # Found a new opcode?
