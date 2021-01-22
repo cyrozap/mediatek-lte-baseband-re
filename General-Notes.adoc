@@ -281,3 +281,6 @@ drivers/API.
 ** https://archive.fosdem.org/2014/schedule/event/lima_shader/[FOSDEM 2014: lima driver: Opening up the Mali instruction set]
 *** https://video.fosdem.org/2014/H1301_Cornil/Sunday/lima_driver_Opening_up_the_Mali_instruction_set.webm[Video],
     https://archive.fosdem.org/2014/schedule/event/lima_shader/attachments/slides/439/export/events/attachments/lima_shader/slides/439/fosdem_2014_presentation.pptx[Slides]
+** https://www.x.org/wiki/Events/XDC2018/Talks/#lyude_alyssa[XDC 2018: Lyude Paul & Alyssa Rosenzweig - Introducing Panfrost]
+*** https://www.youtube.com/watch?v=qtt2Y7XZS3k[Video],
+    https://xdc2018.x.org/slides/Panfrost-XDC_2018.pdf[Slides]
