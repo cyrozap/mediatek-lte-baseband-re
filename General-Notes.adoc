@@ -275,3 +275,27 @@ drivers/API.
 * http://baseband-devel.722152.n3.nabble.com/Fun-with-the-MTK-6573-Baseband-Patching-Replacing-td4026683.html[Fun with the MTK 6573 Baseband (Patching / Replacing)]
 ** https://lists.osmocom.org/pipermail/baseband-devel/2017-April/005188.html[Fun with the MTK 6573 Baseband (Patching / Replacing), continued]
 ** Not much new information here, but still somewhat interesting.
+
+* Mali and Mali-T GPU ISA reverse engineering talks.
+** The design of the Coresonic core seems a lot like a GPU, so some of the techniques discussed here may apply.
+** https://archive.fosdem.org/2012/schedule/event/mali.html[FOSDEM 2012: Liberating ARM's Mali GPU]
+*** https://www.youtube.com/watch?v=MvRJ_8K8baI[Video],
+    https://people.freedesktop.org/~libv/FOSDEM2012_lima.pdf[Slides]
+** http://linuxtag.org/2012/en/program/overview/details-talkid481.html[LinuxTag 2012: Lima: Liberating ARM's Mali GPU]
+*** https://media.ccc.de/v/linuxtag12-481-lima_liberating_arm_s_mali_gpu[Video (CCC, stretched aspect ratio)],
+    https://www.youtube.com/watch?v=JK1SIZi3u44[Video (YouTube, with proper aspect ratio)],
+    https://people.freedesktop.org/~libv/Linuxtag2012_lima.pdf[Slides]
+** https://archive.fosdem.org/2013/schedule/event/operating_systems_open_arm_gpu/[FOSDEM 2013: Open ARM GPU drivers]
+*** https://video.fosdem.org/2013/maintracks/K.1.105/Open_ARM_GPU_drivers.webm[Video],
+    https://people.freedesktop.org/~libv/FOSDEM2013_arm_gpus.pdf[Slides]
+** https://archive.fosdem.org/2014/schedule/event/lima_driver/[FOSDEM 2014: The Lima driver]
+*** https://video.fosdem.org/2014/H1301_Cornil/Sunday/The_Lima_driver.webm[Video],
+    https://people.freedesktop.org/~libv/FOSDEM2014_lima_driver.pdf[Slides]
+** https://archive.fosdem.org/2014/schedule/event/lima_shader/[FOSDEM 2014: lima driver: Opening up the Mali instruction set]
+*** https://video.fosdem.org/2014/H1301_Cornil/Sunday/lima_driver_Opening_up_the_Mali_instruction_set.webm[Video],
+    https://archive.fosdem.org/2014/schedule/event/lima_shader/attachments/slides/439/export/events/attachments/lima_shader/slides/439/fosdem_2014_presentation.pptx[Slides]
+** https://archive.fosdem.org/2014/schedule/event/sunxi_kms/[FOSDEM 2014: Sunxi KMS driver]
+*** https://video.fosdem.org/2014/H1301_Cornil/Sunday/Sunxi_KMS_driver.webm[Video],
+    https://people.freedesktop.org/~libv/FOSDEM2014_sunxi_kms.pdf[Slides]
+** https://archive.fosdem.org/2015/schedule/event/tamil/[FOSDEM 2015: The Tamil Driver]
+*** https://video.fosdem.org/2015/devroom-graphics/tamil.mp4[Video]
