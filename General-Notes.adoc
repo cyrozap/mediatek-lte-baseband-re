@@ -174,6 +174,10 @@ CPU. "MCUSYS" seems to refer to the <<AP>> MCU system.
 [[MSDC]]MSDC:: Used to refer to their EMMC/SD card controller core. Possibly
 "MediaTek SD Controller".
 
+[[PCM]]PCM:: Programmable Command Master. This refers to the custom power
+management CPU in the <<SPM>>. It has a 32-bit variable-length instruction
+set, 17 registers (r0-r15 + zero register r31), and instruction RAM.
+
 [[RXDFE]]RXDFE:: "RX Digital Front End"?
 
 [[SBC]]SBC:: "Secure Boot Code"? Refers to secure boot functionality. When
@@ -190,6 +194,11 @@ Or a hardware component inside the SoC's debug subsystem?
 authenticate the program loading the DA? Challenge-response auth to
 authenticate the program communicating with the BROM? When this is enabled, it
 disables Download Agent (DA) functionality in the BROM.
+
+[[SPM]]SPM:: System Power Manager. A SoC peripheral used for power management.
+Contains a custom microcontroller core (<<PCM>>) that can manage the power
+states of the main CPUs, DRAM, and other peripherals in order to support
+system suspend, deep sleep/idle, etc.
 
 [[SST]]SST:: System Stability Tracker. This is the name of the system trace
 functionality included in the <<BP>> firmware.
