@@ -140,6 +140,18 @@ def raw(value):
     return struct.pack('<I', value)
 
 def instr(opcode, imm=0, rd=0, inv=0, shl=0, sh=0, rx=0, ry=0, rs=0, rxry=0, rxryrs=0):
+    assert not opcode & ~0b1111
+    assert not imm & ~0b1
+    assert not rd & ~0b11111
+    assert not inv & ~0b1
+    assert not shl & ~0b1
+    assert not sh & ~0b11111
+    assert not rx & ~0b11111
+    assert not ry & ~0b11111
+    assert not rs & ~0b11111
+    assert not rxry & ~0b1111111111
+    assert not rxryrs & ~0b111111111111111
+
     instruction = (
         (opcode << 28) |
         (imm << 27) |
