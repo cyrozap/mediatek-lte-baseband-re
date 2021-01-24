@@ -107,6 +107,10 @@ access between the CR4 and the Coresonic core, meant for debugging.
 [[CCCI]]CCCI:: Cross Core Communication Interface. This is the memory/DMA
 interface through which the <<AP>> and the <<BP>> communicate.
 
+[[CCPU]]CCPU:: Control CPU. This refers to the custom control CPU in the
+<<GCPU>>. It has a 22-bit instruction set, 32 general purpose 32-bit
+registers, instruction ROM, instruction RAM, and data RAM.
+
 [[CONN]]CONN:: "Connectivity", usually refers to the connectivity subsystem.
 The connectivity subsystem includes the WiFi CPU core and possibly the
 Bluetooth CPU as well.
@@ -139,8 +143,9 @@ this module.
 program registers with strict timing requirements.
 
 [[GCPU]]GCPU:: General Copy Protection Unit. A SoC peripheral used for
-decrypting encrypted media. It's a microcontroller core (MD32?) with some ROM,
-SRAM, and hardware accelerators for AES, SHA, MD5, RC4, DES, CRC32, DMA, etc.
+decrypting encrypted media. It has a microcontroller core (<<CCPU>>) with some
+ROM, SRAM, and hardware accelerators for AES, SHA, MD5, RC4, DES, CRC32, DMA,
+etc.
 
 [[GCU]]GCU:: GPRS Cipher Unit. An accelerator for cryptographic ciphers used
 in some GSM protocols.
