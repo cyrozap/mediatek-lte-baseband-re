@@ -13,7 +13,7 @@ class Md32(Bmo):
         self.cfgreg_base = cfgreg_base
         if not self.tcm_base:
             raise ValueError("Error: MD32 TCM base address \"tcm_base\" has not been set.")
-        if not self.tcm_base:
+        if not self.cfgreg_base:
             raise ValueError("Error: MD32 CFGREG base address \"cfgreg_base\" has not been set.")
 
         self.clk_ctrl_base = self.cfgreg_base + 0x1000
