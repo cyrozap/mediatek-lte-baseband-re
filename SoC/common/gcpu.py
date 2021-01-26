@@ -152,6 +152,10 @@ def main():
     instructions.append(0)
     instructions.append((0x35 << 15) | (0x2000 + len(instructions) - 1))
     instructions.append(0)
+
+    if len(instructions) > 512:
+        raise ValueError("Too many instructions: {} is greater than the max of 512.".format(len(instructions)))
+
     print("Raw instructions: {}".format(["0x{:06x}".format(inst) for inst in instructions]))
 
     for i, inst in enumerate(instructions):
