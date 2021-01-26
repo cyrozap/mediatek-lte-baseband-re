@@ -89,6 +89,7 @@ class Gcpu(Bmo):
 
 
 def instr_set_reg(reg, value):
+    value &= 0xffffffff
     val_hi_1 = value >> 21
     val_hi_0 = (value >> 16) & 0x1f
     val_lo_3 = (value >> 12) & 0xf
