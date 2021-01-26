@@ -42,6 +42,9 @@ class Gcpu(Bmo):
         # Start execution at addr.
         self.writew(self.gcpu_base + 0x400, addr)
 
+    def flags_read(self):
+        return self.reg_read(33)
+
     def pc_read(self):
         return self.reg_read(32)
 
@@ -132,6 +135,8 @@ def main():
 
     gcpu.print_regs()
 
+    print("Flags: 0x{:08x}".format(gcpu.flags_read()))
+
     #irom = gcpu.im_read(0, 0x1000)
     #open('gcpu_irom.bin', 'wb').write(irom)
 
@@ -170,6 +175,8 @@ def main():
     print("PC: 0x{:04x}".format(gcpu.pc_read()))
 
     gcpu.print_regs()
+
+    print("Flags: 0x{:08x}".format(gcpu.flags_read()))
 
     print("MEM_CMD: 0x{:08x}".format(gcpu.readw(0x10210c00)))
     print("MEM_P0: 0x{:08x}".format(gcpu.readw(0x10210c00 + 4)))
