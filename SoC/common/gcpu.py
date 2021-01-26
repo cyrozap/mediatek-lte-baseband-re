@@ -89,21 +89,24 @@ class Gcpu(Bmo):
 
 
 def instr_set_reg(reg, value):
-    val_hi = value >> 16
+    val_hi_1 = value >> 21
+    val_hi_0 = (value >> 16) & 0x1f
     val_lo_3 = (value >> 12) & 0xf
     val_lo_2 = (value >> 8) & 0xf
     val_lo_1 = (value >> 4) & 0xf
     val_lo_0 = value & 0xf
-    insts = [0 for _ in range(9)]
-    insts[0] = (0x2 << 19) | (reg << 16) | val_hi
-    insts[1] = (0x0a << 16) | (reg << 10) | (4 << 5) | reg
-    insts[2] = (0x08 << 16) | (reg << 10) | (val_lo_3 << 5) | reg
+    insts = [0 for _ in range(11)]
+    insts[0] = (0x0e << 16) | (val_hi_1 << 5) | reg
+    insts[1] = (0x0a << 16) | (reg << 10) | (5 << 5) | reg
+    insts[2] = (0x08 << 16) | (reg << 10) | (val_hi_0 << 5) | reg
     insts[3] = (0x0a << 16) | (reg << 10) | (4 << 5) | reg
-    insts[4] = (0x08 << 16) | (reg << 10) | (val_lo_2 << 5) | reg
+    insts[4] = (0x08 << 16) | (reg << 10) | (val_lo_3 << 5) | reg
     insts[5] = (0x0a << 16) | (reg << 10) | (4 << 5) | reg
-    insts[6] = (0x08 << 16) | (reg << 10) | (val_lo_1 << 5) | reg
+    insts[6] = (0x08 << 16) | (reg << 10) | (val_lo_2 << 5) | reg
     insts[7] = (0x0a << 16) | (reg << 10) | (4 << 5) | reg
-    insts[8] = (0x08 << 16) | (reg << 10) | (val_lo_0 << 5) | reg
+    insts[8] = (0x08 << 16) | (reg << 10) | (val_lo_1 << 5) | reg
+    insts[9] = (0x0a << 16) | (reg << 10) | (4 << 5) | reg
+    insts[10] = (0x08 << 16) | (reg << 10) | (val_lo_0 << 5) | reg
     print("instr_set_reg(r{}, 0x{:08x}): {}".format(reg, value, ["0x{:06x}".format(inst) for inst in insts]))
     return insts
 
