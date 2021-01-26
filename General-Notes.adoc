@@ -206,7 +206,8 @@ functionality included in the <<BP>> firmware.
 [[SWLA]]SWLA:: Software LA (Logic Analyzer?). It seems to be some kind of
 debug functionality in the <<BP>> firmware.
 
-[[TRNG]]TRNG:: Truly Random Number Generator.
+[[TRNG]]TRNG:: True Random Number Generator. A SoC peripheral that generates
+(hopefully) cryptographically-secure random numbers.
 
 [[WMT]]WMT:: Wireless Management Task. Refers to the WiFi/Bluetooth
 drivers/API.
