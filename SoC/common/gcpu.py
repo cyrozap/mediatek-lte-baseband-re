@@ -7,6 +7,9 @@ import time
 from bmo import Bmo
 
 
+INST_KEY = 0x259355
+
+
 class Gcpu(Bmo):
     def __init__(self, *args, gcpu_base=None, **kwargs):
         self.gcpu_base = gcpu_base
@@ -141,7 +144,9 @@ def main():
 
     print("Flags: 0x{:08x}".format(gcpu.flags_read()))
 
-    #irom = gcpu.im_read(0, 0x1000)
+    #irom = bytearray(gcpu.im_read(0, 0x1000))
+    #for i, (inst,) in enumerate(struct.iter_unpack('<I', irom)):
+    #    struct.pack_into('<I', irom, i*4, inst ^ INST_KEY)
     #open('gcpu_irom.bin', 'wb').write(irom)
 
     instructions = [
@@ -160,7 +165,7 @@ def main():
     print("Raw instructions: {}".format(["0x{:06x}".format(inst) for inst in instructions]))
 
     for i, inst in enumerate(instructions):
-        instructions[i] = inst ^ 0x259355
+        instructions[i] = inst ^ INST_KEY
     print("Obfuscated instructions: {}".format(["0x{:06x}".format(inst) for inst in instructions]))
 
     iram = b''.join([struct.pack('<I', inst) for inst in instructions])
