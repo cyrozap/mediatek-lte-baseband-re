@@ -64,6 +64,15 @@ def parse_bp(groups):
             print("   - {}".format(description))
     print(" - {}: Preloader offset: {} bytes".format(groups['z'], offset * 2048))
 
+def parse_g0(groups):
+    y = int(groups['y'], 16)
+    usbdl_bulk_com_support = y >> 8
+    reserved1 = y & 0xff
+
+    print(" - {}: Lower 16 bits of the BROM config flags.".format(groups['x']))
+    print(" - {0:02X}: USB DL bulk communications support: {0}".format(usbdl_bulk_com_support))
+    print(" - {0:02X}: BROM config reserved1: {0}".format(reserved1))
+
 def parse_t0(groups):
     time_hi = int(groups['x'], 16)
     time_lo = int(groups['y'], 16)
@@ -78,6 +87,7 @@ def parse_msg(groups):
 
     msg_handler = {
         'BP': parse_bp,
+        'G0': parse_g0,
         'T0': parse_t0,
     }.get(msg_type, lambda x: None)
 
