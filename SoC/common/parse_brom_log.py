@@ -24,10 +24,18 @@ def parse_dl(groups):
     b = int(groups['b'], 16)
     c = int(groups['c'], 16)
 
-    print(" - {}: USB DL timeout: {} ms".format(groups['x'], usbdl_timeout_ms))
+    usbdl_timeout_string = "{} ms".format(usbdl_timeout_ms)
+    if usbdl_timeout_ms == 0xffffffff:
+        usbdl_timeout_string = "None"
+
+    mode_timeout_string = "{} s".format(timeout_s)
+    if timeout_s == 0x3fff:
+        mode_timeout_string = "None"
+
+    print(" - {}: USB DL timeout: {}".format(groups['x'], usbdl_timeout_string))
     print(" - {}: USB DL mode".format(groups['y']))
     print("   - Flag: {}".format("Present" if flag == 0x444C else "Absent"))
-    print("   - Timeout: {} s".format(timeout_s))
+    print("   - Timeout: {}".format(mode_timeout_string))
     print("   - Enabled: {}".format(True if enable else False))
     print(" - {}".format(groups['a']))
     print(" - {}".format(groups['b']))
