@@ -85,13 +85,17 @@ def parse_t0(groups):
 def parse_msg(groups):
     msg_type = groups['type']
 
-    msg_handler = {
-        'BP': parse_bp,
-        'G0': parse_g0,
-        'T0': parse_t0,
-    }.get(msg_type, lambda x: None)
+    matchers = (
+        (r"BP", parse_bp),
+        (r"G0", parse_g0),
+        (r"T0", parse_t0),
+    )
 
-    msg_handler(groups)
+    for regex, handler in matchers:
+        match = re.fullmatch(regex, msg_type)
+        if match:
+            handler(groups)
+            break
 
 def main():
     matchers = (
