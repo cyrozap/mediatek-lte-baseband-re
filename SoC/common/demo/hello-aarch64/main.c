@@ -177,6 +177,7 @@ static void init(void) {
 		UART_BASE = 0x11002000;
 		TOPRGU_BASE = 0x10007000;
 		USBDL = 0x10202050;
+		BROM_LOG = (uint8_t volatile *)0x00106E4C;
 		break;
 	default:
 		soc_name = "UNKNOWN";
