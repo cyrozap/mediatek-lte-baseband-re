@@ -137,6 +137,7 @@ class Pcm(Bmo):
 
 
 def raw(value):
+    value &= 0xffffffff
     return struct.pack('<I', value)
 
 def instr(opcode, imm=0, rd=0, inv=0, shl=0, sh=0, rx=0, ry=0, rs=0, rxry=0, rxryrs=0):
@@ -168,6 +169,7 @@ def instr(opcode, imm=0, rd=0, inv=0, shl=0, sh=0, rx=0, ry=0, rs=0, rxry=0, rxr
     return struct.pack('<I', instruction)
 
 def instr_set_reg(reg, value):
+    value &= 0xffffffff
     instruction = 0x18000000 | (reg << 22) | (31 << 0)
     print("instr_set_reg(r{}, 0x{:08x}): 0x{:08x}, 0x{:08x}".format(reg, value, instruction, value))
     return struct.pack('<II', instruction, value)
