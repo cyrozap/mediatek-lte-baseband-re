@@ -88,6 +88,15 @@ def parse_g0(groups):
     print(" - {0:02X}: USB DL bulk communications support: {0}".format(usbdl_bulk_com_support))
     print(" - {0:02X}: BROM config reserved1: {0}".format(reserved1))
 
+def parse_nn(groups):
+    counter = int(groups['type'], 16)
+    code_1 = int(groups['x'], 16)
+    code_2 = int(groups['y'], 16)
+
+    print(" - {}: Message counter: {}".format(groups['type'], counter))
+    print(" - {}: Status code: 0x{:04x}".format(groups['x'], code_1))
+    print(" - {}: Extra context-specific data: 0x{:04x}".format(groups['y'], code_2))
+
 def parse_t0(groups):
     time_hi = int(groups['x'], 16)
     time_lo = int(groups['y'], 16)
@@ -130,6 +139,7 @@ def parse_msg(groups):
         (r"BP", parse_bp),
         (r"F[0-9A-F]", parse_fn),
         (r"G0", parse_g0),
+        (r"[0-9][0-9A-F]", parse_nn),
         (r"T0", parse_t0),
         (r"V[0-9]", parse_vn),
     )
