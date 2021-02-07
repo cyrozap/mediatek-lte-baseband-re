@@ -82,6 +82,32 @@ def parse_t0(groups):
     print(" - {} {}: BROM execution time: {} ms".format(groups['x'], groups['y'], boot_time))
     print(" - {}: JTAG delay % 65536: {} ms".format(groups['z'], jtag_delay))
 
+def parse_vn(groups):
+    bd_idx = int(groups['type'][1], 10)
+    code_1 = int(groups['x'], 16)
+    code_2 = int(groups['y'], 16)
+    bl_type = int(groups['z'], 16)
+
+    bl_type_string = {
+        0x0000: "gfh_file_none",
+        0x0001: "arm_bl",
+        0x0002: "arm_ext_bl",
+        0x0003: "dualmac_dsp_bl",
+        0x0004: "sctrl_cert",
+        0x0005: "tool_auth",
+        0x0006: "file_mtk_reserved1",
+        0x0007: "epp",
+        0x0008: "file_mtk_reserved2",
+        0x0009: "file_mtk_reserved3",
+        0x000a: "root_cert",
+        0x000b: "ap_bl",
+    }.get(bl_type, "unknown")
+
+    print(" - {0}: Bootloader descriptor index: {0}".format(bd_idx))
+    print(" - {}: Most recent status code: 0x{:04x}".format(groups['x'], code_1))
+    print(" - {}: Previous status code: 0x{:04x}".format(groups['y'], code_2))
+    print(" - {}: Bootloader descriptor bl_type: {}".format(groups['z'], bl_type_string.upper()))
+
 def parse_msg(groups):
     msg_type = groups['type']
 
@@ -89,6 +115,7 @@ def parse_msg(groups):
         (r"BP", parse_bp),
         (r"G0", parse_g0),
         (r"T0", parse_t0),
+        (r"V[0-9]", parse_vn),
     )
 
     for regex, handler in matchers:
