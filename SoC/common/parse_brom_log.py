@@ -32,12 +32,17 @@ def parse_dl(groups):
     if timeout_s == 0x3fff:
         mode_timeout_string = "None"
 
+    aa_string = {
+        0x00: "No DL mode timeout.",
+        0x01: "Valid DL mode timeout set.",
+    }.get(a, "UNKNOWN")
+
     print(" - {}: USB DL timeout: {}".format(groups['x'], usbdl_timeout_string))
     print(" - {}: USB DL mode".format(groups['y']))
     print("   - Flag: {}".format("Present" if flag == 0x444C else "Absent"))
     print("   - Timeout: {}".format(mode_timeout_string))
     print("   - Enabled: {}".format(True if enable else False))
-    print(" - {}".format(groups['a']))
+    print(" - {}: {}".format(groups['a'], aa_string))
     print(" - {}".format(groups['b']))
     print(" - {}".format(groups['c']))
 
