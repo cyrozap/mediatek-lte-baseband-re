@@ -16,6 +16,7 @@ static uint32_t UART_LSR;
 
 static uint32_t TOPRGU_BASE;
 static uint32_t USBDL;
+static uint32_t volatile * BROM_LOG_LEN;
 static uint8_t volatile * BROM_LOG;
 
 #define MAX_CMD_LEN 100
@@ -137,6 +138,7 @@ static void init(void) {
 		UART_BASE = 0x11002000 + 0x1000; // UART1 base address.
 		TOPRGU_BASE = 0x10212000;
 		USBDL = 0x10000818;
+		BROM_LOG_LEN = (uint32_t volatile *)0x0010277C;
 		BROM_LOG = (uint8_t volatile *)0x00105274;
 
 		// Configure UART1 pins.
@@ -170,6 +172,7 @@ static void init(void) {
 		UART_BASE = 0x11002000;
 		TOPRGU_BASE = 0x10007000;
 		USBDL = 0x1001A080;
+		BROM_LOG_LEN = (uint32_t volatile *)0x00102850;
 		BROM_LOG = (uint8_t volatile *)0x001065D0;
 		break;
 	case 0x8163:
@@ -177,6 +180,7 @@ static void init(void) {
 		UART_BASE = 0x11002000;
 		TOPRGU_BASE = 0x10007000;
 		USBDL = 0x10202050;
+		BROM_LOG_LEN = (uint32_t volatile *)0x00102884;
 		BROM_LOG = (uint8_t volatile *)0x00106E4C;
 		break;
 	default:
@@ -530,9 +534,13 @@ static int blog_handler(size_t argc, const char * argv[]) {
 		return -1;
 	}
 
+	uint32_t max = 0x400;
+	if ((BROM_LOG_LEN != NULL) && (*BROM_LOG_LEN > 0))
+		max = *BROM_LOG_LEN;
+
 	println("BROM log:");
 
-	for (size_t i = 0; ; i++) {
+	for (uint32_t i = 0; i < max; i++) {
 		if (BROM_LOG[i] < ' ' && BROM_LOG[i] != '\n' && BROM_LOG[i] != '\r')
 			break;
 		if (BROM_LOG[i] > '~')
