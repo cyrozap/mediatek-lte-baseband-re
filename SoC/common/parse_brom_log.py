@@ -64,6 +64,21 @@ def parse_bp(groups):
             print("   - {}".format(description))
     print(" - {}: Preloader offset: {} bytes".format(groups['z'], offset * 2048))
 
+def parse_fn(groups):
+    mode = int(groups['type'][1], 16)
+    code_1 = int(groups['x'], 16)
+    code_2 = int(groups['y'], 16)
+
+    mode_string = {
+        0: "RAM",
+        3: "MSDC0 (eMMC)",
+        5: "MSDC1 (SD)",
+    }.get(mode, "UNKNOWN")
+
+    print(" - {}: Boot mode ID: {}".format(mode, mode_string))
+    print(" - {}: Most recent status code: 0x{:04x}".format(groups['x'], code_1))
+    print(" - {}: Previous status code: 0x{:04x}".format(groups['y'], code_2))
+
 def parse_g0(groups):
     y = int(groups['y'], 16)
     usbdl_bulk_com_support = y >> 8
@@ -113,6 +128,7 @@ def parse_msg(groups):
 
     matchers = (
         (r"BP", parse_bp),
+        (r"F[0-9A-F]", parse_fn),
         (r"G0", parse_g0),
         (r"T0", parse_t0),
         (r"V[0-9]", parse_vn),
