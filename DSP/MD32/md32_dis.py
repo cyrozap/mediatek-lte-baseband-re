@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import pathlib
 import re
 import struct
@@ -360,3 +362,21 @@ def disassemble_dword(dword : int, debug=False):
                 args = args.decode('ascii')
                 dec_instrs = InstructionBundle([dec_instr, Instruction(instr_size, instr, mnemonic, args)])
                 return dec_instrs
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--debug", action="store_true", default=False, help="Print debug output.")
+    parser.add_argument("instruction", type=str, help="The instruction word you want to decode.")
+    args = parser.parse_args()
+
+    instruction = int(args.instruction, 16)
+
+    if len(args.instruction) <= 6:
+        # Assume 16-bit instruction.
+        instruction <<= 16
+
+    print(disassemble_dword(instruction, debug=args.debug))
+
+if __name__ == "__main__":
+    main()
