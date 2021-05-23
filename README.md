@@ -66,5 +66,5 @@ to this project.
 
 Join us in the `#postmarketos-lowlevel` channel on
 [Matrix](https://matrix.to/#/#lowlevel:postmarketos.org) or
-[OFTC IRC](https://kiwiirc.com/nextclient/#ircs://irc.oftc.net:6697/#postmarketos-lowlevel)
+[OFTC IRC](https://webchat.oftc.net/?channels=postmarketos-lowlevel)
 to discuss this and other low-level smartphone firmware projects.
