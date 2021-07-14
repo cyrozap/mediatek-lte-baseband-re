@@ -96,6 +96,22 @@ class UsbDl:
             ),
             'brom_g_da_verified': 0x001030C0,
         },
+        0x0326: {
+            'name': "MT6750",
+            'brom': (0x00000000, 0x10000),
+            'sram': (0x00100000, 0x20000),
+            'l2_sram': (0x00200000, 0x40000),  # Functional spec says size is 0x20000, but that's incorrect.
+            'toprgu': (0x10007000, 0x1000),
+            'efusec': (0x10206000, 0x1000),
+            'usbdl': 0x10001818,
+            'cqdma_base': 0x10212C00,
+            'tmp_addr': 0x110001A0,
+            'brom_g_bounds_check': (
+                (0x0010276C, 0x00000000),
+                (0x00105704, 0x00000000),
+            ),
+            'brom_g_da_verified': 0x001030BC,
+        },
         0x0335: {
             'name': "MT6737M",
             'brom': (0x00000000, 0x10000),
