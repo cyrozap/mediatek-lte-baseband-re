@@ -5,12 +5,26 @@ import struct
 import time
 
 from bmo import Bmo
+from usbdl import UsbDl
 
 
 class Md32(Bmo):
-    def __init__(self, *args, tcm_base=None, cfgreg_base=None, **kwargs):
-        self.tcm_base = tcm_base
-        self.cfgreg_base = cfgreg_base
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        soc_id = self.readw(0x08000000)
+        self.soc = UsbDl.socs.get(soc_id)
+        if not self.soc:
+            raise ValueError("Error: Failed to recognize SoC with chip ID 0x{:04x}.".format(soc_id))
+
+        print("Detected SoC: {}".format(self.soc['name']))
+
+        md32_info = self.soc.get('md32')
+        if not md32_info:
+            raise ValueError("Error: MD32 info has not been defined for SoC \"{}\".".format(self.soc['name']))
+
+        self.tcm_base = md32_info.get('tcm_base')
+        self.cfgreg_base = md32_info.get('cfgreg_base')
         if not self.tcm_base:
             raise ValueError("Error: MD32 TCM base address \"tcm_base\" has not been set.")
         if not self.cfgreg_base:
@@ -18,12 +32,11 @@ class Md32(Bmo):
 
         self.clk_ctrl_base = self.cfgreg_base + 0x1000
 
-        super().__init__(*args, **kwargs)
-
     def soc_reset(self):
         # Reset the whole SoC.
-        self.writew(0x10007000, 0x22000000 | 0x10 | 0x4)
-        self.writew(0x10007000 + 0x14, 0x1209)
+        self.writew(self.soc['toprgu'][0], [0x22000000 | 0x10 | 0x4])
+        time.sleep(0.001)
+        self.writew(self.soc['toprgu'][0] + 0x14, [0x1209])
 
         self.close()
 
@@ -163,22 +176,19 @@ def main():
     parser.add_argument('-s', '--baudrate-next', type=int, default=115200, help="The baud rate you want to switch to. Default: 115200")
     args = parser.parse_args()
 
-    tcm_base = 0x10020000
-    cfgreg_base = 0x10058000
-
     verbose = False
 
     #print("Resetting SoC...")
-    #md32 = Md32(args.port, baudrate=args.baudrate, debug=False, verbose=verbose, tcm_base=tcm_base, cfgreg_base=cfgreg_base)
+    #md32 = Md32(args.port, baudrate=args.baudrate, debug=False, verbose=verbose)
     #md32.soc_reset()
     #time.sleep(1)
 
-    md32 = Md32(args.port, baudrate=args.baudrate, debug=False, verbose=verbose, tcm_base=tcm_base, cfgreg_base=cfgreg_base)
+    md32 = Md32(args.port, baudrate=args.baudrate, debug=False, verbose=verbose)
     if args.baudrate_next != args.baudrate:
         print("Switching to baudrate to {}...".format(args.baudrate_next))
         md32.setbaud(args.baudrate_next)
 
-        md32 = Md32(args.port, baudrate=args.baudrate_next, debug=False, verbose=verbose, tcm_base=tcm_base, cfgreg_base=cfgreg_base)
+        md32 = Md32(args.port, baudrate=args.baudrate_next, debug=False, verbose=verbose)
 
     # Reset MD32 state.
     md32.md32_reset()

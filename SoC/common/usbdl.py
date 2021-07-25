@@ -186,6 +186,10 @@ class UsbDl:
             ),
             'brom_g_da_verified': 0x001031D0,
             'gcpu_base': 0x10210000,
+            'md32': {
+                'tcm_base': 0x10020000,
+                'cfgreg_base': 0x10058000,
+            }
         },
     }
 
