@@ -34,23 +34,16 @@ static void putchar(char c) {
 	mem[UART_THR/4] = c;
 }
 
-static size_t strnlen(const char * buf, size_t max_len) {
-	size_t len = 0;
-	for (size_t i = 0; i < max_len; i++) {
+static void print(const char * buf) {
+	for (size_t i = 0; ; i++) {
 		if (buf[i] == 0)
 			break;
-		len++;
+		putchar(buf[i]);
 	}
-	return len;
 }
 
 static void println(const char * buf) {
-	size_t len = strnlen(buf, 256);
-
-	for (size_t i = 0; i < len; i++) {
-		putchar(buf[i]);
-	}
-
+	print(buf);
 	putchar('\n');
 }
 
