@@ -5,7 +5,7 @@ CC := $(PREFIX)gcc
 #CFLAGS := -march=armv7-a -mthumb -mfloat-abi=soft -fpie -nostdlib -nostartfiles -nodefaultlibs -fno-builtin -Os
 CFLAGS := -march=armv7-a -mfloat-abi=soft -fpie -nostdlib -nostartfiles -nodefaultlibs -fno-builtin -Os
 LD := $(PREFIX)ld
-LDFLAGS := -e 0x00200000 -Ttext 0x00200000 -Map mode-switch.map
+LDFLAGS := -T linker.ld -Map mode-switch.map
 OBJCOPY := $(PREFIX)objcopy
 OBJDUMP := $(PREFIX)objdump
 
@@ -17,7 +17,7 @@ all: mode-switch.bin mode-switch.elf
 %.o: %.S
 	$(AS) $(ASFLAGS) -o $@ $<
 
-mode-switch.elf: main.o
+mode-switch.elf: init.o main.o
 	$(LD) $(LDFLAGS) -o $@ $^
 
 %.bin: %.elf
