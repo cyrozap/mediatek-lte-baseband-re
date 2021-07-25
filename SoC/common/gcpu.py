@@ -57,6 +57,21 @@ class Gcpu(Bmo):
     def flags_read(self):
         return self.reg_read(33)
 
+    def print_flags(self):
+        flags = self.flags_read()
+        f_zero = flags & (1 << 1)
+        f_carry_or_overflow = flags & ((1 << 2) | (1 << 0))
+
+        flags_list = []
+        if f_zero:
+            flags_list.append("Zero")
+        if f_carry_or_overflow:
+            if f_carry_or_overflow != ((1 << 2) | (1 << 0)):
+                print("WARNING: Unexpected mismatch between Carry and oVerflow flags!")
+            flags_list.append("Carry/oVerflow")
+
+        print("Flags: 0x{:08x} ({})".format(flags, ", ".join(flags_list)))
+
     def pc_read(self):
         return self.reg_read(32)
 
@@ -186,7 +201,7 @@ def main():
 
     gcpu.print_regs()
 
-    print("Flags: 0x{:08x}".format(gcpu.flags_read()))
+    gcpu.print_flags()
 
     #irom = bytearray(gcpu.im_read(0, 0x1000))
     #for i, (inst,) in enumerate(struct.iter_unpack('<I', irom)):
@@ -233,7 +248,7 @@ def main():
 
     gcpu.print_regs()
 
-    print("Flags: 0x{:08x}".format(gcpu.flags_read()))
+    gcpu.print_flags()
 
     print("MEM_CMD: 0x{:08x}".format(gcpu.readw(gcpu.gcpu_base + 0xc00)))
     print("MEM_P0: 0x{:08x}".format(gcpu.readw(gcpu.gcpu_base + 0xc00 + 4)))
