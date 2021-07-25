@@ -133,6 +133,14 @@ static void init(void) {
 		TOPRGU_BASE = 0x10212000;
 		USBDL = 0x10000818;
 		break;
+	case 0x0326:
+		soc_name = "MT6750";
+		UART_BASE = 0x11002000;
+		TOPRGU_BASE = 0x10007000;
+		USBDL = 0x10001818;
+		BROM_LOG_LEN = (uint32_t volatile *)0x0010277C;
+		BROM_LOG = (uint8_t volatile *)0x00105274;
+		break;
 	case 0x0335:
 		soc_name = "MT6737M";
 		UART_BASE = 0x11002000 + 0x1000; // UART1 base address.
