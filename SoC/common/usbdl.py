@@ -79,6 +79,7 @@ class UsbDl:
                 (0x00105704, 0x00000000),
             ),
             'brom_g_da_verified': 0x001030BC,
+            'gcpu_base': 0x10210000,
         },
         0x0321: {
             'name': "MT6735",
@@ -95,6 +96,7 @@ class UsbDl:
                 (0x00105704, 0x00000000),
             ),
             'brom_g_da_verified': 0x001030C0,
+            'gcpu_base': 0x10216000,
         },
         0x0335: {
             'name': "MT6737M",
@@ -111,6 +113,7 @@ class UsbDl:
                 (0x00105704, 0x00000000),
             ),
             'brom_g_da_verified': 0x001030C0,
+            'gcpu_base': 0x10216000,
         },
         0x0337: {
             'name': "MT6753",
@@ -166,6 +169,7 @@ class UsbDl:
                 (0x001072DC, 0x00000000),
             ),
             'brom_g_da_verified': 0x001031D0,
+            'gcpu_base': 0x10210000,
         },
     }
 

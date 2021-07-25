@@ -5,23 +5,32 @@ import struct
 import time
 
 from bmo import Bmo
+from usbdl import UsbDl
 
 
 INST_KEY = 0x259355
 
 
 class Gcpu(Bmo):
-    def __init__(self, *args, gcpu_base=None, **kwargs):
-        self.gcpu_base = gcpu_base
-        if not self.gcpu_base:
-            raise ValueError("Error: GCPU base address \"gcpu_base\" has not been set.")
-
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        soc_id = self.readw(0x08000000)
+        self.soc = UsbDl.socs.get(soc_id)
+        if not self.soc:
+            raise ValueError("Error: Failed to recognize SoC with chip ID 0x{:04x}.".format(soc_id))
+
+        print("Detected SoC: {}".format(self.soc['name']))
+
+        self.gcpu_base = self.soc.get('gcpu_base')
+        if not self.gcpu_base:
+            raise ValueError("Error: GCPU base address has not been defined for SoC \"{}\".".format(self.soc['name']))
 
     def soc_reset(self):
         # Reset the whole SoC.
-        self.writew(0x10007000, 0x22000000 | 0x10 | 0x4)
-        self.writew(0x10007000 + 0x14, 0x1209)
+        self.writew(self.soc['toprgu'][0], [0x22000000 | 0x10 | 0x4])
+        time.sleep(0.001)
+        self.writew(self.soc['toprgu'][0] + 0x14, [0x1209])
 
         self.close()
 
@@ -158,21 +167,19 @@ def main():
     parser.add_argument('-s', '--baudrate-next', type=int, default=115200, help="The baud rate you want to switch to. Default: 115200")
     args = parser.parse_args()
 
-    gcpu_base = 0x10210000
-
     verbose = False
 
     #print("Resetting SoC...")
-    #gcpu = Gcpu(args.port, baudrate=args.baudrate, debug=False, verbose=verbose, gcpu_base=gcpu_base)
+    #gcpu = Gcpu(args.port, baudrate=args.baudrate, debug=False, verbose=verbose)
     #gcpu.soc_reset()
     #time.sleep(1)
 
-    gcpu = Gcpu(args.port, baudrate=args.baudrate, debug=False, verbose=verbose, gcpu_base=gcpu_base)
+    gcpu = Gcpu(args.port, baudrate=args.baudrate, debug=False, verbose=verbose)
     if args.baudrate_next != args.baudrate:
         print("Switching to baudrate to {}...".format(args.baudrate_next))
         gcpu.setbaud(args.baudrate_next)
 
-        gcpu = Gcpu(args.port, baudrate=args.baudrate_next, debug=False, verbose=verbose, gcpu_base=gcpu_base)
+        gcpu = Gcpu(args.port, baudrate=args.baudrate_next, debug=False, verbose=verbose)
 
     # Reset GCPU state.
     gcpu.ccpu_reset()
@@ -228,8 +235,8 @@ def main():
 
     print("Flags: 0x{:08x}".format(gcpu.flags_read()))
 
-    print("MEM_CMD: 0x{:08x}".format(gcpu.readw(0x10210c00)))
-    print("MEM_P0: 0x{:08x}".format(gcpu.readw(0x10210c00 + 4)))
+    print("MEM_CMD: 0x{:08x}".format(gcpu.readw(gcpu.gcpu_base + 0xc00)))
+    print("MEM_P0: 0x{:08x}".format(gcpu.readw(gcpu.gcpu_base + 0xc00 + 4)))
 
 
 if __name__ == "__main__":
