@@ -20,6 +20,7 @@ RE_ARGS_REG_OFF_REG_MOD = re.compile(r'r(?P<reg0>[0-9]+), \(r(?P<reg1>[0-9]+)\+=
 RE_ARGS_IMM_REG_IMM = re.compile(r'#0x(?P<imm0>[0-9a-f]+), r(?P<reg0>[0-9]+), #0x(?P<imm1>[0-9a-f]+)')
 RE_ARGS_REG_REG_IMM = re.compile(r'r(?P<reg0>[0-9]+), r(?P<reg1>[0-9]+), #0x(?P<imm0>[0-9a-f]+)')
 RE_ARGS_REG_REG_REG = re.compile(r'r(?P<reg0>[0-9]+), r(?P<reg1>[0-9]+), r(?P<reg2>[0-9]+)')
+RE_ARGS_SFR_REG_REG = re.compile(r'(?P<sfr>[a-zA-Z0-9]+), r(?P<reg0>[0-9]+), r(?P<reg1>[0-9]+)')
 RE_ARGS_REG_IMM_IMM = re.compile(r'r(?P<reg0>[0-9]+), #0x(?P<imm0>[0-9a-f]+), #0x(?P<imm1>[0-9a-f]+)')
 RE_ARGS_REG_OFF_REG = re.compile(r'r(?P<reg0>[0-9]+), #0x(?P<imm0>[0-9a-f]+)\(r(?P<reg1>[0-9]+)\)')
 RE_ARGS_REG_ADR_REG = re.compile(r'r(?P<reg0>[0-9]+), \(r(?P<reg1>[0-9]+)\)')
@@ -102,6 +103,15 @@ class ArgsRegRegReg(Arguments):
     @classmethod
     def from_args(cls, args : str):
         args_match = RE_ARGS_REG_REG_REG.fullmatch(args)
+        if not args_match:
+            return None
+
+        return cls(**args_match.groupdict())
+
+class ArgsSfrRegReg(Arguments):
+    @classmethod
+    def from_args(cls, args : str):
+        args_match = RE_ARGS_SFR_REG_REG.fullmatch(args)
         if not args_match:
             return None
 
@@ -289,6 +299,7 @@ def parse_args(args : str):
         ArgsImmRegImm,
         ArgsRegRegImm,
         ArgsRegRegReg,
+        ArgsSfrRegReg,
         ArgsRegImmImm,
         ArgsRegOffReg,
         ArgsRegAdrReg,
