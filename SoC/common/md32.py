@@ -137,19 +137,19 @@ class Md32(Bmo):
 
     def regs_read(self):
         # Save the value of r15.
-        r15_saved = self.readw(self.cfgreg_base + 0x68)
+        r15_saved = self.reg_read(15)
 
         for reg in range(14):
             # Copy the value from the register of interest to r15.
             self.exec_instr(0x0d000000 | (reg << 4) | 15)
 
             # Read the copied value from the r15 register.
-            value = self.readw(self.cfgreg_base + 0x68)
+            value = self.reg_read(15)
 
             yield reg, value
 
         # Special case for r14.
-        yield 14, self.readw(self.cfgreg_base + 0x64)
+        yield 14, self.reg_read(14)
 
         # Restore the value of r15.
         self.reg_write(15, r15_saved)
