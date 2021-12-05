@@ -9,6 +9,35 @@ from usbdl import UsbDl
 
 
 class Md32(Bmo):
+    csr_list = (
+        ('sr', 0),
+        ('ipc', 1),
+        ('isr', 2),
+        ('lf', 4),
+        ('ls0', 5),
+        ('le0', 6),
+        ('lc0', 7),
+        ('ls1', 8),
+        ('le1', 9),
+        ('lc1', 10),
+        ('ls2', 11),
+        ('le2', 12),
+        ('lc2', 13),
+    )
+
+    sfr_read_instructions = {
+        'a0h': 0x04162000,
+        'a0l': 0x04172000,
+        'dbg': 0x07008000,
+    }
+
+    sfr_write_instructions = {
+        # name: (instruction, source register shift)
+        'a0h': (0x04148000, 8),
+        'a0l': (0x04134000, 4),
+        'dbg': (0x07008010, 0),
+    }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -162,6 +191,40 @@ class Md32(Bmo):
         print(", ".join(regs[4:8]))
         print(", ".join(regs[8:12]))
         print(", ".join(regs[12:]))
+
+    def sfrs_read(self):
+        # Save the value of r15.
+        r15_saved = self.reg_read(15)
+
+        for csr_name, csr_number in self.csr_list:
+            # Copy the value from the register of interest to r15.
+            self.exec_instr(0x04154000 | (csr_number << 4) | 15)
+
+            # Read the copied value from the r15 register.
+            value = self.reg_read(15)
+
+            yield csr_name, value
+
+        for sfr_name, instruction in self.sfr_read_instructions.items():
+            # Copy the value from the register of interest to r15.
+            self.exec_instr(instruction | 15)
+
+            # Read the copied value from the r15 register.
+            value = self.reg_read(15)
+
+            yield sfr_name, value
+
+        # Restore the value of r15.
+        self.reg_write(15, r15_saved)
+
+    def print_sfrs(self):
+        sfrs = ["{}: 0x{:08x}".format(sfr, value) for sfr, value in self.sfrs_read()]
+        print(", ".join(sfrs[:3]))
+        print(", ".join(sfrs[3:3+1]))
+        print(", ".join(sfrs[4:4+3]))
+        print(", ".join(sfrs[7:7+3]))
+        print(", ".join(sfrs[10:10+3]))
+        print(", ".join(sfrs[13:]))
 
     def tcm_load(self, data : int):
         assert len(data) % 4 == 0
