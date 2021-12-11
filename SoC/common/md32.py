@@ -256,10 +256,10 @@ def main():
     # Reset MD32 state.
     md32.md32_reset()
 
-    # Insert software breakpoints to make sure we don't mess up the CPU state.
-    breakpoints = struct.pack('<I', 0xa003a003)
-    md32.memory_write(md32.tcm_base, breakpoints)
-    assert breakpoints == md32.memory_read(md32.tcm_base, 4)
+    # Insert software breakpoint to make sure we don't mess up the CPU state.
+    bp = struct.pack('<I', 0x05400000)
+    md32.memory_write(md32.tcm_base, bp)
+    assert bp == md32.memory_read(md32.tcm_base, 4)
 
     # Release from reset.
     md32.md32_run()
