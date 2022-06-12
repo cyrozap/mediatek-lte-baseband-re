@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 """
 OpenOCD RPC example, covered by GNU GPLv3 or later
 Copyright (C) 2014 Andreas Ortmann (ortmann@finf.uni-hannover.de)

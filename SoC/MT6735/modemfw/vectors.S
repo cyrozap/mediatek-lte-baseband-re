@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
+
 /****************************************************************************
  * arch/arm/src/arm7-r/arm_vectortab.S
  *
