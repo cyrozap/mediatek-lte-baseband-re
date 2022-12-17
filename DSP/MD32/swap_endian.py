@@ -28,13 +28,12 @@ def main():
     args = parser.parse_args()
 
     binary = open(args.input, 'rb').read()
-    words = struct.iter_unpack('<I', binary)
 
     output = sys.stdout.buffer
     if args.output:
         output = open(args.output, 'wb')
 
-    for word in map(lambda x: x[0], words):
+    for (word,) in struct.iter_unpack('<I', binary):
         output.write(struct.pack('>I', word))
 
     output.close()
