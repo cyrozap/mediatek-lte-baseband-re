@@ -179,7 +179,7 @@ static void init(void) {
 		writew(0x10211A50, gpio_pull_sel);
 		uint32_t gpio_pull_en = readw(0x10211A30);
 		gpio_pull_en |= 1 << 15;
-		writew(0x10211A30, gpio_pull_sel);
+		writew(0x10211A30, gpio_pull_en);
 		uint32_t gpio_mode = readw(0x10211370);
 		gpio_mode &= ~((0x7 << 22) | (0x7 << 19));
 		gpio_mode |= (0x1 << 22) | (0x1 << 19);
