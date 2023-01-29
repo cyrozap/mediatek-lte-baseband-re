@@ -240,6 +240,9 @@ drivers/API.
 ** "Reversing the ADF7242"
 ** Good talk on how to reverse engineer ISAs in general.
 
+* https://recon.cx/2012/schedule/attachments/40_Chernov-Troshina.pdf[Reverse engineering of binary programs for custom virtual machines]
+** Another good ISA reverse engineering talk.
+
 * https://www.robertxiao.ca/hacking/dsctf-2019-cpu-adventure-unknown-cpu-reversing/[reverse-engineering a custom, unknown CPU from a single program]
 ** Explains how, for a CTF competition, a custom ISA was reverse-engineered
    with only access to the executed binary and a running, remote instance of
