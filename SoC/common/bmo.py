@@ -20,9 +20,10 @@
 
 
 import binascii
-import serial
 import struct
 import time
+
+import serial
 
 
 class BmoInitError(Exception):
