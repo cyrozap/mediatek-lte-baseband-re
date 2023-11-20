@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # make_image.py - A tool for generating bootable modem images
-# Copyright (C) 2018  Forest Crossman <cyrozap@gmail.com>
+# Copyright (C) 2018, 2023  Forest Crossman <cyrozap@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 import argparse
 import struct
-from datetime import datetime
+from datetime import datetime, UTC
 
 
 def gen_footer(data):
@@ -31,7 +31,7 @@ def gen_footer(data):
     f += struct.pack('<I', 2)  # product_ver
     f += struct.pack('<I', 5)  # image_type
     f += struct.pack('16s', b'MT6735_S00')  # platform
-    f += struct.pack('64s', datetime.utcnow().strftime("%Y/%m/%d %H:%M").encode('utf-8'))  # build_time
+    f += struct.pack('64s', datetime.now(UTC).strftime("%Y/%m/%d %H:%M").encode('utf-8'))  # build_time
     f += struct.pack('64s', b'')  # build_ver
     f += struct.pack('B', 1)  # bind_sys_id
     f += struct.pack('B', 0)  # ext_attr
