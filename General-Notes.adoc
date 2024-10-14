@@ -251,6 +251,21 @@ drivers/API.
    map its functionality, which enabled them to search for those patterns of
    functionality in the binary.
 
+* https://archive.conference.hitb.org/hitbsecconf2012ams/adam-gowdiak-dvb/index.html[Security Vulnerabilities of Digital Video Broadcast Chipsets]
+** https://www.youtube.com/watch?v=TpR9exZrj0Q[Video],
+   https://archive.conference.hitb.org/hitbsecconf2012ams/materials/D1T2%20-%20Adam%20Gowdiak%20-%20Security%20Vulnerabilities%20of%20DVB%20Chipsets.pdf[Slides]
+** This talk is primarily about DVB chip security, but it does include some
+   discussion of ISA reverse engineering techniques.
+** "JMP and LOAD/STORE instructions sufficient to discover the meaning of all
+   other instructions":
+. "JMP from firmware to user's code path"
+. "STORE the contents of registers (firmware context)"
+. "LOAD user's environment (contents of registers)"
+. "EXECUTE unknown SLIM Core instruction opcode"
+. "STORE user's environment (contents of registers)"
+. "LOAD the contents of registers (firmware context)"
+. "JMP back to firmware code path"
+
 * https://docs.google.com/presentation/d/13OJNOb2IMwp79SDrbxSLF3i7StTgWLdD7QlYpic39r8/edit[Reversing a Japanese Wireless SD Card - From Zero to Code Execution]
 ** This talk includes some ISA identification techniques.
 ** Has links to some interesting tools:
