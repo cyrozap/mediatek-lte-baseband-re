@@ -195,7 +195,7 @@ encrypted JTAG?). See also: <<HACC>>.
 [[SIB]]SIB:: System Interface Box. A custom SWD/JTAG adapter used by MediaTek?
 Or a hardware component inside the SoC's debug subsystem?
 
-[[SLA]]SLA:: "Software Loader Authentication"? Some challenge-response auth to
+[[SLA]]SLA:: Serial Link Authentication. Some challenge-response auth to
 authenticate the program loading the DA? Challenge-response auth to
 authenticate the program communicating with the BROM? When this is enabled, it
 disables Download Agent (DA) functionality in the BROM.
