@@ -142,6 +142,10 @@ block with registers that control reset, clocking, and I/O selection for the
 debug subsystem. For example, the JTAG enable/disable registers are part of
 this module.
 
+[[DEVAPC]]DEVAPC:: Device Access Permission Control.
+
+[[DPM]]DPM:: DRAM Power Manager.
+
 [[DSP]]DSP:: Digital Signal Processor.
 
 [[GCE]]GCE:: Global Command Engine. A SoC peripheral that can be used to
@@ -173,6 +177,8 @@ their IOMMU.
 [[MCU]]MCU:: Used to refer to different processor subsystems. e.g., "APMCU"
 refers to the main <<AP>> core cluster, while "MDMCU" refers to the <<BP>>
 CPU. "MCUSYS" seems to refer to the <<AP>> MCU system.
+
+[[MCUPM]]MCUPM:: MCUSYS Power Management.
 
 [[MFG]]MFG:: MFlexGraphics. Refers to the 3D GPU subsystem.
 
