@@ -108,9 +108,13 @@ access between the CR4 and the Coresonic core, meant for debugging.
 [[CCCI]]CCCI:: Cross Core Communication Interface. This is the memory/DMA
 interface through which the <<AP>> and the <<BP>> communicate.
 
+[[CCIF]]CCIF:: Cross Core Interface.
+
 [[CCPU]]CCPU:: Control CPU. This refers to the custom control CPU in the
 <<GCPU>>. It has a 22-bit instruction set, 32 general purpose 32-bit
 registers, instruction ROM, instruction RAM, and data RAM.
+
+[[CLDMA]]CLDMA:: Control Layer DMA.
 
 [[CONN]]CONN:: "Connectivity", usually refers to the connectivity subsystem.
 The connectivity subsystem includes the WiFi CPU core and possibly the
