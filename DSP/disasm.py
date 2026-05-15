@@ -40,8 +40,9 @@ def main():
 
     fw = open(args.firmware, 'rb').read()
 
-    for (instr,) in struct.iter_unpack('<I', fw):
-        print("0x{:07x}: {}".format(instr, dis(instr)))
+    print("Instruction index: Instruction word in hex (Instruction word in binary)")
+    for i, (instr,) in enumerate(struct.iter_unpack('<I', fw)):
+        print("{:>6d}: 0x{:07x} (0b{})".format(i, instr, dis(instr)))
 
 
 if __name__ == "__main__":
