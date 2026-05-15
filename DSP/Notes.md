@@ -3,10 +3,10 @@
 
 ## ISA
 
-* 24-bit instructions
-  * The code binary has a null byte after every three bytes, at a minimum.
+* 25-bit instructions
+  * The code binary has a null byte or a one byte after every three bytes, at a minimum.
   * It would be less complicated for every 32-bit word on the Cortex-R4
-    side correspond to a 24-bit instruction word on the DSP side, since the
+    side correspond to a 25-bit instruction word on the DSP side, since the
     DSP could use the same addressing scheme but with 8 fewer data lines.
   * Confirmed by [Coresonic's website][Coresonic].
 

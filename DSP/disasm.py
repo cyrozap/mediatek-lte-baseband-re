@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: 0BSD
 
-# Copyright (C) 2021 by Forest Crossman <cyrozap@gmail.com>
+# Copyright (C) 2021, 2026 by Forest Crossman <cyrozap@gmail.com>
 #
 # Permission to use, copy, modify, and/or distribute this software for
 # any purpose with or without fee is hereby granted.
@@ -25,11 +25,11 @@ class InstDecodeError(Exception):
 
 
 def dis(instr : int):
-    # Instructions are all 24 bits wide.
-    if instr >> 24 != 0:
-        raise InstDecodeError("Instruction 0x{:08x} wider than 32 bits.".format(instr))
+    # Instructions are all 25 bits wide.
+    if instr >> 25 != 0:
+        raise InstDecodeError("Instruction 0x{:08x} wider than 25 bits.".format(instr))
 
-    bits = "{:024b}".format(instr)
+    bits = "{:025b}".format(instr)
 
     return bits
 
@@ -41,7 +41,7 @@ def main():
     fw = open(args.firmware, 'rb').read()
 
     for (instr,) in struct.iter_unpack('<I', fw):
-        print("0x{:06x}: {}".format(instr, dis(instr)))
+        print("0x{:07x}: {}".format(instr, dis(instr)))
 
 
 if __name__ == "__main__":
