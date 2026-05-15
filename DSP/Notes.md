@@ -33,21 +33,15 @@
       * 5: MMC/MC2
       * 6: MSC/MC3
       * 7: MD32
-    * MD32, the 7th core (`core_idx` 7) seems to be different from the other
-      cores.
-      * Its code segment cotains 32-bit instructions.
+    * MD32, the 7th core (`core_idx` 7) is different from the other cores.
+      * Its code segment cotains 32-bit instructions, not 25-bit Coresonic
+        instructions.
       * The code and data are loaded into a separate region of the Cortex-R4's
         address space compared to the other 6 cores.
-      * It's possible that this is a [MediaDSP][MediaDSP] core used for audio
-        coding.
-        * The register tables for multiple SoCs heavily imply this.
-      * Also might be [this][devicetree-bindings].
-        * They might use it for different purposes in different SoCs.
+      * More details on the architecture of this core can be found [here](MD32).
   * Each section is loaded sequentially based on its location in the binary.
     * In other words, they're loaded in `file_idx` order, not `core_idx`
       order.
 
 
 [Coresonic]: https://web.archive.org/web/20120415124337/http://www.coresonic.com/12/Products/Technology.html
-[MediaDSP]: https://www.da.isy.liu.se/pubs/diwu/diwu-ssocc2006.pdf
-[devicetree-bindings]: https://github.com/freedomtan/kernel-3.18-X20-96-board/blob/a0fd09200a4a4f7de5d366d20e43027f8dc6709a/Documentation/devicetree/bindings/misc/mediatek-md32.txt
