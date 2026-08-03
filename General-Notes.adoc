@@ -128,8 +128,8 @@ flow, the DA is code loaded over USB by the preloader (which itself may be
 loaded over USB in BROM USB Download Mode) that interacts with the host
 software to read from/write to eMMC.
 
-[[DAA]]DAA:: "Download Agent Authentication"? When this is enabled, the
-<<BROM>> will authenticate the <<DA>> before executing it.
+[[DAA]]DAA:: Download Agent Authentication? When this is enabled, the
+<<BROM>> and Preloader will authenticate the <<DA>> before executing it.
 
 [[DBF]]DBF:: DSP Binary Filter. As the name implies, this is binary filter
 data that is loaded into and parsed by the firmware running on the Coresonic
@@ -149,7 +149,8 @@ this module.
 [[DSP]]DSP:: Digital Signal Processor.
 
 [[GCE]]GCE:: Global Command Engine. A SoC peripheral that can be used to
-program registers with strict timing requirements.
+program registers with strict timing requirements. It has 64-bit instruction
+set and a few major revisions with new encoding and more complex instructions.
 
 [[GCPU]]GCPU:: General Copy Protection Unit. A SoC peripheral used for
 decrypting encrypted media. It has a microcontroller core (<<CCPU>>) with some
@@ -191,8 +192,8 @@ set, 17 registers (r0-r15 + zero register r31), and instruction RAM.
 
 [[RXDFE]]RXDFE:: "RX Digital Front End"?
 
-[[SBC]]SBC:: "Secure Boot Code"? Refers to secure boot functionality. When
-this is enabled, the BROM will only load and run properly signed boot code.
+[[SBC]]SBC:: Secure Boot Chain. When this is enabled, the BROM will only load
+and run properly signed boot code.
 
 [[SEJ]]SEJ:: Security Engine with JTAG control. Has some regs to control JTAG
 enable/disable. Also has some encryption/decryption functionality (maybe
@@ -201,10 +202,13 @@ encrypted JTAG?). See also: <<HACC>>.
 [[SIB]]SIB:: System Interface Box. A custom SWD/JTAG adapter used by MediaTek?
 Or a hardware component inside the SoC's debug subsystem?
 
-[[SLA]]SLA:: Serial Link Authentication. Some challenge-response auth to
-authenticate the program loading the DA? Challenge-response auth to
-authenticate the program communicating with the BROM? When this is enabled, it
-disables Download Agent (DA) functionality in the BROM.
+[[SLA]]SLA:: Serial Link Authentication. There's 3 types of the SLA: BootROM
+SLA, Preloader SLA and DA SLA. When BROM SLA is enabled, host must query unique
+SoC identifier and sign it with a private key. The public key is fused into the
+SoC and will be used to verify signed data. The SLA challenge must be passed in
+order to boot the DA. Preloader SLA is used only by certain vendors for
+additional security. DA SLA depends on DA build configuration and doesn't
+depend on the SoC SLA fuse.
 
 [[SPM]]SPM:: System Power Manager. A SoC peripheral used for power management.
 Contains a custom microcontroller core (<<PCM>>) that can manage the power
